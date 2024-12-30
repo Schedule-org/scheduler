@@ -1,0 +1,9 @@
+alerts:
+  - id: "1"
+    name: "Rota mais acessada"
+    description: "Alerta quando uma rota específica é acessada mais de X vezes nos últimos 3 dias."
+    condition: "access_count >= 100"
+    notification:
+      type: "email"
+      recipient: "usuario@dominio.com"
+      subject: "Alerta: Rota mais acessada"
