@@ -1,0 +1,32 @@
+auth_enabled: false
+
+server:
+  http_listen_port: 3100
+
+ingester:
+  wal:
+    dir: /loki/wal
+  chunk_target_size: 1048576
+
+distributor:
+  shard_by_all_labels: true
+
+query_range:
+  results_cache:
+    cache:
+      enabled: true
+  max_retries: 5
+  batch_size: 100
+
+table_manager:
+  retention_deletes_enabled: false
+  retention_period: 7d
+
+frontend:
+  compress_responses: true
+
+storage_config:
+  boltdb_shipper:
+    directory: /loki/index
+    index_duration: 168h
+    retention_duration: 336h

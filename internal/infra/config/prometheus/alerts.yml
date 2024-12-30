@@ -5,5 +5,5 @@ alerts:
     condition: "access_count >= 100"
     notification:
       type: "email"
-      recipient: "usuario@dominio.com"
+      recipient: "hebertsantosdeveloper@gmail.com"
       subject: "Alerta: Rota mais acessada"
