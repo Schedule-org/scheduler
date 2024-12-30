@@ -10,4 +10,4 @@ RUN go build -o scheduler ./cmd/api/main.go
 
 EXPOSE 8080
 
-CMD ["./"]
+CMD ["./scheduler"]
