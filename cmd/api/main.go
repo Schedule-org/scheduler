@@ -3,6 +3,7 @@ package main
 import (
 	"net/http"
 
+	"github.com/gin-gonic/gin"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
@@ -21,15 +22,14 @@ func init() {
 	prometheus.MustRegister(requests)
 }
 
-func handler(w http.ResponseWriter, r *http.Request) {
-	requests.WithLabelValues(r.Method, r.URL.Path).Inc()
-	w.WriteHeader(http.StatusOK)
-	w.Write([]byte("Hello, Grafana!"))
+func handler(c *gin.Context) {
+	requests.WithLabelValues(c.Request.Method, c.FullPath()).Inc()
+	c.String(http.StatusOK, "Hello, Grafana!")
 }
 
 func main() {
-	http.HandleFunc("/", handler)
-	http.Handle("/metrics", promhttp.Handler())
-
-	http.ListenAndServe(":8080", nil)
+	r := gin.Default()
+	r.GET("/", handler)
+	r.GET("/metrics", gin.WrapH(promhttp.Handler()))
+	r.Run(":8080")
 }
