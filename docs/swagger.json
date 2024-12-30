@@ -1,0 +1,15 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "Saas plataform",
+        "title": "Scheduler app",
+        "contact": {
+            "name": "Hebert santos",
+            "url": "https://www.hebertzin.com/",
+            "email": "hebertsantosdeveloper@gmail.com"
+        },
+        "version": "1.0"
+    },
+    "basePath": "/api/v1",
+    "paths": {}
+}
