@@ -28,6 +28,11 @@ restart:
 	make docker-down
 	make docker-up
 
+documentation:
+	@echo "Generating Docs..."
+	swag init -g cmd/api/main.go -o docs
+
+
 help:
 	@echo "Available commands:"
 	@echo "  build        Build the Go application"
