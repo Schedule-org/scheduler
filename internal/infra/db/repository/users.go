@@ -17,7 +17,7 @@ type UserDatabaseRepository struct {
 	logger *logrus.Logger
 }
 
-func NewCategooryRepository(db *gorm.DB, logger *logrus.Logger) *UserDatabaseRepository {
+func NewUserRepository(db *gorm.DB, logger *logrus.Logger) *UserDatabaseRepository {
 	return &UserDatabaseRepository{
 		db: db,
 	}
