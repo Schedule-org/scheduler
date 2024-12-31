@@ -12,6 +12,8 @@ import (
 
 type AddUserUseCase interface {
 	Add(ctx context.Context, payload *domains.User) (*domains.User, *core.Exception)
+	FindUserById(ctx context.Context, id string) (*domains.User, *core.Exception)
+	FindAllUsers(ctx context.Context) ([]domains.User, *core.Exception)
 }
 
 type AddUserUseCaseImpl struct {
@@ -62,4 +64,20 @@ func (uc *AddUserUseCaseImpl) Add(ctx context.Context, payload *domains.User) (*
 	}).Info("User created successfully")
 
 	return user, nil
+}
+
+func (ur *UsersRepository) FindUserById(ctx context.Context, id string) (*domains.User, *core.Exception) {
+	user, err := ur.repo.FindUserById(ctx, id)
+	if err != nil {
+		return nil, core.Unexpected(core.WithMessage("error finding user"), core.WithError(err))
+	}
+	return user, nil
+}
+
+func (ur *UsersRepository) FindAllUsers(ctx context.Context) ([]domains.User, *core.Exception) {
+	result, err := ur.repo.FindAllUsers(ctx)
+	if err != nil {
+		return nil, core.Unexpected(core.WithMessage("Some error has been ocurred"))
+	}
+	return result, nil
 }
