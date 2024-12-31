@@ -9,7 +9,6 @@ import (
 	"gorm.io/gorm"
 )
 
-// Interface UserRepository define os métodos para operações no banco de dados relacionadas a usuários.
 type UserRepository interface {
 	Add(ctx context.Context, user *domains.User) (*domains.User, error)
 	FindUserByEmail(ctx context.Context, email string) (*domains.User, error)
@@ -17,7 +16,6 @@ type UserRepository interface {
 	FindAllUsers(ctx context.Context) ([]domains.User, error)
 }
 
-// Estrutura UserDatabaseRepository implementa UserRepository e opera sobre um banco de dados GORM.
 type UserDatabaseRepository struct {
 	db     *gorm.DB
 	logger *logrus.Logger
@@ -47,7 +45,7 @@ func (repo *UserDatabaseRepository) Add(ctx context.Context, user *domains.User)
 
 	repo.logger.WithFields(logrus.Fields{
 		"method": "Add",
-		"userID": user.Id,
+		"user":   user.Name,
 	}).Info("User created successfully")
 
 	return user, nil
