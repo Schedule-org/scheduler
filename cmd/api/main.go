@@ -4,10 +4,13 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/natefinch/lumberjack"
+	"github.com/hebertzin/scheduler/internal/infra/config/env"
+	"github.com/hebertzin/scheduler/internal/infra/config/logging"
+	"github.com/hebertzin/scheduler/internal/infra/db"
+	router "github.com/hebertzin/scheduler/internal/presentation/routes"
+
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
-	"github.com/sirupsen/logrus"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 )
@@ -41,28 +44,20 @@ func handler(c *gin.Context) {
 
 // @BasePath /api/v1
 func main() {
-
-	logrus.SetOutput(&lumberjack.Logger{
-		Filename:   "/var/log/app.log",
-		MaxSize:    10,
-		MaxBackups: 3,
-		MaxAge:     28,
-		Compress:   true,
-	})
-
-	logrus.SetFormatter(&logrus.TextFormatter{
-		FullTimestamp: true,
-	})
-
+	appConfig := env.LoadConfig()
+	log := logging.InitLogger()
+	database := db.ConnectDatabase(appConfig)
+	if err := db.Migrate(database); err != nil {
+		panic("Database migration failed: " + err.Error())
+	}
 	r := gin.Default()
 	r.GET("/api/v1/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
-
 	r.GET("/", handler)
 	r.GET("/metrics", gin.WrapH(promhttp.Handler()))
 
-	logrus.WithFields(logrus.Fields{
-		"status": "success",
-	}).Info("Server is running!!")
-	r.Run(":8080")
+	router.UsersGroupRouter(r, database, log)
+	if err := r.Run(":8080"); err != nil {
+		println("some error has been occurred:", err.Error())
+	}
 
 }

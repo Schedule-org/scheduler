@@ -4,7 +4,7 @@ import (
 	"context"
 	"errors"
 
-	"github.com/hebertzin/tadix-backend/internal/domains"
+	"github.com/hebertzin/scheduler/internal/domains"
 	"github.com/sirupsen/logrus"
 	"gorm.io/gorm"
 )

@@ -5,7 +5,7 @@ import (
 	"log"
 	"time"
 
-	"github.com/hebertzin/tadix-backend/internal/domains"
+	"github.com/hebertzin/scheduler/internal/domains"
 	"github.com/sirupsen/logrus"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"

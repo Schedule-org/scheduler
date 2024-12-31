@@ -3,9 +3,9 @@ package usecases
 import (
 	"context"
 
-	"github.com/hebertzin/tadix-backend/internal/core"
-	"github.com/hebertzin/tadix-backend/internal/domains"
-	"github.com/hebertzin/tadix-backend/internal/infra/db/repository"
+	"github.com/hebertzin/scheduler/internal/core"
+	"github.com/hebertzin/scheduler/internal/domains"
+	"github.com/hebertzin/scheduler/internal/infra/db/repository"
 	"github.com/sirupsen/logrus"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -66,7 +66,7 @@ func (uc *AddUserUseCaseImpl) Add(ctx context.Context, payload *domains.User) (*
 	return user, nil
 }
 
-func (ur *UsersRepository) FindUserById(ctx context.Context, id string) (*domains.User, *core.Exception) {
+func (ur *AddUserUseCaseImpl) FindUserById(ctx context.Context, id string) (*domains.User, *core.Exception) {
 	user, err := ur.repo.FindUserById(ctx, id)
 	if err != nil {
 		return nil, core.Unexpected(core.WithMessage("error finding user"), core.WithError(err))
@@ -74,7 +74,7 @@ func (ur *UsersRepository) FindUserById(ctx context.Context, id string) (*domain
 	return user, nil
 }
 
-func (ur *UsersRepository) FindAllUsers(ctx context.Context) ([]domains.User, *core.Exception) {
+func (ur *AddUserUseCaseImpl) FindAllUsers(ctx context.Context) ([]domains.User, *core.Exception) {
 	result, err := ur.repo.FindAllUsers(ctx)
 	if err != nil {
 		return nil, core.Unexpected(core.WithMessage("Some error has been ocurred"))

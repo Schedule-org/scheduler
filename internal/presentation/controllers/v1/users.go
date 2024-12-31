@@ -4,9 +4,9 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/hebertzin/tadix-backend/internal/core/usecases"
-	"github.com/hebertzin/tadix-backend/internal/domains"
-	"github.com/hebertzin/tadix-backend/internal/infra/dto"
+	"github.com/hebertzin/scheduler/internal/core/usecases"
+	"github.com/hebertzin/scheduler/internal/domains"
+	"github.com/hebertzin/scheduler/internal/infra/dto"
 )
 
 type UserController interface {

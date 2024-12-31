@@ -1,6 +1,6 @@
 package dto
 
-import "github.com/hebertzin/tadix-backend/internal/domains"
+import "github.com/hebertzin/scheduler/internal/domains"
 
 type UserDTO struct {
 	Name  string `json:"name"`
