@@ -10,6 +10,7 @@ import (
 
 type UserRepository interface {
 	Add(ctx context.Context, category *domains.User) (*domains.User, error)
+	FindUserByEmail(ctx context.Context, email string) (*domains.User, error)
 }
 
 type UserDatabaseRepository struct {
