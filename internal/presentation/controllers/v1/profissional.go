@@ -22,16 +22,16 @@ func NewProfessionalController(uc usecases.ProfessionalsUseCase) *ProfessionalsU
 }
 
 // Add godoc
-// @Summary      Add a new establishment
-// @Description  Create a new establishment with the provided data
-// @Tags         Establishments
+// @Summary      Add a new professional
+// @Description  Create a new professional with the provided data
+// @Tags         Professionals
 // @Accept       json
 // @Produce      json
-// @Param        establishment  body      domains.Establishment  true  "Establishment data"
-// @Success      201            {object}  domains.HttpResponse{data=domains.Establishment}  "Establishment created successfully"
-// @Failure      400            {object}  domains.HttpResponse  "Bad Request"
-// @Failure      500            {object}  domains.HttpResponse  "Internal Server Error"
-// @Router       /establishments [post]
+// @Param        professional  body      domains.Professionals  true  "Professional data"
+// @Success      201           {object}  domains.HttpResponse{data=domains.Professionals}  "Professional created successfully"
+// @Failure      400           {object}  domains.HttpResponse  "Bad Request"
+// @Failure      500           {object}  domains.HttpResponse  "Internal Server Error"
+// @Router       /professionals [post]
 func (ctrl *ProfessionalsUseCase) Add(ctx *gin.Context) {
 	var input domains.Professionals
 	if err := ctx.ShouldBindJSON(&input); err != nil {
@@ -56,17 +56,17 @@ func (ctrl *ProfessionalsUseCase) Add(ctx *gin.Context) {
 	})
 }
 
-// FindEstablishmentById godoc
-// @Summary      Find establishment by ID
-// @Description  Retrieve an establishment using its unique ID
-// @Tags         Establishments
+// FindProfessionalById godoc
+// @Summary      Find professional by ID
+// @Description  Retrieve a professional using its unique ID
+// @Tags         Professionals
 // @Accept       json
 // @Produce      json
-// @Param        id   path      string  true  "Establishment ID"
-// @Success      200  {object}  domains.HttpResponse{data=domains.Establishment}  "Establishment found successfully"
-// @Failure      404  {object}  domains.HttpResponse  "Establishment not found"
+// @Param        id   path      string  true  "Professional ID"
+// @Success      200  {object}  domains.HttpResponse{data=domains.Professionals}  "Professional found successfully"
+// @Failure      404  {object}  domains.HttpResponse  "Professional not found"
 // @Failure      500  {object}  domains.HttpResponse  "Internal Server Error"
-// @Router       /establishment_id/{id} [get]
+// @Router       /professionals/{id} [get]
 func (ctrl *ProfessionalsUseCase) FindEstablishmentById(ctx *gin.Context) {
 	id := ctx.Param("id")
 	output, err := ctrl.uc.FindProfessionalById(ctx.Request.Context(), id)
