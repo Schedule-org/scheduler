@@ -56,6 +56,9 @@ func main() {
 	r.GET("/metrics", gin.WrapH(promhttp.Handler()))
 
 	router.UsersGroupRouter(r, database, log)
+	router.EstablishmentGroupRouter(r, database, log)
+	router.ProfessionalsGroupRouter(r, database, log)
+	router.ServicesGroupRouter(r, database, log)
 	if err := r.Run(":8080"); err != nil {
 		println("some error has been occurred:", err.Error())
 	}
