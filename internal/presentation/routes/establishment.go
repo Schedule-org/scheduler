@@ -12,7 +12,7 @@ func EstablishmentGroupRouter(router *gin.Engine, db *gorm.DB, logger *logrus.Lo
 	establishmentFactory := factory.EstablishmentFactory(db, logger)
 	v1 := router.Group("/api/v1")
 	{
-		v1.POST("/establishment/", establishmentFactory.Add)
+		v1.POST("/establishments/", establishmentFactory.Add)
 		v1.GET("/establishment_id/:id", establishmentFactory.FindEstablishmentById)
 	}
 }

@@ -8,17 +8,17 @@ import (
 	"github.com/hebertzin/scheduler/internal/domains"
 )
 
-type EstablishmentController interface {
+type ProfessionalsController interface {
 	Add(ctx *gin.Context)
 	FindEstablishmentById(ctx *gin.Context)
 }
 
-type EstablishmentUseCase struct {
-	uc usecases.EstablishmentUseCase
+type ProfessionalsUseCase struct {
+	uc usecases.ProfessionalsUseCase
 }
 
-func NewEstablishmentController(uc usecases.EstablishmentUseCase) *EstablishmentUseCase {
-	return &EstablishmentUseCase{uc: uc}
+func NewProfessionalController(uc usecases.ProfessionalsUseCase) *ProfessionalsUseCase {
+	return &ProfessionalsUseCase{uc: uc}
 }
 
 // Add godoc
@@ -32,8 +32,8 @@ func NewEstablishmentController(uc usecases.EstablishmentUseCase) *Establishment
 // @Failure      400            {object}  domains.HttpResponse  "Bad Request"
 // @Failure      500            {object}  domains.HttpResponse  "Internal Server Error"
 // @Router       /establishments [post]
-func (ctrl *EstablishmentUseCase) Add(ctx *gin.Context) {
-	var input domains.Establishment
+func (ctrl *ProfessionalsUseCase) Add(ctx *gin.Context) {
+	var input domains.Professionals
 	if err := ctx.ShouldBindJSON(&input); err != nil {
 		ctx.JSON(http.StatusBadRequest, domains.HttpResponse{
 			Message: err.Error(),
@@ -50,7 +50,7 @@ func (ctrl *EstablishmentUseCase) Add(ctx *gin.Context) {
 		return
 	}
 	ctx.JSON(http.StatusOK, domains.HttpResponse{
-		Message: "Establishment created successfully",
+		Message: "Professional created successfully",
 		Code:    http.StatusCreated,
 		Data:    output,
 	})
@@ -67,9 +67,9 @@ func (ctrl *EstablishmentUseCase) Add(ctx *gin.Context) {
 // @Failure      404  {object}  domains.HttpResponse  "Establishment not found"
 // @Failure      500  {object}  domains.HttpResponse  "Internal Server Error"
 // @Router       /establishment_id/{id} [get]
-func (ctrl *EstablishmentUseCase) FindEstablishmentById(ctx *gin.Context) {
+func (ctrl *ProfessionalsUseCase) FindEstablishmentById(ctx *gin.Context) {
 	id := ctx.Param("id")
-	output, err := ctrl.uc.FindEstablishmentById(ctx.Request.Context(), id)
+	output, err := ctrl.uc.FindProfessionalById(ctx.Request.Context(), id)
 	if err != nil {
 		ctx.JSON(err.Code, domains.HttpResponse{
 			Message: err.Message,
@@ -77,7 +77,7 @@ func (ctrl *EstablishmentUseCase) FindEstablishmentById(ctx *gin.Context) {
 		})
 	}
 	ctx.JSON(http.StatusOK, domains.HttpResponse{
-		Message: "Establishment found successfully",
+		Message: "Professional found successfully",
 		Code:    http.StatusOK,
 		Data:    output,
 	})
