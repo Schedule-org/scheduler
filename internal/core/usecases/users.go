@@ -30,31 +30,19 @@ func (uc *AddUserUseCaseImpl) Add(ctx context.Context, payload *domains.User) (*
 		return nil, core.BadRequest(core.WithMessage("Some fields are missing"))
 	}
 
-	existentUser, err := uc.repo.FindUserByEmail(ctx, payload.Email)
+	existentUser, _ := uc.repo.FindUserByEmail(ctx, payload.Email)
 	if existentUser != nil {
-		uc.logger.WithFields(logrus.Fields{
-			"method": "Add",
-			"error":  err,
-		}).Error("User already exists")
 		return nil, core.Confilct(core.WithMessage("User already exists in the database"))
 	}
 
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(payload.Password), bcrypt.DefaultCost)
 	if err != nil {
-		uc.logger.WithFields(logrus.Fields{
-			"method": "Add",
-			"error":  err,
-		}).Error("Error generating password hash")
 		return nil, core.Unexpected(core.WithMessage("Error generating password hash"))
 	}
 	payload.Password = string(hashedPassword)
 
 	user, err := uc.repo.Add(ctx, payload)
 	if err != nil {
-		uc.logger.WithFields(logrus.Fields{
-			"method": "Add",
-			"error":  err,
-		}).Error("Error creating user")
 		return nil, core.Unexpected()
 	}
 

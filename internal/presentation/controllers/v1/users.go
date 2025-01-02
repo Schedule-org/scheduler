@@ -84,6 +84,7 @@ func (ctrl *UserUseCase) FindUserById(ctx *gin.Context) {
 	user := dto.MapToUserDTO(output)
 	ctx.JSON(http.StatusOK, domains.HttpResponse{
 		Message: "User found successfully",
+		Code:    http.StatusOK,
 		Data:    user,
 	})
 }

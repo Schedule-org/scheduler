@@ -26,11 +26,7 @@ func LoadConfig() *domains.Config {
 	}
 
 	if config.User == "" || config.Password == "" || config.Database == "" || config.Port == "" || config.Host == "" {
-		logging.Log.WithFields(logrus.Fields{
-			"method":   "LoadConfig",
-			"user":     config.User,
-			"database": config.Database,
-		}).Error("Some error has been ocurred load env variables")
+		println("Some env fields are missing")
 	}
 
 	return config
