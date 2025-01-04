@@ -18,7 +18,6 @@ type Establishment struct {
 	CreatedAt  time.Time `json:"created_at"`
 	UpdatedAt  time.Time `json:"updated_at"`
 
-	// Chave estrangeira referenciando o usuário
-	UserID uuid.UUID `gorm:"type:uuid;not null"` // Chave estrangeira para Users
-	User   Users     `gorm:"foreignKey:UserID"`  // Relacionamento com o modelo Users
+	UserID uuid.UUID `gorm:"type:uuid;not null"`
+	User   Users     `gorm:"foreignKey:UserID"`
 }
