@@ -12,6 +12,7 @@ type EstablishmentController interface {
 	Add(ctx *gin.Context)
 	FindEstablishmentById(ctx *gin.Context)
 	GetAllProfessinalsByEstablishmentId(ctx *gin.Context)
+	UpdateEstablishmentById(ctx *gin.Context)
 }
 
 type EstablishmentUseCase struct {
@@ -95,6 +96,29 @@ func (ctrl *EstablishmentUseCase) GetAllProfessinalsByEstablishmentId(ctx *gin.C
 	}
 	ctx.JSON(http.StatusOK, domains.HttpResponse{
 		Message: "Professionals found successfully",
+		Code:    http.StatusOK,
+		Data:    output,
+	})
+}
+
+func (ctrl *EstablishmentUseCase) UpdateEstablishmentById(ctx *gin.Context) {
+	establishment_id := ctx.Param("establishment_id")
+	var establishment domains.Establishment
+	if err := ctx.ShouldBindJSON(&establishment); err != nil {
+		ctx.JSON(http.StatusBadRequest, domains.HttpResponse{
+			Message: err.Error(),
+		})
+		return
+	}
+	output, err := ctrl.uc.UpdateEstablishmentById(ctx.Request.Context(), establishment_id, &establishment)
+	if err != nil {
+		ctx.JSON(err.Code, domains.HttpResponse{
+			Message: err.Message,
+			Code:    err.Code,
+		})
+	}
+	ctx.JSON(http.StatusOK, domains.HttpResponse{
+		Message: "Establishment update successfully",
 		Code:    http.StatusOK,
 		Data:    output,
 	})
