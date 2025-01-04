@@ -13,6 +13,7 @@ func ServicesGroupRouter(router *gin.Engine, db *gorm.DB, logger *logrus.Logger)
 	v1 := router.Group("/api/v1")
 	{
 		v1.POST("/service/", servicesFactory.Add)
-		v1.GET("/service_id/:id", servicesFactory.FindServiceById)
+		v1.GET("/service_id/:service_id", servicesFactory.FindServiceById)
+		v1.GET("/services/:professional_id", servicesFactory.GetAllServicesByProfessionalId)
 	}
 }

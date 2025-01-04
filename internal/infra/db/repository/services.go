@@ -12,6 +12,7 @@ import (
 type ServicesRepository interface {
 	Add(ctx context.Context, establishment *domains.Services) (*domains.Services, error)
 	FindServiceById(ctx context.Context, service_id string) (*domains.Services, error)
+	GetAllServicesByProfessionalId(ctx context.Context, professional_id string) ([]domains.Services, error)
 }
 
 type ServicesDatabaseRepository struct {
@@ -71,4 +72,16 @@ func (repo *ServicesDatabaseRepository) FindServiceById(ctx context.Context, ser
 	}).Info("service found successfully")
 
 	return &service, nil
+}
+
+func (repo *ServicesDatabaseRepository) GetAllServicesByProfessionalId(ctx context.Context, professional_id string) ([]domains.Services, error) {
+	var services []domains.Services
+	err := repo.db.WithContext(ctx).
+		Where("professional_id = ?", professional_id).
+		Find(&services).Error
+
+	if err != nil {
+		return nil, err
+	}
+	return services, nil
 }

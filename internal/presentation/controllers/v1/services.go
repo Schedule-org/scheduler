@@ -11,6 +11,7 @@ import (
 type ServicesController interface {
 	Add(ctx *gin.Context)
 	FindServiceById(ctx *gin.Context)
+	GetAllServicesByProfessionalId(ctx *gin.Context)
 }
 
 type ServicesUseCase struct {
@@ -78,6 +79,22 @@ func (ctrl *ServicesUseCase) FindServiceById(ctx *gin.Context) {
 	}
 	ctx.JSON(http.StatusOK, domains.HttpResponse{
 		Message: "service found successfully",
+		Code:    http.StatusOK,
+		Data:    output,
+	})
+}
+
+func (ctrl *ServicesUseCase) GetAllServicesByProfessionalId(ctx *gin.Context) {
+	professional_id := ctx.Param("profissional_id")
+	output, err := ctrl.uc.GetAllServicesByProfessionalId(ctx.Request.Context(), professional_id)
+	if err != nil {
+		ctx.JSON(err.Code, domains.HttpResponse{
+			Message: err.Message,
+			Code:    err.Code,
+		})
+	}
+	ctx.JSON(http.StatusOK, domains.HttpResponse{
+		Message: "services found successfully",
 		Code:    http.StatusOK,
 		Data:    output,
 	})

@@ -12,6 +12,7 @@ import (
 type ServicesUseCase interface {
 	Add(ctx context.Context, payload *domains.Services) (*domains.Services, *core.Exception)
 	FindServiceById(ctx context.Context, id string) (*domains.Services, *core.Exception)
+	GetAllServicesByProfessionalId(ctx context.Context, professional_id string) ([]domains.Services, *core.Exception)
 }
 
 type ServicesUseCaseImpl struct {
@@ -39,11 +40,13 @@ func (uc *ServicesUseCaseImpl) Add(ctx context.Context, payload *domains.Service
 	if err != nil {
 		return nil, core.Unexpected()
 	}
-
-	uc.logger.WithFields(logrus.Fields{
-		"method":  "Add",
-		"service": service.Name,
-	}).Info("service created successfully")
-
 	return service, nil
+}
+
+func (uc *ServicesUseCaseImpl) GetAllServicesByProfessionalId(ctx context.Context, professional_id string) ([]domains.Services, *core.Exception) {
+	services, err := uc.repo.GetAllServicesByProfessionalId(ctx, professional_id)
+	if err != nil {
+		return nil, core.Unexpected()
+	}
+	return services, nil
 }
