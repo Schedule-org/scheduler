@@ -4,7 +4,6 @@ import (
 	"context"
 
 	"github.com/hebertzin/scheduler/internal/domains"
-	"github.com/hebertzin/scheduler/internal/infra/db/models"
 	"github.com/sirupsen/logrus"
 	"gorm.io/gorm"
 )
@@ -28,7 +27,6 @@ func NewProfessionalsRepository(db *gorm.DB, logger *logrus.Logger) *Professiona
 
 func (repo *ProfessionalsDatabaseRepository) Add(ctx context.Context, professional *domains.Professionals) (*domains.Professionals, error) {
 	if err := repo.db.WithContext(ctx).
-		Model(&models.Establishment{}).
 		Create(professional).Error; err != nil {
 		return nil, err
 	}
@@ -36,11 +34,11 @@ func (repo *ProfessionalsDatabaseRepository) Add(ctx context.Context, profession
 }
 
 func (repo *ProfessionalsDatabaseRepository) FindProfessionalById(ctx context.Context, professional_id string) (*domains.Professionals, error) {
-	var establishment *domains.Professionals
+	var professionals domains.Professionals
 	if err := repo.db.WithContext(ctx).
-		Model(&models.Professional{}).
-		Where("id = ?", professional_id).Error; err != nil {
+		Where("id = ?", professional_id).
+		First(&professionals).Error; err != nil {
 		return nil, err
 	}
-	return establishment, nil
+	return &professionals, nil
 }

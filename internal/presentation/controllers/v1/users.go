@@ -51,12 +51,10 @@ func (ctrl *UserUseCase) Add(ctx *gin.Context) {
 		})
 		return
 	}
-
-	user := dto.MapToUserDTO(output)
 	ctx.JSON(http.StatusOK, domains.HttpResponse{
 		Message: "User created successfully",
 		Code:    http.StatusCreated,
-		Data:    user,
+		Data:    output,
 	})
 }
 

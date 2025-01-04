@@ -45,12 +45,6 @@ func (uc *AddUserUseCaseImpl) Add(ctx context.Context, payload *domains.User) (*
 	if err != nil {
 		return nil, core.Unexpected()
 	}
-
-	uc.logger.WithFields(logrus.Fields{
-		"method": "Add",
-		"user":   user.Name,
-	}).Info("User created successfully")
-
 	return user, nil
 }
 

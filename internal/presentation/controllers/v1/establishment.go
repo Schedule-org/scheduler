@@ -71,7 +71,7 @@ func (ctrl *EstablishmentUseCase) Add(ctx *gin.Context) {
 // @Failure      500  {object}  domains.HttpResponse  "Internal Server Error"
 // @Router       /establishment_id/{id} [get]
 func (ctrl *EstablishmentUseCase) FindEstablishmentById(ctx *gin.Context) {
-	id := ctx.Param("id")
+	id := ctx.Param("establishment_id")
 	output, err := ctrl.uc.FindEstablishmentById(ctx.Request.Context(), id)
 	if err != nil {
 		ctx.JSON(err.Code, domains.HttpResponse{

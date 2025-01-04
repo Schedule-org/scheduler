@@ -29,9 +29,7 @@ func NewUserRepository(db *gorm.DB, logger *logrus.Logger) *UserDatabaseReposito
 }
 
 func (repo *UserDatabaseRepository) Add(ctx context.Context, user *domains.User) (*domains.User, error) {
-	if err := repo.db.WithContext(ctx).
-		Model(&models.Users{}).
-		Create(user).Error; err != nil {
+	if err := repo.db.WithContext(ctx).Create(user).Error; err != nil {
 		return nil, err
 	}
 	return user, nil
