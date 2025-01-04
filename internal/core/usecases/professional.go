@@ -39,11 +39,5 @@ func (uc *ProfessionalsUseCaseImpl) Add(ctx context.Context, payload *domains.Pr
 	if err != nil {
 		return nil, core.Unexpected()
 	}
-
-	uc.logger.WithFields(logrus.Fields{
-		"method":       "Add",
-		"professional": professional.Name,
-	}).Info("Professional created successfully")
-
 	return professional, nil
 }

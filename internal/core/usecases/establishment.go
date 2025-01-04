@@ -11,7 +11,9 @@ import (
 
 type EstablishmentUseCase interface {
 	Add(ctx context.Context, payload *domains.Establishment) (*domains.Establishment, *core.Exception)
-	FindEstablishmentById(ctx context.Context, id string) (*domains.Establishment, *core.Exception)
+	GetAllProfessionalsByEstablishmentId(ctx context.Context, establishment_id string) ([]domains.Professionals, *core.Exception)
+	FindEstablishmentById(ctx context.Context, establishment_id string) (*domains.Establishment, *core.Exception)
+	UpdateEstablishmentById(ctx context.Context, establishment_id string, establishmentData *domains.Establishment) (*domains.Establishment, *core.Exception)
 }
 
 type EstablishmentUserUseCaseImpl struct {
@@ -45,5 +47,21 @@ func (uc *EstablishmentUserUseCaseImpl) Add(ctx context.Context, payload *domain
 		"establishment": establishment.Name,
 	}).Info("establishment created successfully")
 
+	return establishment, nil
+}
+
+func (uc *EstablishmentUserUseCaseImpl) GetAllProfessionalsByEstablishmentId(ctx context.Context, establishment_id string) ([]domains.Professionals, *core.Exception) {
+	professionails, err := uc.repo.GetAllProfessionalsByEstablishmentId(ctx, establishment_id)
+	if err != nil {
+		return nil, core.Unexpected()
+	}
+	return professionails, nil
+}
+
+func (uc *EstablishmentUserUseCaseImpl) UpdateEstablishmentById(ctx context.Context, establishment_id string, establishmentData *domains.Establishment) (*domains.Establishment, *core.Exception) {
+	establishment, err := uc.repo.UpdateEstablishmentById(ctx, establishment_id, establishmentData)
+	if err != nil {
+		return nil, core.Unexpected(core.WithMessage("Some error has been ocurred trying update a establishment"))
+	}
 	return establishment, nil
 }

@@ -2,9 +2,9 @@ package repository
 
 import (
 	"context"
-	"errors"
 
 	"github.com/hebertzin/scheduler/internal/domains"
+	"github.com/hebertzin/scheduler/internal/infra/db/models"
 	"github.com/sirupsen/logrus"
 	"gorm.io/gorm"
 )
@@ -12,6 +12,7 @@ import (
 type ServicesRepository interface {
 	Add(ctx context.Context, establishment *domains.Services) (*domains.Services, error)
 	FindServiceById(ctx context.Context, service_id string) (*domains.Services, error)
+	GetAllServicesByProfessionalId(ctx context.Context, professional_id string) ([]domains.Services, error)
 }
 
 type ServicesDatabaseRepository struct {
@@ -27,48 +28,30 @@ func NewServicesRepository(db *gorm.DB, logger *logrus.Logger) *ServicesDatabase
 }
 
 func (repo *ServicesDatabaseRepository) Add(ctx context.Context, service *domains.Services) (*domains.Services, error) {
-	repo.logger.WithFields(logrus.Fields{
-		"method":  "Add",
-		"service": service,
-	}).Info("Init service creation")
-
-	err := repo.db.WithContext(ctx).Create(service).Error
-	if err != nil {
-		repo.logger.WithFields(logrus.Fields{
-			"method": "Add",
-			"error":  err,
-		}).Error("Error occurred while creating service")
+	if err := repo.db.WithContext(ctx).
+		Model(&models.Services{}).
+		Create(service).Error; err != nil {
 		return nil, err
 	}
-
-	repo.logger.WithFields(logrus.Fields{
-		"method":  "Add",
-		"service": service.Name,
-	}).Info("service created successfully")
-
 	return service, nil
 }
 
 func (repo *ServicesDatabaseRepository) FindServiceById(ctx context.Context, service_id string) (*domains.Services, error) {
-	var service domains.Services
-	err := repo.db.WithContext(ctx).Where("id = ?", service_id).First(&service).Error
-	if err != nil {
-		repo.logger.WithFields(logrus.Fields{
-			"method":     "FindServiceById",
-			"service_id": service_id,
-			"error":      err,
-		}).Error("Error finding  service by ID")
-
-		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, nil
-		}
+	var service *domains.Services
+	if err := repo.db.WithContext(ctx).
+		Model(&models.Services{}).
+		Where("id = ?", service_id).Error; err != nil {
 		return nil, err
 	}
+	return service, nil
+}
 
-	repo.logger.WithFields(logrus.Fields{
-		"method": "FindServiceById",
-		"userID": service_id,
-	}).Info("service found successfully")
-
-	return &service, nil
+func (repo *ServicesDatabaseRepository) GetAllServicesByProfessionalId(ctx context.Context, professional_id string) ([]domains.Services, error) {
+	var services []domains.Services
+	if err := repo.db.WithContext(ctx).
+		Where("professional_id = ?", professional_id).
+		Find(&services).Error; err != nil {
+		return nil, err
+	}
+	return services, nil
 }
