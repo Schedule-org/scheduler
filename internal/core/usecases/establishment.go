@@ -11,6 +11,7 @@ import (
 
 type EstablishmentUseCase interface {
 	Add(ctx context.Context, payload *domains.Establishment) (*domains.Establishment, *core.Exception)
+	GetAllProfessionalsByEstablishmentId(ctx context.Context, establishment_id string) ([]domains.Professionals, *core.Exception)
 	FindEstablishmentById(ctx context.Context, id string) (*domains.Establishment, *core.Exception)
 }
 
@@ -46,4 +47,12 @@ func (uc *EstablishmentUserUseCaseImpl) Add(ctx context.Context, payload *domain
 	}).Info("establishment created successfully")
 
 	return establishment, nil
+}
+
+func (uc *EstablishmentUserUseCaseImpl) GetAllProfessionalsByEstablishmentId(ctx context.Context, establishment_id string) ([]domains.Professionals, *core.Exception) {
+	professionails, err := uc.repo.GetAllProfessionalsByEstablishmentId(ctx, establishment_id)
+	if err != nil {
+		return nil, core.Unexpected()
+	}
+	return professionails, nil
 }

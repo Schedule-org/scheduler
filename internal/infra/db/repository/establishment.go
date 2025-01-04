@@ -11,6 +11,7 @@ import (
 
 type EstablishmentRepository interface {
 	Add(ctx context.Context, establishment *domains.Establishment) (*domains.Establishment, error)
+	GetAllProfessionalsByEstablishmentId(ctx context.Context, establishment_id string) ([]domains.Professionals, error)
 	FindEstablishmentById(ctx context.Context, email string) (*domains.Establishment, error)
 }
 
@@ -71,4 +72,16 @@ func (repo *EstablishmentDatabaseRepository) FindEstablishmentById(ctx context.C
 	}).Info("establishment found successfully")
 
 	return &establishment, nil
+}
+
+func (repo *EstablishmentDatabaseRepository) GetAllProfessionalsByEstablishmentId(ctx context.Context, establishment_id string) ([]domains.Professionals, error) {
+	var professionals []domains.Professionals
+	err := repo.db.WithContext(ctx).
+		Where("establishment_id = ?", establishment_id).
+		Find(&professionals).Error
+
+	if err != nil {
+		return nil, err
+	}
+	return professionals, nil
 }
