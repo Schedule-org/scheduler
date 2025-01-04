@@ -2,9 +2,9 @@ package repository
 
 import (
 	"context"
-	"errors"
 
 	"github.com/hebertzin/scheduler/internal/domains"
+	"github.com/hebertzin/scheduler/internal/infra/db/models"
 	"github.com/sirupsen/logrus"
 	"gorm.io/gorm"
 )
@@ -29,91 +29,39 @@ func NewUserRepository(db *gorm.DB, logger *logrus.Logger) *UserDatabaseReposito
 }
 
 func (repo *UserDatabaseRepository) Add(ctx context.Context, user *domains.User) (*domains.User, error) {
-	repo.logger.WithFields(logrus.Fields{
-		"method": "Add",
-		"user":   user,
-	}).Info("Init user creation")
-
-	err := repo.db.WithContext(ctx).Create(user).Error
-	if err != nil {
-		repo.logger.WithFields(logrus.Fields{
-			"method": "Add",
-			"error":  err,
-		}).Error("Error occurred while creating user")
+	if err := repo.db.WithContext(ctx).
+		Model(&models.Users{}).
+		Create(user).Error; err != nil {
 		return nil, err
 	}
-
-	repo.logger.WithFields(logrus.Fields{
-		"method": "Add",
-		"user":   user.Name,
-	}).Info("User created successfully")
-
 	return user, nil
 }
 
 func (repo *UserDatabaseRepository) FindUserById(ctx context.Context, id string) (*domains.User, error) {
-	var user domains.User
-	err := repo.db.WithContext(ctx).Where("id = ?", id).First(&user).Error
-	if err != nil {
-		repo.logger.WithFields(logrus.Fields{
-			"method": "FindUserById",
-			"userID": id,
-			"error":  err,
-		}).Error("Error finding user by ID")
-
-		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, nil
-		}
+	var user *domains.User
+	if err := repo.db.WithContext(ctx).
+		Model(&models.Users{}).
+		Where("id = ?", id).Error; err != nil {
 		return nil, err
 	}
-
-	repo.logger.WithFields(logrus.Fields{
-		"method": "FindUserById",
-		"userID": id,
-	}).Info("User found successfully")
-
-	return &user, nil
+	return user, nil
 }
 
 func (repo *UserDatabaseRepository) FindUserByEmail(ctx context.Context, email string) (*domains.User, error) {
-	var user domains.User
-	err := repo.db.WithContext(ctx).Where("email = ?", email).First(&user).Error
-	if err != nil {
-		repo.logger.WithFields(logrus.Fields{
-			"method": "FindUserByEmail",
-			"email":  email,
-			"error":  err,
-		}).Error("Error finding user by email")
-
-		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, nil
-		}
+	var user *domains.User
+	if err := repo.db.WithContext(ctx).
+		Model(&models.Users{}).
+		Where("email = ?", email).Error; err != nil {
 		return nil, err
 	}
-
-	repo.logger.WithFields(logrus.Fields{
-		"method": "FindUserByEmail",
-		"email":  email,
-	}).Info("User found successfully")
-
-	return &user, nil
+	return user, nil
 }
 
 func (repo *UserDatabaseRepository) FindAllUsers(ctx context.Context) ([]domains.User, error) {
 	var users []domains.User
 	err := repo.db.WithContext(ctx).Find(&users).Error
 	if err != nil {
-		repo.logger.WithFields(logrus.Fields{
-			"method": "FindAllUsers",
-			"error":  err,
-		}).Error("Error occurred while fetching all users")
 		return nil, err
 	}
-
-	repo.logger.WithFields(logrus.Fields{
-		"method": "FindAllUsers",
-		"count":  len(users),
-	}).Info("Users fetched successfully")
-
 	return users, nil
 }

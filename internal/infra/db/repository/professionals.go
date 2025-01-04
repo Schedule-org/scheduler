@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/hebertzin/scheduler/internal/domains"
+	"github.com/hebertzin/scheduler/internal/infra/db/models"
 	"github.com/sirupsen/logrus"
 	"gorm.io/gorm"
 )
@@ -26,20 +27,20 @@ func NewProfessionalsRepository(db *gorm.DB, logger *logrus.Logger) *Professiona
 }
 
 func (repo *ProfessionalsDatabaseRepository) Add(ctx context.Context, professional *domains.Professionals) (*domains.Professionals, error) {
-	repo.logger.WithFields(logrus.Fields{
-		"method":       "Add",
-		"professional": professional,
-	}).Info("Init professional creation")
-
-	_ = repo.db.WithContext(ctx).Create(professional).Error
+	if err := repo.db.WithContext(ctx).
+		Model(&models.Establishment{}).
+		Create(professional).Error; err != nil {
+		return nil, err
+	}
 	return professional, nil
 }
 
 func (repo *ProfessionalsDatabaseRepository) FindProfessionalById(ctx context.Context, professional_id string) (*domains.Professionals, error) {
-	var professional domains.Professionals
-	err := repo.db.WithContext(ctx).Where("id = ?", professional_id).First(&professional).Error
-	if err != nil {
+	var establishment *domains.Professionals
+	if err := repo.db.WithContext(ctx).
+		Model(&models.Professional{}).
+		Where("id = ?", professional_id).Error; err != nil {
 		return nil, err
 	}
-	return &professional, nil
+	return establishment, nil
 }
