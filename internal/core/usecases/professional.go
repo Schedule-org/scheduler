@@ -23,8 +23,8 @@ func NewProfissionalUseCase(repo repository.ProfessionalsRepository, logger *log
 	return &ProfessionalsUseCaseImpl{repo: repo, logger: logger}
 }
 
-func (ur *ProfessionalsUseCaseImpl) FindProfessionalById(ctx context.Context, id string) (*domains.Professionals, *core.Exception) {
-	professional, err := ur.repo.FindProfessionalById(ctx, id)
+func (uc *ProfessionalsUseCaseImpl) FindProfessionalById(ctx context.Context, id string) (*domains.Professionals, *core.Exception) {
+	professional, err := uc.repo.FindProfessionalById(ctx, id)
 	if err != nil {
 		return nil, core.Unexpected(core.WithMessage("error finding professional"), core.WithError(err))
 	}
