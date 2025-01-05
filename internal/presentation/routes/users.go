@@ -13,7 +13,7 @@ func UsersGroupRouter(router *gin.Engine, db *gorm.DB, logger *logrus.Logger) {
 	v1 := router.Group("/api/v1")
 	{
 		v1.GET("/users/:user_id", usersFactory.FindUserById)
-		v1.GET("/users/:user_id/establishments/", usersFactory.FindAllEstablishmentsByUserId)
+		v1.GET("/users/:user_id/establishments", usersFactory.FindAllEstablishmentsByUserId)
 		v1.GET("/users/", usersFactory.FindAllUsers)
 		v1.POST("/users", usersFactory.Add)
 	}
