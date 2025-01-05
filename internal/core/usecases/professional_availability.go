@@ -18,8 +18,8 @@ type ProfessionalsAvailabilityUseCaseImpl struct {
 	logger *logrus.Logger
 }
 
-func NewProfessionalsAvailabilityUseCase(repo repository.EstablishmentRepository, logger *logrus.Logger) EstablishmentUseCase {
-	return &EstablishmentUserUseCaseImpl{repo: repo, logger: logger}
+func NewProfessionalsAvailabilityUseCase(repo repository.ProfessionalsAvailabilityRepository, logger *logrus.Logger) ProfessionalsAvailabilityUseCase {
+	return &ProfessionalsAvailabilityUseCaseImpl{repo: repo, logger: logger}
 }
 
 func (uc *ProfessionalsAvailabilityUseCaseImpl) Add(ctx context.Context, availability *domains.ProfessionalAvailability) (*domains.ProfessionalAvailability, *core.Exception) {
