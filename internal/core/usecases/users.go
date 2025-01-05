@@ -14,6 +14,7 @@ type AddUserUseCase interface {
 	Add(ctx context.Context, payload *domains.User) (*domains.User, *core.Exception)
 	FindUserById(ctx context.Context, id string) (*domains.User, *core.Exception)
 	FindAllUsers(ctx context.Context) ([]domains.User, *core.Exception)
+	FindAllEstablishmentsByUserId(ctx context.Context, user_id string) ([]domains.Establishment, *core.Exception)
 }
 
 type AddUserUseCaseImpl struct {
@@ -46,11 +47,6 @@ func (uc *AddUserUseCaseImpl) Add(ctx context.Context, payload *domains.User) (*
 		return nil, core.Unexpected()
 	}
 
-	uc.logger.WithFields(logrus.Fields{
-		"method": "Add",
-		"user":   user.Name,
-	}).Info("User created successfully")
-
 	return user, nil
 }
 
@@ -63,9 +59,17 @@ func (ur *AddUserUseCaseImpl) FindUserById(ctx context.Context, id string) (*dom
 }
 
 func (ur *AddUserUseCaseImpl) FindAllUsers(ctx context.Context) ([]domains.User, *core.Exception) {
-	result, err := ur.repo.FindAllUsers(ctx)
+	users, err := ur.repo.FindAllUsers(ctx)
 	if err != nil {
 		return nil, core.Unexpected(core.WithMessage("Some error has been ocurred"))
 	}
-	return result, nil
+	return users, nil
+}
+
+func (ur *AddUserUseCaseImpl) FindAllEstablishmentsByUserId(ctx context.Context, user_id string) ([]domains.Establishment, *core.Exception) {
+	establishments, err := ur.repo.FindAllEstablishmentsByUserId(ctx, user_id)
+	if err != nil {
+		return nil, core.Unexpected(core.WithMessage("Some error has been ocurred"))
+	}
+	return establishments, nil
 }

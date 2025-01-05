@@ -13,6 +13,7 @@ type EstablishmentController interface {
 	FindEstablishmentById(ctx *gin.Context)
 	GetAllProfessinalsByEstablishmentId(ctx *gin.Context)
 	UpdateEstablishmentById(ctx *gin.Context)
+	GetEstablishmentReport(ctx *gin.Context)
 }
 
 type EstablishmentUseCase struct {
@@ -70,7 +71,7 @@ func (ctrl *EstablishmentUseCase) Add(ctx *gin.Context) {
 // @Failure      500  {object}  domains.HttpResponse  "Internal Server Error"
 // @Router       /establishment_id/{id} [get]
 func (ctrl *EstablishmentUseCase) FindEstablishmentById(ctx *gin.Context) {
-	id := ctx.Param("id")
+	id := ctx.Param("establishment_id")
 	output, err := ctrl.uc.FindEstablishmentById(ctx.Request.Context(), id)
 	if err != nil {
 		ctx.JSON(err.Code, domains.HttpResponse{
@@ -119,6 +120,22 @@ func (ctrl *EstablishmentUseCase) UpdateEstablishmentById(ctx *gin.Context) {
 	}
 	ctx.JSON(http.StatusOK, domains.HttpResponse{
 		Message: "Establishment update successfully",
+		Code:    http.StatusOK,
+		Data:    output,
+	})
+}
+
+func (ctrl *EstablishmentUseCase) GetEstablishmentReport(ctx *gin.Context) {
+	establishment_id := ctx.Param("establishment_id")
+	output, err := ctrl.uc.GetEstablishmentReport(ctx.Request.Context(), establishment_id)
+	if err != nil {
+		ctx.JSON(err.Code, domains.HttpResponse{
+			Message: err.Message,
+			Code:    err.Code,
+		})
+	}
+	ctx.JSON(http.StatusOK, domains.HttpResponse{
+		Message: "Establishment report",
 		Code:    http.StatusOK,
 		Data:    output,
 	})

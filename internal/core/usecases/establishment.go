@@ -13,6 +13,7 @@ type EstablishmentUseCase interface {
 	Add(ctx context.Context, payload *domains.Establishment) (*domains.Establishment, *core.Exception)
 	GetAllProfessionalsByEstablishmentId(ctx context.Context, establishment_id string) ([]domains.Professionals, *core.Exception)
 	FindEstablishmentById(ctx context.Context, establishment_id string) (*domains.Establishment, *core.Exception)
+	GetEstablishmentReport(ctx context.Context, establishment_id string) (*domains.EstablishmentReport, *core.Exception)
 	UpdateEstablishmentById(ctx context.Context, establishment_id string, establishmentData *domains.Establishment) (*domains.Establishment, *core.Exception)
 }
 
@@ -41,12 +42,6 @@ func (uc *EstablishmentUserUseCaseImpl) Add(ctx context.Context, payload *domain
 	if err != nil {
 		return nil, core.Unexpected()
 	}
-
-	uc.logger.WithFields(logrus.Fields{
-		"method":        "Add",
-		"establishment": establishment.Name,
-	}).Info("establishment created successfully")
-
 	return establishment, nil
 }
 
@@ -64,4 +59,12 @@ func (uc *EstablishmentUserUseCaseImpl) UpdateEstablishmentById(ctx context.Cont
 		return nil, core.Unexpected(core.WithMessage("Some error has been ocurred trying update a establishment"))
 	}
 	return establishment, nil
+}
+
+func (uc *EstablishmentUserUseCaseImpl) GetEstablishmentReport(ctx context.Context, establishment_id string) (*domains.EstablishmentReport, *core.Exception) {
+	stats, err := uc.repo.GetEstablishmentReport(ctx, establishment_id)
+	if err != nil {
+		return nil, core.Unexpected(core.WithMessage("Some error has been ocurred trying update a establishment"))
+	}
+	return stats, nil
 }

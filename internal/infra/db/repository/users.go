@@ -13,6 +13,7 @@ type UserRepository interface {
 	Add(ctx context.Context, user *domains.User) (*domains.User, error)
 	FindUserByEmail(ctx context.Context, email string) (*domains.User, error)
 	FindUserById(ctx context.Context, id string) (*domains.User, error)
+	FindAllEstablishmentsByUserId(ctx context.Context, user_id string) ([]domains.Establishment, error)
 	FindAllUsers(ctx context.Context) ([]domains.User, error)
 }
 
@@ -29,9 +30,7 @@ func NewUserRepository(db *gorm.DB, logger *logrus.Logger) *UserDatabaseReposito
 }
 
 func (repo *UserDatabaseRepository) Add(ctx context.Context, user *domains.User) (*domains.User, error) {
-	if err := repo.db.WithContext(ctx).
-		Model(&models.Users{}).
-		Create(user).Error; err != nil {
+	if err := repo.db.WithContext(ctx).Create(user).Error; err != nil {
 		return nil, err
 	}
 	return user, nil
@@ -64,4 +63,16 @@ func (repo *UserDatabaseRepository) FindAllUsers(ctx context.Context) ([]domains
 		return nil, err
 	}
 	return users, nil
+}
+
+func (repo *UserDatabaseRepository) FindAllEstablishmentsByUserId(ctx context.Context, user_id string) ([]domains.Establishment, error) {
+	var establishments []domains.Establishment
+	err := repo.db.WithContext(ctx).
+		Where("user_id = ?", user_id).
+		Find(&establishments).Error
+
+	if err != nil {
+		return nil, err
+	}
+	return establishments, nil
 }

@@ -13,6 +13,7 @@ type EstablishmentRepository interface {
 	Add(ctx context.Context, establishment *domains.Establishment) (*domains.Establishment, error)
 	GetAllProfessionalsByEstablishmentId(ctx context.Context, establishment_id string) ([]domains.Professionals, error)
 	FindEstablishmentById(ctx context.Context, email string) (*domains.Establishment, error)
+	GetEstablishmentReport(ctx context.Context, establishment_id string) (*domains.EstablishmentReport, error)
 	UpdateEstablishmentById(ctx context.Context, establishment_id string, establishmentData *domains.Establishment) (*domains.Establishment, error)
 }
 
@@ -30,7 +31,6 @@ func NewEstablishmentRepository(db *gorm.DB, logger *logrus.Logger) *Establishme
 
 func (repo *EstablishmentDatabaseRepository) Add(ctx context.Context, establishment *domains.Establishment) (*domains.Establishment, error) {
 	if err := repo.db.WithContext(ctx).
-		Model(&models.Establishment{}).
 		Create(establishment).Error; err != nil {
 		return nil, err
 	}
@@ -38,13 +38,13 @@ func (repo *EstablishmentDatabaseRepository) Add(ctx context.Context, establishm
 }
 
 func (repo *EstablishmentDatabaseRepository) FindEstablishmentById(ctx context.Context, establishment_id string) (*domains.Establishment, error) {
-	var establishment *domains.Establishment
+	var establishment domains.Establishment
 	if err := repo.db.WithContext(ctx).
-		Model(&models.Establishment{}).
-		Where("id = ?", establishment_id).Error; err != nil {
+		Where("id = ?", establishment_id).
+		First(&establishment).Error; err != nil {
 		return nil, err
 	}
-	return establishment, nil
+	return &establishment, nil
 }
 
 func (repo *EstablishmentDatabaseRepository) GetAllProfessionalsByEstablishmentId(ctx context.Context, establishment_id string) ([]domains.Professionals, error) {
@@ -65,4 +65,23 @@ func (repo *EstablishmentDatabaseRepository) UpdateEstablishmentById(ctx context
 		return nil, err
 	}
 	return establishmentData, nil
+}
+
+func (repo *EstablishmentDatabaseRepository) GetEstablishmentReport(ctx context.Context, establishment_id string) (*domains.EstablishmentReport, error) {
+	var stats domains.EstablishmentReport
+	if err := repo.db.WithContext(ctx).
+		Model(&models.Professional{}).
+		Where("establishment_id = ?", establishment_id).
+		Count(&stats.TotalProfessionals).Error; err != nil {
+		return nil, err
+	}
+
+	if err := repo.db.WithContext(ctx).
+		Model(&models.Services{}).
+		Where("establishment_id = ?", establishment_id).
+		Count(&stats.TotalServices).Error; err != nil {
+		return nil, err
+	}
+
+	return &stats, nil
 }

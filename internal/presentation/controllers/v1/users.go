@@ -13,6 +13,7 @@ type UserController interface {
 	Add(ctx *gin.Context)
 	FindUserById(ctx *gin.Context)
 	FindAllUsers(ctx *gin.Context)
+	FindAllEstablishmentsByUserId(ctx *gin.Context)
 }
 
 type UserUseCase struct {
@@ -51,12 +52,10 @@ func (ctrl *UserUseCase) Add(ctx *gin.Context) {
 		})
 		return
 	}
-
-	user := dto.MapToUserDTO(output)
 	ctx.JSON(http.StatusOK, domains.HttpResponse{
 		Message: "User created successfully",
 		Code:    http.StatusCreated,
-		Data:    user,
+		Data:    output,
 	})
 }
 
@@ -118,5 +117,21 @@ func (ctrl *UserUseCase) FindAllUsers(ctx *gin.Context) {
 		Message: "Users retrieved",
 		Code:    http.StatusOK,
 		Data:    users,
+	})
+}
+
+func (ctrl *UserUseCase) FindAllEstablishmentsByUserId(ctx *gin.Context) {
+	user_id := ctx.Param("user_id")
+	establishments, err := ctrl.uc.FindAllEstablishmentsByUserId(ctx.Request.Context(), user_id)
+	if err != nil {
+		ctx.JSON(err.Code, domains.HttpResponse{
+			Message: err.Message,
+			Code:    err.Code,
+		})
+	}
+	ctx.JSON(http.StatusOK, domains.HttpResponse{
+		Message: "Users establishments retrieved",
+		Code:    http.StatusOK,
+		Data:    establishments,
 	})
 }
