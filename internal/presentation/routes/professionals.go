@@ -12,7 +12,8 @@ func ProfessionalsGroupRouter(router *gin.Engine, db *gorm.DB, logger *logrus.Lo
 	professionalFactory := factory.ProfessionalFactory(db, logger)
 	v1 := router.Group("/api/v1")
 	{
-		v1.POST("/professionals/", professionalFactory.Add)
 		v1.GET("/professionals/:professional_id", professionalFactory.FindEstablishmentById)
+		v1.PUT("/professionals/:professional_id")
+		v1.POST("/professionals", professionalFactory.Add)
 	}
 }
