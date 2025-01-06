@@ -10,6 +10,7 @@ import (
 
 type ProfessionalAvailabilityController interface {
 	Add(ctx *gin.Context)
+	GetProfessionalAvailabilityById(ctx *gin.Context)
 }
 
 type ProfessionalAvailabilityUseCase struct {
@@ -39,6 +40,23 @@ func (ctrl *ProfessionalAvailabilityUseCase) Add(ctx *gin.Context) {
 	}
 	ctx.JSON(http.StatusOK, domains.HttpResponse{
 		Message: "professional availability created successfully",
+		Code:    http.StatusCreated,
+		Data:    output,
+	})
+}
+
+func (ctrl *ProfessionalAvailabilityUseCase) GetProfessionalAvailabilityById(ctx *gin.Context) {
+	professional_id := ctx.Param("id")
+	output, err := ctrl.uc.GetProfessionalAvailabilityById(ctx.Request.Context(), professional_id)
+	if err != nil {
+		ctx.JSON(err.Code, domains.HttpResponse{
+			Message: err.Message,
+			Code:    err.Code,
+		})
+		return
+	}
+	ctx.JSON(http.StatusOK, domains.HttpResponse{
+		Message: "professional availability retrieved successfully",
 		Code:    http.StatusCreated,
 		Data:    output,
 	})

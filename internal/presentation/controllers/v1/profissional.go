@@ -11,6 +11,7 @@ import (
 type ProfessionalsController interface {
 	Add(ctx *gin.Context)
 	FindEstablishmentById(ctx *gin.Context)
+	UpdateProfessionalById(ctx *gin.Context)
 }
 
 type ProfessionalsUseCase struct {
@@ -78,6 +79,23 @@ func (ctrl *ProfessionalsUseCase) FindEstablishmentById(ctx *gin.Context) {
 	}
 	ctx.JSON(http.StatusOK, domains.HttpResponse{
 		Message: "Professional found successfully",
+		Code:    http.StatusOK,
+		Data:    output,
+	})
+}
+
+func (ctrl *ProfessionalsUseCase) UpdateProfessionalById(ctx *gin.Context) {
+	var professional domains.Professionals
+	id := ctx.Param("id")
+	output, err := ctrl.uc.UpdateProfessionalById(ctx.Request.Context(), id, &professional)
+	if err != nil {
+		ctx.JSON(err.Code, domains.HttpResponse{
+			Message: err.Message,
+			Code:    err.Code,
+		})
+	}
+	ctx.JSON(http.StatusOK, domains.HttpResponse{
+		Message: "Professional update successfully",
 		Code:    http.StatusOK,
 		Data:    output,
 	})

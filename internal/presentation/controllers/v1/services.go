@@ -85,7 +85,7 @@ func (ctrl *ServicesUseCase) FindServiceById(ctx *gin.Context) {
 }
 
 func (ctrl *ServicesUseCase) GetAllServicesByProfessionalId(ctx *gin.Context) {
-	professional_id := ctx.Param("profissional_id")
+	professional_id := ctx.Param("id")
 	output, err := ctrl.uc.GetAllServicesByProfessionalId(ctx.Request.Context(), professional_id)
 	if err != nil {
 		ctx.JSON(err.Code, domains.HttpResponse{

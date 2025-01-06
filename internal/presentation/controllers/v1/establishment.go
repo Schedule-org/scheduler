@@ -71,7 +71,7 @@ func (ctrl *EstablishmentUseCase) Add(ctx *gin.Context) {
 // @Failure      500  {object}  domains.HttpResponse  "Internal Server Error"
 // @Router       /establishment_id/{id} [get]
 func (ctrl *EstablishmentUseCase) FindEstablishmentById(ctx *gin.Context) {
-	id := ctx.Param("establishment_id")
+	id := ctx.Param("id")
 	output, err := ctrl.uc.FindEstablishmentById(ctx.Request.Context(), id)
 	if err != nil {
 		ctx.JSON(err.Code, domains.HttpResponse{
@@ -87,7 +87,7 @@ func (ctrl *EstablishmentUseCase) FindEstablishmentById(ctx *gin.Context) {
 }
 
 func (ctrl *EstablishmentUseCase) GetAllProfessinalsByEstablishmentId(ctx *gin.Context) {
-	establishment_id := ctx.Param("establishment_id")
+	establishment_id := ctx.Param("id")
 	output, err := ctrl.uc.GetAllProfessionalsByEstablishmentId(ctx.Request.Context(), establishment_id)
 	if err != nil {
 		ctx.JSON(err.Code, domains.HttpResponse{
@@ -103,7 +103,7 @@ func (ctrl *EstablishmentUseCase) GetAllProfessinalsByEstablishmentId(ctx *gin.C
 }
 
 func (ctrl *EstablishmentUseCase) UpdateEstablishmentById(ctx *gin.Context) {
-	establishment_id := ctx.Param("establishment_id")
+	establishment_id := ctx.Param("id")
 	var establishment domains.Establishment
 	if err := ctx.ShouldBindJSON(&establishment); err != nil {
 		ctx.JSON(http.StatusBadRequest, domains.HttpResponse{
@@ -126,7 +126,7 @@ func (ctrl *EstablishmentUseCase) UpdateEstablishmentById(ctx *gin.Context) {
 }
 
 func (ctrl *EstablishmentUseCase) GetEstablishmentReport(ctx *gin.Context) {
-	establishment_id := ctx.Param("establishment_id")
+	establishment_id := ctx.Param("id")
 	output, err := ctrl.uc.GetEstablishmentReport(ctx.Request.Context(), establishment_id)
 	if err != nil {
 		ctx.JSON(err.Code, domains.HttpResponse{

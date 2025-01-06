@@ -12,6 +12,7 @@ import (
 type ProfessionalsUseCase interface {
 	Add(ctx context.Context, payload *domains.Professionals) (*domains.Professionals, *core.Exception)
 	FindProfessionalById(ctx context.Context, id string) (*domains.Professionals, *core.Exception)
+	UpdateProfessionalById(ctx context.Context, professional_id string, professionalData *domains.Professionals) (*domains.Professionals, *core.Exception)
 }
 
 type ProfessionalsUseCaseImpl struct {
@@ -36,6 +37,14 @@ func (uc *ProfessionalsUseCaseImpl) Add(ctx context.Context, payload *domains.Pr
 		return nil, core.BadRequest(core.WithMessage("Some fields are missing"))
 	}
 	professional, err := uc.repo.Add(ctx, payload)
+	if err != nil {
+		return nil, core.Unexpected()
+	}
+	return professional, nil
+}
+
+func (uc *ProfessionalsUseCaseImpl) UpdateProfessionalById(ctx context.Context, professionail_id string, professionalData *domains.Professionals) (*domains.Professionals, *core.Exception) {
+	professional, err := uc.repo.UpdateProfessionalById(ctx, professionail_id, professionalData)
 	if err != nil {
 		return nil, core.Unexpected()
 	}

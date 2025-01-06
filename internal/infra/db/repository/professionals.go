@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/hebertzin/scheduler/internal/domains"
+	"github.com/hebertzin/scheduler/internal/infra/db/models"
 	"github.com/sirupsen/logrus"
 	"gorm.io/gorm"
 )
@@ -11,6 +12,7 @@ import (
 type ProfessionalsRepository interface {
 	Add(ctx context.Context, establishment *domains.Professionals) (*domains.Professionals, error)
 	FindProfessionalById(ctx context.Context, email string) (*domains.Professionals, error)
+	UpdateProfessionalById(ctx context.Context, professional_id string, professionalData *domains.Professionals) (*domains.Professionals, error)
 }
 
 type ProfessionalsDatabaseRepository struct {
@@ -41,4 +43,14 @@ func (repo *ProfessionalsDatabaseRepository) FindProfessionalById(ctx context.Co
 		return nil, err
 	}
 	return &professionals, nil
+}
+
+func (repo *ProfessionalsDatabaseRepository) UpdateProfessionalById(ctx context.Context, professionail_id string, professionalData *domains.Professionals) (*domains.Professionals, error) {
+	if err := repo.db.WithContext(ctx).
+		Model(&models.Professional{}).
+		Where("id = ?", professionail_id).
+		Updates(professionalData).Error; err != nil {
+		return nil, err
+	}
+	return professionalData, nil
 }

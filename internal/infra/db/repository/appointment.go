@@ -10,6 +10,8 @@ import (
 
 type AppointmentRepository interface {
 	Add(ctx context.Context, appointment *domains.Appointment) (*domains.Appointment, error)
+	GetAllAppointmentsByProfessionalId(ctx context.Context, professional_id string) ([]domains.Appointment, error)
+	GetAppointmentById(ctx context.Context, appointment_id string) (*domains.Appointment, error)
 }
 
 type AppointmentDatabaseRepository struct {
@@ -30,4 +32,23 @@ func (repo *AppointmentDatabaseRepository) Add(ctx context.Context, appointment 
 		return nil, err
 	}
 	return appointment, nil
+}
+
+func (repo *AppointmentDatabaseRepository) GetAllAppointmentsByProfessionalId(ctx context.Context, professional_id string) ([]domains.Appointment, error) {
+	var appointments []domains.Appointment
+	err := repo.db.WithContext(ctx).Find(&appointments).Error
+	if err != nil {
+		return nil, err
+	}
+	return appointments, nil
+}
+
+func (repo *AppointmentDatabaseRepository) GetAppointmentById(ctx context.Context, appointment_id string) (*domains.Appointment, error) {
+	var appointment domains.Appointment
+	if err := repo.db.WithContext(ctx).
+		Where("id = ?", appointment_id).
+		First(&appointment).Error; err != nil {
+		return nil, err
+	}
+	return &appointment, nil
 }
