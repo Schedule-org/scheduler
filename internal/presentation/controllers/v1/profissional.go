@@ -86,7 +86,7 @@ func (ctrl *ProfessionalsUseCase) FindEstablishmentById(ctx *gin.Context) {
 
 func (ctrl *ProfessionalsUseCase) UpdateProfessionalById(ctx *gin.Context) {
 	var professional domains.Professionals
-	id := ctx.Param("professional_id")
+	id := ctx.Param("id")
 	output, err := ctrl.uc.UpdateProfessionalById(ctx.Request.Context(), id, &professional)
 	if err != nil {
 		ctx.JSON(err.Code, domains.HttpResponse{

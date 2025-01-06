@@ -121,7 +121,7 @@ func (ctrl *UserUseCase) FindAllUsers(ctx *gin.Context) {
 }
 
 func (ctrl *UserUseCase) FindAllEstablishmentsByUserId(ctx *gin.Context) {
-	user_id := ctx.Param("user_id")
+	user_id := ctx.Param("id")
 	establishments, err := ctrl.uc.FindAllEstablishmentsByUserId(ctx.Request.Context(), user_id)
 	if err != nil {
 		ctx.JSON(err.Code, domains.HttpResponse{

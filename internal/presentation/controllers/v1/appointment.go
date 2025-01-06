@@ -47,7 +47,7 @@ func (ctrl *AppointmentUseCase) Add(ctx *gin.Context) {
 }
 
 func (ctrl *AppointmentUseCase) GetAllAppointmentsByProfessionalId(ctx *gin.Context) {
-	id := ctx.Param("professional_id")
+	id := ctx.Param("id")
 	output, err := ctrl.uc.GetAllAppointmentsByProfessionalId(ctx.Request.Context(), id)
 	if err != nil {
 		ctx.JSON(err.Code, domains.HttpResponse{
@@ -64,7 +64,7 @@ func (ctrl *AppointmentUseCase) GetAllAppointmentsByProfessionalId(ctx *gin.Cont
 }
 
 func (ctrl *AppointmentUseCase) GetAppointmentById(ctx *gin.Context) {
-	id := ctx.Param("appointment_id")
+	id := ctx.Param("id")
 	output, err := ctrl.uc.GetAppointmentById(ctx.Request.Context(), id)
 	if err != nil {
 		ctx.JSON(err.Code, domains.HttpResponse{

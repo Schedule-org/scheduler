@@ -12,8 +12,8 @@ func AppointmentGroupRouter(router *gin.Engine, db *gorm.DB, logger *logrus.Logg
 	appointmentFactory := factory.AppointmentFactory(db, logger)
 	v1 := router.Group("/api/v1")
 	{
-		v1.GET("/appointment/:professional_id/all", appointmentFactory.GetAllAppointmentsByProfessionalId)
-		v1.GET("/appointment/:appointment_id", appointmentFactory.GetAppointmentById)
-		v1.POST("/appointment", appointmentFactory.Add)
+		v1.GET("/appointments/:id/professional", appointmentFactory.GetAllAppointmentsByProfessionalId)
+		v1.GET("/appointments/:id", appointmentFactory.GetAppointmentById)
+		v1.POST("/appointments", appointmentFactory.Add)
 	}
 }
