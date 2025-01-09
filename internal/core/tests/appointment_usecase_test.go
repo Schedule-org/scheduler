@@ -1,0 +1,60 @@
+package usecases
+
+import (
+	"context"
+	"testing"
+	"time"
+
+	"github.com/hebertzin/scheduler/internal/core/usecases"
+	"github.com/hebertzin/scheduler/internal/domains"
+	"github.com/sirupsen/logrus"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
+)
+
+type MockAppointmentRepository struct {
+	mock.Mock
+}
+
+func (m *MockAppointmentRepository) Add(ctx context.Context, appointment *domains.Appointment) (*domains.Appointment, error) {
+	args := m.Called(ctx, appointment)
+	return args.Get(0).(*domains.Appointment), args.Error(1)
+}
+
+func (m *MockAppointmentRepository) GetAllAppointmentsByProfessionalId(ctx context.Context, professionalID string) ([]domains.Appointment, error) {
+	return nil, nil
+}
+
+func (m *MockAppointmentRepository) GetAppointmentById(ctx context.Context, appointmentID string) (*domains.Appointment, error) {
+	return nil, nil
+}
+
+func TestAppointmentUseCase_Add_Success(t *testing.T) {
+	mockRepo := new(MockAppointmentRepository)
+	logger := logrus.New()
+
+	appointmentUseCase := usecases.NewAppointmentUseCase(mockRepo, logger)
+
+	scheduledDate := time.Date(2025, 1, 15, 10, 0, 0, 0, time.UTC)
+	appointment := &domains.Appointment{
+		ProfessionalID: "5689c151-c968-47d7-9ff8-97a863047f19",
+		ScheduledDate:  scheduledDate,
+		Email:          "hebertsantosdeveloper@gmail.com",
+		Phone:          "13996612070",
+		ServiceID:      "5689c151-c968-47d7-9ff8-97a863047f19",
+		Notes:          "Some note",
+	}
+
+	mockRepo.On("Add", mock.Anything, appointment).Return(appointment, nil)
+	result, _ := appointmentUseCase.Add(context.Background(), appointment)
+
+	assert.NotNil(t, result)
+	assert.Equal(t, appointment.ProfessionalID, result.ProfessionalID)
+	assert.Equal(t, appointment.ScheduledDate, result.ScheduledDate)
+	assert.Equal(t, appointment.Email, result.Email)
+	assert.Equal(t, appointment.Phone, result.Phone)
+	assert.Equal(t, appointment.ServiceID, result.ServiceID)
+	assert.Equal(t, appointment.Notes, result.Notes)
+
+	mockRepo.AssertCalled(t, "Add", mock.Anything, appointment)
+}
