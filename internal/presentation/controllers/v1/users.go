@@ -6,7 +6,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/hebertzin/scheduler/internal/core/usecases"
 	"github.com/hebertzin/scheduler/internal/domains"
-	"github.com/hebertzin/scheduler/internal/infra/dto"
 )
 
 type UserController interface {
@@ -80,11 +79,10 @@ func (ctrl *UserUseCase) FindUserById(ctx *gin.Context) {
 			Code:    err.Code,
 		})
 	}
-	user := dto.MapToUserDTO(users)
 	ctx.JSON(http.StatusOK, domains.HttpResponse{
 		Message: "User found successfully",
 		Code:    http.StatusOK,
-		Data:    user,
+		Data:    users,
 	})
 }
 
