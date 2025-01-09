@@ -10,7 +10,7 @@ import (
 
 type ProfessionalsController interface {
 	Add(ctx *gin.Context)
-	FindEstablishmentById(ctx *gin.Context)
+	FindProfessionalById(ctx *gin.Context)
 	UpdateProfessionalById(ctx *gin.Context)
 }
 
@@ -42,7 +42,7 @@ func (ctrl *ProfessionalsUseCase) Add(ctx *gin.Context) {
 		return
 	}
 
-	output, err := ctrl.uc.Add(ctx.Request.Context(), &input)
+	professional, err := ctrl.uc.Add(ctx.Request.Context(), &input)
 	if err != nil {
 		ctx.JSON(err.Code, domains.HttpResponse{
 			Message: err.Message,
@@ -53,7 +53,7 @@ func (ctrl *ProfessionalsUseCase) Add(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, domains.HttpResponse{
 		Message: "Professional created successfully",
 		Code:    http.StatusCreated,
-		Data:    output,
+		Data:    professional,
 	})
 }
 
@@ -68,9 +68,9 @@ func (ctrl *ProfessionalsUseCase) Add(ctx *gin.Context) {
 // @Failure      404  {object}  domains.HttpResponse  "Professional not found"
 // @Failure      500  {object}  domains.HttpResponse  "Internal Server Error"
 // @Router       /professionals/{id} [get]
-func (ctrl *ProfessionalsUseCase) FindEstablishmentById(ctx *gin.Context) {
+func (ctrl *ProfessionalsUseCase) FindProfessionalById(ctx *gin.Context) {
 	id := ctx.Param("id")
-	output, err := ctrl.uc.FindProfessionalById(ctx.Request.Context(), id)
+	professional, err := ctrl.uc.FindProfessionalById(ctx.Request.Context(), id)
 	if err != nil {
 		ctx.JSON(err.Code, domains.HttpResponse{
 			Message: err.Message,
@@ -80,14 +80,14 @@ func (ctrl *ProfessionalsUseCase) FindEstablishmentById(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, domains.HttpResponse{
 		Message: "Professional found successfully",
 		Code:    http.StatusOK,
-		Data:    output,
+		Data:    professional,
 	})
 }
 
 func (ctrl *ProfessionalsUseCase) UpdateProfessionalById(ctx *gin.Context) {
-	var professional domains.Professionals
+	var input domains.Professionals
 	id := ctx.Param("id")
-	output, err := ctrl.uc.UpdateProfessionalById(ctx.Request.Context(), id, &professional)
+	professional, err := ctrl.uc.UpdateProfessionalById(ctx.Request.Context(), id, &input)
 	if err != nil {
 		ctx.JSON(err.Code, domains.HttpResponse{
 			Message: err.Message,
@@ -97,6 +97,6 @@ func (ctrl *ProfessionalsUseCase) UpdateProfessionalById(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, domains.HttpResponse{
 		Message: "Professional update successfully",
 		Code:    http.StatusOK,
-		Data:    output,
+		Data:    professional,
 	})
 }

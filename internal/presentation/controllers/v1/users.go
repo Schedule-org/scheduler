@@ -44,7 +44,7 @@ func (ctrl *UserUseCase) Add(ctx *gin.Context) {
 		return
 	}
 
-	output, err := ctrl.uc.Add(ctx.Request.Context(), &input)
+	users, err := ctrl.uc.Add(ctx.Request.Context(), &input)
 	if err != nil {
 		ctx.JSON(err.Code, domains.HttpResponse{
 			Message: err.Message,
@@ -55,7 +55,7 @@ func (ctrl *UserUseCase) Add(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, domains.HttpResponse{
 		Message: "User created successfully",
 		Code:    http.StatusCreated,
-		Data:    output,
+		Data:    users,
 	})
 }
 
@@ -73,14 +73,14 @@ func (ctrl *UserUseCase) Add(ctx *gin.Context) {
 // @Router       /users/{id} [get]
 func (ctrl *UserUseCase) FindUserById(ctx *gin.Context) {
 	id := ctx.Param("id")
-	output, err := ctrl.uc.FindUserById(ctx.Request.Context(), id)
+	users, err := ctrl.uc.FindUserById(ctx.Request.Context(), id)
 	if err != nil {
 		ctx.JSON(err.Code, domains.HttpResponse{
 			Message: err.Message,
 			Code:    err.Code,
 		})
 	}
-	user := dto.MapToUserDTO(output)
+	user := dto.MapToUserDTO(users)
 	ctx.JSON(http.StatusOK, domains.HttpResponse{
 		Message: "User found successfully",
 		Code:    http.StatusOK,
@@ -98,21 +98,13 @@ func (ctrl *UserUseCase) FindUserById(ctx *gin.Context) {
 // @Failure      500  {object}  domains.HttpResponse  "Internal Server Error"
 // @Router       /users [get]
 func (ctrl *UserUseCase) FindAllUsers(ctx *gin.Context) {
-	output, err := ctrl.uc.FindAllUsers(ctx.Request.Context())
+	users, err := ctrl.uc.FindAllUsers(ctx.Request.Context())
 	if err != nil {
 		ctx.JSON(err.Code, domains.HttpResponse{
 			Message: err.Message,
 			Code:    err.Code,
 		})
 	}
-
-	var users []dto.UserDTO
-
-	for i := 0; i < len(output); i++ {
-		mapUser := dto.MapToUserDTO(&output[i])
-		users = append(users, *mapUser)
-	}
-
 	ctx.JSON(http.StatusOK, domains.HttpResponse{
 		Message: "Users retrieved",
 		Code:    http.StatusOK,
@@ -121,8 +113,8 @@ func (ctrl *UserUseCase) FindAllUsers(ctx *gin.Context) {
 }
 
 func (ctrl *UserUseCase) FindAllEstablishmentsByUserId(ctx *gin.Context) {
-	user_id := ctx.Param("id")
-	establishments, err := ctrl.uc.FindAllEstablishmentsByUserId(ctx.Request.Context(), user_id)
+	id := ctx.Param("id")
+	establishments, err := ctrl.uc.FindAllEstablishmentsByUserId(ctx.Request.Context(), id)
 	if err != nil {
 		ctx.JSON(err.Code, domains.HttpResponse{
 			Message: err.Message,

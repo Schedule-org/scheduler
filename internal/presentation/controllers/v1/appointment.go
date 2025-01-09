@@ -31,7 +31,7 @@ func (ctrl *AppointmentUseCase) Add(ctx *gin.Context) {
 		return
 	}
 
-	output, err := ctrl.uc.Add(ctx.Request.Context(), &input)
+	appointment, err := ctrl.uc.Add(ctx.Request.Context(), &input)
 	if err != nil {
 		ctx.JSON(err.Code, domains.HttpResponse{
 			Message: err.Message,
@@ -42,13 +42,13 @@ func (ctrl *AppointmentUseCase) Add(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, domains.HttpResponse{
 		Message: "appointment created successfully",
 		Code:    http.StatusCreated,
-		Data:    output,
+		Data:    appointment,
 	})
 }
 
 func (ctrl *AppointmentUseCase) GetAllAppointmentsByProfessionalId(ctx *gin.Context) {
 	id := ctx.Param("id")
-	output, err := ctrl.uc.GetAllAppointmentsByProfessionalId(ctx.Request.Context(), id)
+	appointments, err := ctrl.uc.GetAllAppointmentsByProfessionalId(ctx.Request.Context(), id)
 	if err != nil {
 		ctx.JSON(err.Code, domains.HttpResponse{
 			Message: err.Message,
@@ -59,13 +59,13 @@ func (ctrl *AppointmentUseCase) GetAllAppointmentsByProfessionalId(ctx *gin.Cont
 	ctx.JSON(http.StatusOK, domains.HttpResponse{
 		Message: "appointments by professional id successfully retrieved",
 		Code:    http.StatusCreated,
-		Data:    output,
+		Data:    appointments,
 	})
 }
 
 func (ctrl *AppointmentUseCase) GetAppointmentById(ctx *gin.Context) {
 	id := ctx.Param("id")
-	output, err := ctrl.uc.GetAppointmentById(ctx.Request.Context(), id)
+	appointment, err := ctrl.uc.GetAppointmentById(ctx.Request.Context(), id)
 	if err != nil {
 		ctx.JSON(err.Code, domains.HttpResponse{
 			Message: err.Message,
@@ -74,8 +74,8 @@ func (ctrl *AppointmentUseCase) GetAppointmentById(ctx *gin.Context) {
 		return
 	}
 	ctx.JSON(http.StatusOK, domains.HttpResponse{
-		Message: "appointments by id successfully retrieved",
+		Message: "appointment by id successfully retrieved",
 		Code:    http.StatusCreated,
-		Data:    output,
+		Data:    appointment,
 	})
 }

@@ -2,13 +2,11 @@ package domains
 
 import (
 	"time"
-
-	"github.com/google/uuid"
 )
 
 type Appointment struct {
-	ProfessionalID uuid.UUID `json:"professional_id"`
-	ServiceID      uuid.UUID `json:"service_id"`
+	ProfessionalID string    `json:"professional_id"`
+	ServiceID      string    `json:"service_id"`
 	ScheduledDate  time.Time `json:"schedule_date"`
 	Email          string    `json:"user_email"`
 	Phone          string    `json:"user_phone"`
