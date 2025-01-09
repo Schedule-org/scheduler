@@ -30,7 +30,7 @@ func (ctrl *ProfessionalAvailabilityUseCase) Add(ctx *gin.Context) {
 		return
 	}
 
-	output, err := ctrl.uc.Add(ctx.Request.Context(), &input)
+	availability, err := ctrl.uc.Add(ctx.Request.Context(), &input)
 	if err != nil {
 		ctx.JSON(err.Code, domains.HttpResponse{
 			Message: err.Message,
@@ -41,13 +41,13 @@ func (ctrl *ProfessionalAvailabilityUseCase) Add(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, domains.HttpResponse{
 		Message: "professional availability created successfully",
 		Code:    http.StatusCreated,
-		Data:    output,
+		Data:    availability,
 	})
 }
 
 func (ctrl *ProfessionalAvailabilityUseCase) GetProfessionalAvailabilityById(ctx *gin.Context) {
 	professional_id := ctx.Param("id")
-	output, err := ctrl.uc.GetProfessionalAvailabilityById(ctx.Request.Context(), professional_id)
+	availability, err := ctrl.uc.GetProfessionalAvailabilityById(ctx.Request.Context(), professional_id)
 	if err != nil {
 		ctx.JSON(err.Code, domains.HttpResponse{
 			Message: err.Message,
@@ -58,6 +58,6 @@ func (ctrl *ProfessionalAvailabilityUseCase) GetProfessionalAvailabilityById(ctx
 	ctx.JSON(http.StatusOK, domains.HttpResponse{
 		Message: "professional availability retrieved successfully",
 		Code:    http.StatusCreated,
-		Data:    output,
+		Data:    availability,
 	})
 }

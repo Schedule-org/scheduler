@@ -42,7 +42,7 @@ func (ctrl *ServicesUseCase) Add(ctx *gin.Context) {
 		return
 	}
 
-	output, err := ctrl.uc.Add(ctx.Request.Context(), &input)
+	service, err := ctrl.uc.Add(ctx.Request.Context(), &input)
 	if err != nil {
 		ctx.JSON(err.Code, domains.HttpResponse{
 			Message: err.Message,
@@ -53,7 +53,7 @@ func (ctrl *ServicesUseCase) Add(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, domains.HttpResponse{
 		Message: "service created successfully",
 		Code:    http.StatusCreated,
-		Data:    output,
+		Data:    service,
 	})
 }
 
@@ -70,7 +70,7 @@ func (ctrl *ServicesUseCase) Add(ctx *gin.Context) {
 // @Router       /service_id/{id} [get]
 func (ctrl *ServicesUseCase) FindServiceById(ctx *gin.Context) {
 	id := ctx.Param("id")
-	output, err := ctrl.uc.FindServiceById(ctx.Request.Context(), id)
+	service, err := ctrl.uc.FindServiceById(ctx.Request.Context(), id)
 	if err != nil {
 		ctx.JSON(err.Code, domains.HttpResponse{
 			Message: err.Message,
@@ -80,13 +80,13 @@ func (ctrl *ServicesUseCase) FindServiceById(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, domains.HttpResponse{
 		Message: "service found successfully",
 		Code:    http.StatusOK,
-		Data:    output,
+		Data:    service,
 	})
 }
 
 func (ctrl *ServicesUseCase) GetAllServicesByProfessionalId(ctx *gin.Context) {
 	professional_id := ctx.Param("id")
-	output, err := ctrl.uc.GetAllServicesByProfessionalId(ctx.Request.Context(), professional_id)
+	services, err := ctrl.uc.GetAllServicesByProfessionalId(ctx.Request.Context(), professional_id)
 	if err != nil {
 		ctx.JSON(err.Code, domains.HttpResponse{
 			Message: err.Message,
@@ -96,6 +96,6 @@ func (ctrl *ServicesUseCase) GetAllServicesByProfessionalId(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, domains.HttpResponse{
 		Message: "services found successfully",
 		Code:    http.StatusOK,
-		Data:    output,
+		Data:    services,
 	})
 }

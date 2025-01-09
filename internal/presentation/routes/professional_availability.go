@@ -12,7 +12,7 @@ func ProfessionalAvailabilityGroupRouter(router *gin.Engine, db *gorm.DB, logger
 	professionalsAvailabilityFactory := factory.ProfessionalAvailabilityFactory(db, logger)
 	v1 := router.Group("/api/v1")
 	{
-		v1.GET("/availability/:id/professional")
-		v1.POST("/availability/professionals/", professionalsAvailabilityFactory.Add)
+		v1.GET("/availability/:id/professional", professionalsAvailabilityFactory.GetProfessionalAvailabilityById)
+		v1.POST("/availability", professionalsAvailabilityFactory.Add)
 	}
 }
