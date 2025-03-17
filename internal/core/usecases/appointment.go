@@ -10,32 +10,32 @@ import (
 )
 
 type AppointmentUseCase struct {
-	repo   repository.AppointmentRepository
-	logger *logrus.Logger
+	repository repository.AppointmentRepository
+	logger     *logrus.Logger
 }
 
-func NewAppointmentUseCase(repo repository.AppointmentRepository, logger *logrus.Logger) domains.AppointmentUseCase {
-	return &AppointmentUseCase{repo: repo, logger: logger}
+func NewAppointmentUseCase(repository repository.AppointmentRepository, logger *logrus.Logger) domains.AppointmentUseCase {
+	return &AppointmentUseCase{repository: repository, logger: logger}
 }
 
-func (ur *AppointmentUseCase) Add(ctx context.Context, appointment *domains.Appointment) (*domains.Appointment, *core.Exception) {
-	appointment, err := ur.repo.Add(ctx, appointment)
+func (s *AppointmentUseCase) Add(ctx context.Context, appointment *domains.Appointment) (*domains.Appointment, *core.Exception) {
+	appointment, err := s.repository.Add(ctx, appointment)
 	if err != nil {
 		return nil, core.Unexpected(core.WithMessage("error creating appointment"), core.WithError(err))
 	}
 	return appointment, nil
 }
 
-func (ur *AppointmentUseCase) GetAllAppointmentsByProfessionalId(ctx context.Context, professional_id string) ([]domains.Appointment, *core.Exception) {
-	appointments, err := ur.repo.GetAllAppointmentsByProfessionalId(ctx, professional_id)
+func (s *AppointmentUseCase) GetAllAppointmentsByProfessionalId(ctx context.Context, professional_id string) ([]domains.Appointment, *core.Exception) {
+	appointments, err := s.repository.GetAllAppointmentsByProfessionalId(ctx, professional_id)
 	if err != nil {
 		return nil, core.Unexpected(core.WithMessage("error get all appointment by professional id"), core.WithError(err))
 	}
 	return appointments, nil
 }
 
-func (ur *AppointmentUseCase) GetAppointmentById(ctx context.Context, appointment_id string) (*domains.Appointment, *core.Exception) {
-	appointment, err := ur.repo.GetAppointmentById(ctx, appointment_id)
+func (s *AppointmentUseCase) GetAppointmentById(ctx context.Context, appointment_id string) (*domains.Appointment, *core.Exception) {
+	appointment, err := s.repository.GetAppointmentById(ctx, appointment_id)
 	if err != nil {
 		return nil, core.Unexpected(core.WithMessage("error get appointment by id"), core.WithError(err))
 	}

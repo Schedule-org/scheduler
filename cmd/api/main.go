@@ -7,7 +7,7 @@ import (
 	"github.com/hebertzin/scheduler/internal/infra/config/env"
 	"github.com/hebertzin/scheduler/internal/infra/config/logging"
 	"github.com/hebertzin/scheduler/internal/infra/db"
-	router "github.com/hebertzin/scheduler/internal/presentation/router"
+	"github.com/hebertzin/scheduler/internal/presentation/router"
 
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
