@@ -4,7 +4,6 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/hebertzin/scheduler/internal/core/usecases"
 	"github.com/hebertzin/scheduler/internal/domains"
 )
 
@@ -16,10 +15,10 @@ type UserController interface {
 }
 
 type UserUseCase struct {
-	uc usecases.AddUserUseCase
+	uc domains.UserUseCase
 }
 
-func NewUserController(uc usecases.AddUserUseCase) *UserUseCase {
+func NewUserController(uc domains.UserUseCase) *UserUseCase {
 	return &UserUseCase{uc: uc}
 }
 

@@ -9,32 +9,24 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-type EstablishmentUseCase interface {
-	Add(ctx context.Context, payload *domains.Establishment) (*domains.Establishment, *core.Exception)
-	GetAllProfessionalsByEstablishmentId(ctx context.Context, establishment_id string) ([]domains.Professionals, *core.Exception)
-	FindEstablishmentById(ctx context.Context, establishment_id string) (*domains.Establishment, *core.Exception)
-	GetEstablishmentReport(ctx context.Context, establishment_id string) (*domains.EstablishmentReport, *core.Exception)
-	UpdateEstablishmentById(ctx context.Context, establishment_id string, establishmentData *domains.Establishment) (*domains.Establishment, *core.Exception)
-}
-
-type EstablishmentUserUseCaseImpl struct {
+type EstablishmentUserUseCase struct {
 	repo   repository.EstablishmentRepository
 	logger *logrus.Logger
 }
 
-func NewEstablishmentUseCase(repo repository.EstablishmentRepository, logger *logrus.Logger) EstablishmentUseCase {
-	return &EstablishmentUserUseCaseImpl{repo: repo, logger: logger}
+func NewEstablishmentUseCase(repo repository.EstablishmentRepository, logger *logrus.Logger) domains.EstablishmentUseCase {
+	return &EstablishmentUserUseCase{repo: repo, logger: logger}
 }
 
-func (ur *EstablishmentUserUseCaseImpl) FindEstablishmentById(ctx context.Context, id string) (*domains.Establishment, *core.Exception) {
-	establishment, err := ur.repo.FindEstablishmentById(ctx, id)
+func (uc *EstablishmentUserUseCase) FindEstablishmentById(ctx context.Context, id string) (*domains.Establishment, *core.Exception) {
+	establishment, err := uc.repo.FindEstablishmentById(ctx, id)
 	if err != nil {
 		return nil, core.Unexpected(core.WithMessage("error finding establishment"), core.WithError(err))
 	}
 	return establishment, nil
 }
 
-func (uc *EstablishmentUserUseCaseImpl) Add(ctx context.Context, payload *domains.Establishment) (*domains.Establishment, *core.Exception) {
+func (uc *EstablishmentUserUseCase) Add(ctx context.Context, payload *domains.Establishment) (*domains.Establishment, *core.Exception) {
 	if payload.Name == "" || payload.City == "" || payload.PostalCode == "" || payload.State == "" {
 		return nil, core.BadRequest(core.WithMessage("Some fields are missing"))
 	}
@@ -45,7 +37,7 @@ func (uc *EstablishmentUserUseCaseImpl) Add(ctx context.Context, payload *domain
 	return establishment, nil
 }
 
-func (uc *EstablishmentUserUseCaseImpl) GetAllProfessionalsByEstablishmentId(ctx context.Context, establishment_id string) ([]domains.Professionals, *core.Exception) {
+func (uc *EstablishmentUserUseCase) GetAllProfessionalsByEstablishmentId(ctx context.Context, establishment_id string) ([]domains.Professionals, *core.Exception) {
 	professionails, err := uc.repo.GetAllProfessionalsByEstablishmentId(ctx, establishment_id)
 	if err != nil {
 		return nil, core.Unexpected()
@@ -53,7 +45,7 @@ func (uc *EstablishmentUserUseCaseImpl) GetAllProfessionalsByEstablishmentId(ctx
 	return professionails, nil
 }
 
-func (uc *EstablishmentUserUseCaseImpl) UpdateEstablishmentById(ctx context.Context, establishment_id string, establishmentData *domains.Establishment) (*domains.Establishment, *core.Exception) {
+func (uc *EstablishmentUserUseCase) UpdateEstablishmentById(ctx context.Context, establishment_id string, establishmentData *domains.Establishment) (*domains.Establishment, *core.Exception) {
 	establishment, err := uc.repo.UpdateEstablishmentById(ctx, establishment_id, establishmentData)
 	if err != nil {
 		return nil, core.Unexpected(core.WithMessage("Some error has been ocurred trying update a establishment"))
@@ -61,7 +53,7 @@ func (uc *EstablishmentUserUseCaseImpl) UpdateEstablishmentById(ctx context.Cont
 	return establishment, nil
 }
 
-func (uc *EstablishmentUserUseCaseImpl) GetEstablishmentReport(ctx context.Context, establishment_id string) (*domains.EstablishmentReport, *core.Exception) {
+func (uc *EstablishmentUserUseCase) GetEstablishmentReport(ctx context.Context, establishment_id string) (*domains.EstablishmentReport, *core.Exception) {
 	stats, err := uc.repo.GetEstablishmentReport(ctx, establishment_id)
 	if err != nil {
 		return nil, core.Unexpected(core.WithMessage("Some error has been ocurred trying update a establishment"))

@@ -4,7 +4,6 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/hebertzin/scheduler/internal/core/usecases"
 	"github.com/hebertzin/scheduler/internal/domains"
 )
 
@@ -17,10 +16,10 @@ type EstablishmentController interface {
 }
 
 type EstablishmentUseCase struct {
-	uc usecases.EstablishmentUseCase
+	uc domains.EstablishmentUseCase
 }
 
-func NewEstablishmentController(uc usecases.EstablishmentUseCase) *EstablishmentUseCase {
+func NewEstablishmentController(uc domains.EstablishmentUseCase) *EstablishmentUseCase {
 	return &EstablishmentUseCase{uc: uc}
 }
 

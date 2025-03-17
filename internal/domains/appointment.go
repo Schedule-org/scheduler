@@ -1,7 +1,10 @@
 package domains
 
 import (
+	"context"
 	"time"
+
+	"github.com/hebertzin/scheduler/internal/core"
 )
 
 type Appointment struct {
@@ -13,4 +16,10 @@ type Appointment struct {
 	Notes          string    `json:"notes"`
 	CreatedAt      time.Time `json:"created_at"`
 	UpdatedAt      time.Time `json:"updated_at"`
+}
+
+type AppointmentUseCase interface {
+	Add(ctx context.Context, appointment *Appointment) (*Appointment, *core.Exception)
+	GetAllAppointmentsByProfessionalId(ctx context.Context, professional_id string) ([]Appointment, *core.Exception)
+	GetAppointmentById(ctx context.Context, appointment_id string) (*Appointment, *core.Exception)
 }

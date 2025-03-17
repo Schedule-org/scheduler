@@ -1,8 +1,11 @@
 package domains
 
 import (
+	"context"
 	"database/sql"
 	"time"
+
+	"github.com/hebertzin/scheduler/internal/core"
 )
 
 type User struct {
@@ -12,4 +15,11 @@ type User struct {
 	ActivatedAt sql.NullTime `json:"activate_at"`
 	CreatedAt   time.Time    `json:"created_at"`
 	UpdatedAt   time.Time    `json:"updated_at"`
+}
+
+type UserUseCase interface {
+	Add(ctx context.Context, payload *User) (*User, *core.Exception)
+	FindUserById(ctx context.Context, id string) (*User, *core.Exception)
+	FindAllUsers(ctx context.Context) ([]User, *core.Exception)
+	FindAllEstablishmentsByUserId(ctx context.Context, user_id string) ([]Establishment, *core.Exception)
 }

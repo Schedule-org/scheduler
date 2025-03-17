@@ -10,19 +10,12 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-type AddUserUseCase interface {
-	Add(ctx context.Context, payload *domains.User) (*domains.User, *core.Exception)
-	FindUserById(ctx context.Context, id string) (*domains.User, *core.Exception)
-	FindAllUsers(ctx context.Context) ([]domains.User, *core.Exception)
-	FindAllEstablishmentsByUserId(ctx context.Context, user_id string) ([]domains.Establishment, *core.Exception)
-}
-
 type AddUserUseCaseImpl struct {
 	repo   repository.UserRepository
 	logger *logrus.Logger
 }
 
-func NewAddUserUseCase(repo repository.UserRepository, logger *logrus.Logger) AddUserUseCase {
+func NewAddUserUseCase(repo repository.UserRepository, logger *logrus.Logger) domains.UserUseCase {
 	return &AddUserUseCaseImpl{repo: repo, logger: logger}
 }
 

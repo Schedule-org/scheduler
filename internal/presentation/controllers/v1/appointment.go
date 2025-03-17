@@ -4,7 +4,6 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/hebertzin/scheduler/internal/core/usecases"
 	"github.com/hebertzin/scheduler/internal/domains"
 )
 
@@ -15,10 +14,10 @@ type AppointmentController interface {
 }
 
 type AppointmentUseCase struct {
-	uc usecases.AppointmentUseCase
+	uc domains.AppointmentUseCase
 }
 
-func NewAppointmentController(uc usecases.AppointmentUseCase) *AppointmentUseCase {
+func NewAppointmentController(uc domains.AppointmentUseCase) *AppointmentUseCase {
 	return &AppointmentUseCase{uc: uc}
 }
 

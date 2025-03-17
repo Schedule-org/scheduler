@@ -9,22 +9,16 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-type ServicesUseCase interface {
-	Add(ctx context.Context, payload *domains.Services) (*domains.Services, *core.Exception)
-	FindServiceById(ctx context.Context, id string) (*domains.Services, *core.Exception)
-	GetAllServicesByProfessionalId(ctx context.Context, professional_id string) ([]domains.Services, *core.Exception)
-}
-
-type ServicesUseCaseImpl struct {
+type ServicesUseCase struct {
 	repo   repository.ServicesRepository
 	logger *logrus.Logger
 }
 
-func NewServicesUseCase(repo repository.ServicesRepository, logger *logrus.Logger) ServicesUseCase {
-	return &ServicesUseCaseImpl{repo: repo, logger: logger}
+func NewServicesUseCase(repo repository.ServicesRepository, logger *logrus.Logger) domains.ServicesUseCase {
+	return &ServicesUseCase{repo: repo, logger: logger}
 }
 
-func (ur *ServicesUseCaseImpl) FindServiceById(ctx context.Context, id string) (*domains.Services, *core.Exception) {
+func (ur *ServicesUseCase) FindServiceById(ctx context.Context, id string) (*domains.Services, *core.Exception) {
 	service, err := ur.repo.FindServiceById(ctx, id)
 	if err != nil {
 		return nil, core.Unexpected(core.WithMessage("error finding service"), core.WithError(err))
@@ -32,7 +26,7 @@ func (ur *ServicesUseCaseImpl) FindServiceById(ctx context.Context, id string) (
 	return service, nil
 }
 
-func (uc *ServicesUseCaseImpl) Add(ctx context.Context, payload *domains.Services) (*domains.Services, *core.Exception) {
+func (uc *ServicesUseCase) Add(ctx context.Context, payload *domains.Services) (*domains.Services, *core.Exception) {
 	if payload.Name == "" || payload.Duration == "" {
 		return nil, core.BadRequest(core.WithMessage("Some fields are missing"))
 	}
@@ -43,7 +37,7 @@ func (uc *ServicesUseCaseImpl) Add(ctx context.Context, payload *domains.Service
 	return service, nil
 }
 
-func (uc *ServicesUseCaseImpl) GetAllServicesByProfessionalId(ctx context.Context, professional_id string) ([]domains.Services, *core.Exception) {
+func (uc *ServicesUseCase) GetAllServicesByProfessionalId(ctx context.Context, professional_id string) ([]domains.Services, *core.Exception) {
 	services, err := uc.repo.GetAllServicesByProfessionalId(ctx, professional_id)
 	if err != nil {
 		return nil, core.Unexpected()

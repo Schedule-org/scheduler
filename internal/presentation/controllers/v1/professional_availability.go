@@ -4,7 +4,6 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/hebertzin/scheduler/internal/core/usecases"
 	"github.com/hebertzin/scheduler/internal/domains"
 )
 
@@ -14,10 +13,10 @@ type ProfessionalAvailabilityController interface {
 }
 
 type ProfessionalAvailabilityUseCase struct {
-	uc usecases.ProfessionalsAvailabilityUseCase
+	uc domains.ProfessionalsAvailabilityUseCase
 }
 
-func NewProfessionalAvailabilityController(uc usecases.ProfessionalsAvailabilityUseCase) *ProfessionalAvailabilityUseCase {
+func NewProfessionalAvailabilityController(uc domains.ProfessionalsAvailabilityUseCase) *ProfessionalAvailabilityUseCase {
 	return &ProfessionalAvailabilityUseCase{uc: uc}
 }
 
