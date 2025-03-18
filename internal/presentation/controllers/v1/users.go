@@ -15,6 +15,7 @@ type UserController interface {
 }
 
 type UserHandler struct {
+	BaseHandler
 	uc domains.UserUseCase
 }
 
@@ -36,25 +37,17 @@ func NewUserController(uc domains.UserUseCase) *UserHandler {
 func (h *UserHandler) Add(ctx *gin.Context) {
 	var input domains.User
 	if err := ctx.ShouldBindJSON(&input); err != nil {
-		ctx.JSON(http.StatusBadRequest, domains.HttpResponse{
-			Message: err.Error(),
-		})
+		h.RespondWithError(ctx, http.StatusBadRequest, err.Error(), err)
 		return
 	}
 
-	users, err := h.uc.Add(ctx.Request.Context(), &input)
+	user, err := h.uc.Add(ctx.Request.Context(), &input)
 	if err != nil {
-		ctx.JSON(err.Code, domains.HttpResponse{
-			Message: err.Message,
-			Code:    err.Code,
-		})
+		h.RespondWithError(ctx, err.Code, err.Message, err)
 		return
 	}
-	ctx.JSON(http.StatusOK, domains.HttpResponse{
-		Message: "User created successfully",
-		Code:    http.StatusCreated,
-		Data:    users,
-	})
+
+	h.RespondWithSuccess(ctx, http.StatusCreated, "User created successfully", user)
 }
 
 // FindUserById godoc
@@ -71,18 +64,13 @@ func (h *UserHandler) Add(ctx *gin.Context) {
 // @Router       /users/{id} [get]
 func (h *UserHandler) FindUserById(ctx *gin.Context) {
 	id := ctx.Param("id")
-	users, err := h.uc.FindUserById(ctx.Request.Context(), id)
+	user, err := h.uc.FindUserById(ctx.Request.Context(), id)
 	if err != nil {
-		ctx.JSON(err.Code, domains.HttpResponse{
-			Message: err.Message,
-			Code:    err.Code,
-		})
+		h.RespondWithError(ctx, err.Code, err.Message, err)
+		return
 	}
-	ctx.JSON(http.StatusOK, domains.HttpResponse{
-		Message: "User found successfully",
-		Code:    http.StatusOK,
-		Data:    users,
-	})
+
+	h.RespondWithSuccess(ctx, http.StatusOK, "user found successfully", user)
 }
 
 // FindAllUsers godoc
@@ -97,30 +85,19 @@ func (h *UserHandler) FindUserById(ctx *gin.Context) {
 func (h *UserHandler) FindAllUsers(ctx *gin.Context) {
 	users, err := h.uc.FindAllUsers(ctx.Request.Context())
 	if err != nil {
-		ctx.JSON(err.Code, domains.HttpResponse{
-			Message: err.Message,
-			Code:    err.Code,
-		})
+		h.RespondWithError(ctx, err.Code, err.Message, err)
+		return
 	}
-	ctx.JSON(http.StatusOK, domains.HttpResponse{
-		Message: "Users retrieved",
-		Code:    http.StatusOK,
-		Data:    users,
-	})
+
+	h.RespondWithSuccess(ctx, http.StatusOK, "Users retrieved", users)
 }
 
 func (h *UserHandler) FindAllEstablishmentsByUserId(ctx *gin.Context) {
 	id := ctx.Param("id")
 	establishments, err := h.uc.FindAllEstablishmentsByUserId(ctx.Request.Context(), id)
 	if err != nil {
-		ctx.JSON(err.Code, domains.HttpResponse{
-			Message: err.Message,
-			Code:    err.Code,
-		})
+		h.RespondWithError(ctx, err.Code, err.Message, err)
 	}
-	ctx.JSON(http.StatusOK, domains.HttpResponse{
-		Message: "Users establishments retrieved",
-		Code:    http.StatusOK,
-		Data:    establishments,
-	})
+
+	h.RespondWithSuccess(ctx, http.StatusOK, "Users establishments retrieved", establishments)
 }
