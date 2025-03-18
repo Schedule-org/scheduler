@@ -21,3 +21,9 @@ type ServicesUseCase interface {
 	FindServiceById(ctx context.Context, id string) (*Services, *core.Exception)
 	GetAllServicesByProfessionalId(ctx context.Context, professional_id string) ([]Services, *core.Exception)
 }
+
+type ServicesRepository interface {
+	Add(ctx context.Context, establishment *Services) (*Services, error)
+	FindServiceById(ctx context.Context, service_id string) (*Services, error)
+	GetAllServicesByProfessionalId(ctx context.Context, professional_id string) ([]Services, error)
+}

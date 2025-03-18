@@ -12,7 +12,6 @@ type AppointmentController interface {
 	GetAllAppointmentsByProfessionalId(ctx *gin.Context)
 	GetAppointmentById(ctx *gin.Context)
 }
-
 type AppointmentUseCase struct {
 	uc domains.AppointmentUseCase
 }

@@ -9,14 +9,6 @@ import (
 	"gorm.io/gorm"
 )
 
-type UserRepository interface {
-	Add(ctx context.Context, user *domains.User) (*domains.User, error)
-	FindUserByEmail(ctx context.Context, email string) (*domains.User, error)
-	FindUserById(ctx context.Context, id string) (*domains.User, error)
-	FindAllEstablishmentsByUserId(ctx context.Context, user_id string) ([]domains.Establishment, error)
-	FindAllUsers(ctx context.Context) ([]domains.User, error)
-}
-
 type UserDatabaseRepository struct {
 	db     *gorm.DB
 	logger *logrus.Logger

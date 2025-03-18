@@ -5,16 +5,15 @@ import (
 
 	"github.com/hebertzin/scheduler/internal/core"
 	"github.com/hebertzin/scheduler/internal/domains"
-	"github.com/hebertzin/scheduler/internal/infra/db/repository"
 	"github.com/sirupsen/logrus"
 )
 
 type AppointmentUseCase struct {
-	repository repository.AppointmentRepository
+	repository domains.AppointmentRepository
 	logger     *logrus.Logger
 }
 
-func NewAppointmentUseCase(repository repository.AppointmentRepository, logger *logrus.Logger) domains.AppointmentUseCase {
+func NewAppointmentUseCase(repository domains.AppointmentRepository, logger *logrus.Logger) domains.AppointmentUseCase {
 	return &AppointmentUseCase{repository: repository, logger: logger}
 }
 

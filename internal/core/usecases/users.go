@@ -5,17 +5,16 @@ import (
 
 	"github.com/hebertzin/scheduler/internal/core"
 	"github.com/hebertzin/scheduler/internal/domains"
-	"github.com/hebertzin/scheduler/internal/infra/db/repository"
 	"github.com/sirupsen/logrus"
 	"golang.org/x/crypto/bcrypt"
 )
 
 type UserUseCase struct {
-	repository repository.UserRepository
+	repository domains.UserRepository
 	logger     *logrus.Logger
 }
 
-func NewAddUserUseCase(repository repository.UserRepository, logger *logrus.Logger) domains.UserUseCase {
+func NewAddUserUseCase(repository domains.UserRepository, logger *logrus.Logger) domains.UserUseCase {
 	return &UserUseCase{repository: repository, logger: logger}
 }
 

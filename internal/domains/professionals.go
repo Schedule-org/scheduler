@@ -20,3 +20,9 @@ type ProfessionalsUseCase interface {
 	FindProfessionalById(ctx context.Context, id string) (*Professionals, *core.Exception)
 	UpdateProfessionalById(ctx context.Context, professional_id string, professionalData *Professionals) (*Professionals, *core.Exception)
 }
+
+type ProfessionalsRepository interface {
+	Add(ctx context.Context, establishment *Professionals) (*Professionals, error)
+	FindProfessionalById(ctx context.Context, email string) (*Professionals, error)
+	UpdateProfessionalById(ctx context.Context, professional_id string, professionalData *Professionals) (*Professionals, error)
+}

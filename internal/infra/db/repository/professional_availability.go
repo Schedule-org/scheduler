@@ -9,11 +9,6 @@ import (
 	"gorm.io/gorm"
 )
 
-type ProfessionalsAvailabilityRepository interface {
-	Add(ctx context.Context, availability *domains.ProfessionalAvailability) (*domains.ProfessionalAvailability, error)
-	GetProfessionalAvailabilityById(ctx context.Context, professional_id string) ([]domains.ProfessionalAvailability, error)
-}
-
 type ProfessionalsAvailabilityDatabaseRepository struct {
 	db     *gorm.DB
 	logger *logrus.Logger
