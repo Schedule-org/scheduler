@@ -7,16 +7,18 @@ import (
 	"github.com/hebertzin/scheduler/internal/domains"
 )
 
-type ServicesController interface {
-	Add(ctx *gin.Context)
-	FindServiceById(ctx *gin.Context)
-	GetAllServicesByProfessionalId(ctx *gin.Context)
-}
+type (
+	ServicesController interface {
+		Add(ctx *gin.Context)
+		FindServiceById(ctx *gin.Context)
+		GetAllServicesByProfessionalId(ctx *gin.Context)
+	}
 
-type ServicesHandler struct {
-	BaseHandler
-	uc domains.ServicesUseCase
-}
+	ServicesHandler struct {
+		BaseHandler
+		uc domains.ServicesUseCase
+	}
+)
 
 func NewServicesController(uc domains.ServicesUseCase) *ServicesHandler {
 	return &ServicesHandler{uc: uc}

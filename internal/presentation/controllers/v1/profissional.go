@@ -7,16 +7,18 @@ import (
 	"github.com/hebertzin/scheduler/internal/domains"
 )
 
-type ProfessionalsController interface {
-	Add(ctx *gin.Context)
-	FindProfessionalById(ctx *gin.Context)
-	UpdateProfessionalById(ctx *gin.Context)
-}
+type (
+	ProfessionalsController interface {
+		Add(ctx *gin.Context)
+		FindProfessionalById(ctx *gin.Context)
+		UpdateProfessionalById(ctx *gin.Context)
+	}
 
-type ProfessionalsHandler struct {
-	BaseHandler
-	uc domains.ProfessionalsUseCase
-}
+	ProfessionalsHandler struct {
+		BaseHandler
+		uc domains.ProfessionalsUseCase
+	}
+)
 
 func NewProfessionalController(uc domains.ProfessionalsUseCase) *ProfessionalsHandler {
 	return &ProfessionalsHandler{uc: uc}

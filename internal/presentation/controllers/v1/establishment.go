@@ -7,18 +7,19 @@ import (
 	"github.com/hebertzin/scheduler/internal/domains"
 )
 
-type EstablishmentController interface {
-	Add(ctx *gin.Context)
-	FindEstablishmentById(ctx *gin.Context)
-	GetAllProfessinalsByEstablishmentId(ctx *gin.Context)
-	UpdateEstablishmentById(ctx *gin.Context)
-	GetEstablishmentReport(ctx *gin.Context)
-}
-
-type EstablishmentHandler struct {
-	BaseHandler
-	uc domains.EstablishmentUseCase
-}
+type (
+	EstablishmentController interface {
+		Add(ctx *gin.Context)
+		FindEstablishmentById(ctx *gin.Context)
+		GetAllProfessinalsByEstablishmentId(ctx *gin.Context)
+		UpdateEstablishmentById(ctx *gin.Context)
+		GetEstablishmentReport(ctx *gin.Context)
+	}
+	EstablishmentHandler struct {
+		BaseHandler
+		uc domains.EstablishmentUseCase
+	}
+)
 
 func NewEstablishmentController(uc domains.EstablishmentUseCase) *EstablishmentHandler {
 	return &EstablishmentHandler{uc: uc}

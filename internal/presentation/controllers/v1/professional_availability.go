@@ -7,15 +7,17 @@ import (
 	"github.com/hebertzin/scheduler/internal/domains"
 )
 
-type ProfessionalAvailabilityController interface {
-	Add(ctx *gin.Context)
-	GetProfessionalAvailabilityById(ctx *gin.Context)
-}
+type (
+	ProfessionalAvailabilityController interface {
+		Add(ctx *gin.Context)
+		GetProfessionalAvailabilityById(ctx *gin.Context)
+	}
 
-type ProfessionalAvailabilityHandler struct {
-	BaseHandler
-	uc domains.ProfessionalsAvailabilityUseCase
-}
+	ProfessionalAvailabilityHandler struct {
+		BaseHandler
+		uc domains.ProfessionalsAvailabilityUseCase
+	}
+)
 
 func NewProfessionalAvailabilityController(uc domains.ProfessionalsAvailabilityUseCase) *ProfessionalAvailabilityHandler {
 	return &ProfessionalAvailabilityHandler{uc: uc}

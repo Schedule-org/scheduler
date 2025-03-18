@@ -7,15 +7,17 @@ import (
 	"github.com/hebertzin/scheduler/internal/domains"
 )
 
-type AppointmentController interface {
-	Add(ctx *gin.Context)
-	GetAllAppointmentsByProfessionalId(ctx *gin.Context)
-	GetAppointmentById(ctx *gin.Context)
-}
-type AppointmentHandler struct {
-	BaseHandler
-	uc domains.AppointmentUseCase
-}
+type (
+	AppointmentController interface {
+		Add(ctx *gin.Context)
+		GetAllAppointmentsByProfessionalId(ctx *gin.Context)
+		GetAppointmentById(ctx *gin.Context)
+	}
+	AppointmentHandler struct {
+		BaseHandler
+		uc domains.AppointmentUseCase
+	}
+)
 
 func NewAppointmentController(uc domains.AppointmentUseCase) *AppointmentHandler {
 	return &AppointmentHandler{uc: uc}
