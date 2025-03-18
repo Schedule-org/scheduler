@@ -12,69 +12,49 @@ type AppointmentController interface {
 	GetAllAppointmentsByProfessionalId(ctx *gin.Context)
 	GetAppointmentById(ctx *gin.Context)
 }
-
-type AppointmentUseCase struct {
+type AppointmentHandler struct {
+	BaseHandler
 	uc domains.AppointmentUseCase
 }
 
-func NewAppointmentController(uc domains.AppointmentUseCase) *AppointmentUseCase {
-	return &AppointmentUseCase{uc: uc}
+func NewAppointmentController(uc domains.AppointmentUseCase) *AppointmentHandler {
+	return &AppointmentHandler{uc: uc}
 }
 
-func (ctrl *AppointmentUseCase) Add(ctx *gin.Context) {
+func (h *AppointmentHandler) Add(ctx *gin.Context) {
 	var input domains.Appointment
 	if err := ctx.ShouldBindJSON(&input); err != nil {
-		ctx.JSON(http.StatusBadRequest, domains.HttpResponse{
-			Message: err.Error(),
-		})
+		h.RespondWithError(ctx, http.StatusBadRequest, "Invalid request payload", err)
 		return
 	}
 
-	appointment, err := ctrl.uc.Add(ctx.Request.Context(), &input)
+	appointment, err := h.uc.Add(ctx.Request.Context(), &input)
 	if err != nil {
-		ctx.JSON(err.Code, domains.HttpResponse{
-			Message: err.Message,
-			Code:    err.Code,
-		})
+		h.RespondWithError(ctx, err.Code, err.Message, err)
 		return
 	}
-	ctx.JSON(http.StatusOK, domains.HttpResponse{
-		Message: "appointment created successfully",
-		Code:    http.StatusCreated,
-		Data:    appointment,
-	})
+
+	h.RespondWithSuccess(ctx, http.StatusCreated, "Appointment created successfully", appointment)
 }
 
-func (ctrl *AppointmentUseCase) GetAllAppointmentsByProfessionalId(ctx *gin.Context) {
+func (h *AppointmentHandler) GetAllAppointmentsByProfessionalId(ctx *gin.Context) {
 	id := ctx.Param("id")
-	appointments, err := ctrl.uc.GetAllAppointmentsByProfessionalId(ctx.Request.Context(), id)
+	appointments, err := h.uc.GetAllAppointmentsByProfessionalId(ctx.Request.Context(), id)
 	if err != nil {
-		ctx.JSON(err.Code, domains.HttpResponse{
-			Message: err.Message,
-			Code:    err.Code,
-		})
+		h.RespondWithError(ctx, err.Code, err.Message, err)
 		return
 	}
-	ctx.JSON(http.StatusOK, domains.HttpResponse{
-		Message: "appointments by professional id successfully retrieved",
-		Code:    http.StatusCreated,
-		Data:    appointments,
-	})
+
+	h.RespondWithSuccess(ctx, http.StatusOK, "appointments by professional id successfully retrieved", appointments)
 }
 
-func (ctrl *AppointmentUseCase) GetAppointmentById(ctx *gin.Context) {
+func (h *AppointmentHandler) GetAppointmentById(ctx *gin.Context) {
 	id := ctx.Param("id")
-	appointment, err := ctrl.uc.GetAppointmentById(ctx.Request.Context(), id)
+	appointment, err := h.uc.GetAppointmentById(ctx.Request.Context(), id)
 	if err != nil {
-		ctx.JSON(err.Code, domains.HttpResponse{
-			Message: err.Message,
-			Code:    err.Code,
-		})
+		h.RespondWithError(ctx, err.Code, err.Message, err)
 		return
 	}
-	ctx.JSON(http.StatusOK, domains.HttpResponse{
-		Message: "appointment by id successfully retrieved",
-		Code:    http.StatusCreated,
-		Data:    appointment,
-	})
+
+	h.RespondWithSuccess(ctx, http.StatusOK, "appointment by id successfully retrieved", appointment)
 }

@@ -8,12 +8,6 @@ import (
 	"gorm.io/gorm"
 )
 
-type AppointmentRepository interface {
-	Add(ctx context.Context, appointment *domains.Appointment) (*domains.Appointment, error)
-	GetAllAppointmentsByProfessionalId(ctx context.Context, professional_id string) ([]domains.Appointment, error)
-	GetAppointmentById(ctx context.Context, appointment_id string) (*domains.Appointment, error)
-}
-
 type AppointmentDatabaseRepository struct {
 	db     *gorm.DB
 	logger *logrus.Logger

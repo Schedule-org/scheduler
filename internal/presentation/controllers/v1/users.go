@@ -14,12 +14,13 @@ type UserController interface {
 	FindAllEstablishmentsByUserId(ctx *gin.Context)
 }
 
-type UserUseCase struct {
+type UserHandler struct {
+	BaseHandler
 	uc domains.UserUseCase
 }
 
-func NewUserController(uc domains.UserUseCase) *UserUseCase {
-	return &UserUseCase{uc: uc}
+func NewUserController(uc domains.UserUseCase) *UserHandler {
+	return &UserHandler{uc: uc}
 }
 
 // Add godoc
@@ -33,28 +34,20 @@ func NewUserController(uc domains.UserUseCase) *UserUseCase {
 // @Failure      400   {object}  domains.HttpResponse  "Bad Request"
 // @Failure      500   {object}  domains.HttpResponse  "Internal Server Error"
 // @Router       /users [post]
-func (ctrl *UserUseCase) Add(ctx *gin.Context) {
+func (h *UserHandler) Add(ctx *gin.Context) {
 	var input domains.User
 	if err := ctx.ShouldBindJSON(&input); err != nil {
-		ctx.JSON(http.StatusBadRequest, domains.HttpResponse{
-			Message: err.Error(),
-		})
+		h.RespondWithError(ctx, http.StatusBadRequest, err.Error(), err)
 		return
 	}
 
-	users, err := ctrl.uc.Add(ctx.Request.Context(), &input)
+	user, err := h.uc.Add(ctx.Request.Context(), &input)
 	if err != nil {
-		ctx.JSON(err.Code, domains.HttpResponse{
-			Message: err.Message,
-			Code:    err.Code,
-		})
+		h.RespondWithError(ctx, err.Code, err.Message, err)
 		return
 	}
-	ctx.JSON(http.StatusOK, domains.HttpResponse{
-		Message: "User created successfully",
-		Code:    http.StatusCreated,
-		Data:    users,
-	})
+
+	h.RespondWithSuccess(ctx, http.StatusCreated, "User created successfully", user)
 }
 
 // FindUserById godoc
@@ -69,20 +62,15 @@ func (ctrl *UserUseCase) Add(ctx *gin.Context) {
 // @Failure      404  {object}  domains.HttpResponse  "User not found"
 // @Failure      500  {object}  domains.HttpResponse  "Internal Server Error"
 // @Router       /users/{id} [get]
-func (ctrl *UserUseCase) FindUserById(ctx *gin.Context) {
+func (h *UserHandler) FindUserById(ctx *gin.Context) {
 	id := ctx.Param("id")
-	users, err := ctrl.uc.FindUserById(ctx.Request.Context(), id)
+	user, err := h.uc.FindUserById(ctx.Request.Context(), id)
 	if err != nil {
-		ctx.JSON(err.Code, domains.HttpResponse{
-			Message: err.Message,
-			Code:    err.Code,
-		})
+		h.RespondWithError(ctx, err.Code, err.Message, err)
+		return
 	}
-	ctx.JSON(http.StatusOK, domains.HttpResponse{
-		Message: "User found successfully",
-		Code:    http.StatusOK,
-		Data:    users,
-	})
+
+	h.RespondWithSuccess(ctx, http.StatusOK, "user found successfully", user)
 }
 
 // FindAllUsers godoc
@@ -94,33 +82,22 @@ func (ctrl *UserUseCase) FindUserById(ctx *gin.Context) {
 // @Success      200  {object}  domains.HttpResponse{data=[]dto.UserDTO}  "Users retrieved successfully"
 // @Failure      500  {object}  domains.HttpResponse  "Internal Server Error"
 // @Router       /users [get]
-func (ctrl *UserUseCase) FindAllUsers(ctx *gin.Context) {
-	users, err := ctrl.uc.FindAllUsers(ctx.Request.Context())
+func (h *UserHandler) FindAllUsers(ctx *gin.Context) {
+	users, err := h.uc.FindAllUsers(ctx.Request.Context())
 	if err != nil {
-		ctx.JSON(err.Code, domains.HttpResponse{
-			Message: err.Message,
-			Code:    err.Code,
-		})
+		h.RespondWithError(ctx, err.Code, err.Message, err)
+		return
 	}
-	ctx.JSON(http.StatusOK, domains.HttpResponse{
-		Message: "Users retrieved",
-		Code:    http.StatusOK,
-		Data:    users,
-	})
+
+	h.RespondWithSuccess(ctx, http.StatusOK, "Users retrieved", users)
 }
 
-func (ctrl *UserUseCase) FindAllEstablishmentsByUserId(ctx *gin.Context) {
+func (h *UserHandler) FindAllEstablishmentsByUserId(ctx *gin.Context) {
 	id := ctx.Param("id")
-	establishments, err := ctrl.uc.FindAllEstablishmentsByUserId(ctx.Request.Context(), id)
+	establishments, err := h.uc.FindAllEstablishmentsByUserId(ctx.Request.Context(), id)
 	if err != nil {
-		ctx.JSON(err.Code, domains.HttpResponse{
-			Message: err.Message,
-			Code:    err.Code,
-		})
+		h.RespondWithError(ctx, err.Code, err.Message, err)
 	}
-	ctx.JSON(http.StatusOK, domains.HttpResponse{
-		Message: "Users establishments retrieved",
-		Code:    http.StatusOK,
-		Data:    establishments,
-	})
+
+	h.RespondWithSuccess(ctx, http.StatusOK, "Users establishments retrieved", establishments)
 }

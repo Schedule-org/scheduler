@@ -5,16 +5,15 @@ import (
 
 	"github.com/hebertzin/scheduler/internal/core"
 	"github.com/hebertzin/scheduler/internal/domains"
-	"github.com/hebertzin/scheduler/internal/infra/db/repository"
 	"github.com/sirupsen/logrus"
 )
 
 type ProfessionalsUseCase struct {
-	repository repository.ProfessionalsRepository
+	repository domains.ProfessionalsRepository
 	logger     *logrus.Logger
 }
 
-func NewProfissionalUseCase(repository repository.ProfessionalsRepository, logger *logrus.Logger) domains.ProfessionalsUseCase {
+func NewProfissionalUseCase(repository domains.ProfessionalsRepository, logger *logrus.Logger) domains.ProfessionalsUseCase {
 	return &ProfessionalsUseCase{repository: repository, logger: logger}
 }
 

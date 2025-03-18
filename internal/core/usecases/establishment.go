@@ -5,16 +5,15 @@ import (
 
 	"github.com/hebertzin/scheduler/internal/core"
 	"github.com/hebertzin/scheduler/internal/domains"
-	"github.com/hebertzin/scheduler/internal/infra/db/repository"
 	"github.com/sirupsen/logrus"
 )
 
 type EstablishmentUserUseCase struct {
-	repository repository.EstablishmentRepository
+	repository domains.EstablishmentRepository
 	logger     *logrus.Logger
 }
 
-func NewEstablishmentUseCase(repository repository.EstablishmentRepository, logger *logrus.Logger) domains.EstablishmentUseCase {
+func NewEstablishmentUseCase(repository domains.EstablishmentRepository, logger *logrus.Logger) domains.EstablishmentUseCase {
 	return &EstablishmentUserUseCase{repository: repository, logger: logger}
 }
 

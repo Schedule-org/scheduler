@@ -15,12 +15,13 @@ type EstablishmentController interface {
 	GetEstablishmentReport(ctx *gin.Context)
 }
 
-type EstablishmentUseCase struct {
+type EstablishmentHandler struct {
+	BaseHandler
 	uc domains.EstablishmentUseCase
 }
 
-func NewEstablishmentController(uc domains.EstablishmentUseCase) *EstablishmentUseCase {
-	return &EstablishmentUseCase{uc: uc}
+func NewEstablishmentController(uc domains.EstablishmentUseCase) *EstablishmentHandler {
+	return &EstablishmentHandler{uc: uc}
 }
 
 // Add godoc
@@ -34,28 +35,19 @@ func NewEstablishmentController(uc domains.EstablishmentUseCase) *EstablishmentU
 // @Failure      400            {object}  domains.HttpResponse  "Bad Request"
 // @Failure      500            {object}  domains.HttpResponse  "Internal Server Error"
 // @Router       /establishments [post]
-func (ctrl *EstablishmentUseCase) Add(ctx *gin.Context) {
+func (h *EstablishmentHandler) Add(ctx *gin.Context) {
 	var input domains.Establishment
 	if err := ctx.ShouldBindJSON(&input); err != nil {
-		ctx.JSON(http.StatusBadRequest, domains.HttpResponse{
-			Message: err.Error(),
-		})
+		h.RespondWithError(ctx, http.StatusBadRequest, err.Error(), err)
 		return
 	}
 
-	establishment, err := ctrl.uc.Add(ctx.Request.Context(), &input)
+	establishment, err := h.uc.Add(ctx.Request.Context(), &input)
 	if err != nil {
-		ctx.JSON(err.Code, domains.HttpResponse{
-			Message: err.Message,
-			Code:    err.Code,
-		})
+		h.RespondWithError(ctx, err.Code, err.Message, err)
 		return
 	}
-	ctx.JSON(http.StatusOK, domains.HttpResponse{
-		Message: "Establishment created successfully",
-		Code:    http.StatusCreated,
-		Data:    establishment,
-	})
+	h.RespondWithSuccess(ctx, http.StatusCreated, "Establishment created successfully", establishment)
 }
 
 // FindEstablishmentById godoc
@@ -69,20 +61,16 @@ func (ctrl *EstablishmentUseCase) Add(ctx *gin.Context) {
 // @Failure      404  {object}  domains.HttpResponse  "Establishment not found"
 // @Failure      500  {object}  domains.HttpResponse  "Internal Server Error"
 // @Router       /establishment_id/{id} [get]
-func (ctrl *EstablishmentUseCase) FindEstablishmentById(ctx *gin.Context) {
+func (h *EstablishmentHandler) FindEstablishmentById(ctx *gin.Context) {
 	id := ctx.Param("id")
-	establishment, err := ctrl.uc.FindEstablishmentById(ctx.Request.Context(), id)
+
+	establishment, err := h.uc.FindEstablishmentById(ctx.Request.Context(), id)
 	if err != nil {
-		ctx.JSON(err.Code, domains.HttpResponse{
-			Message: err.Message,
-			Code:    err.Code,
-		})
+		h.RespondWithError(ctx, err.Code, err.Message, err)
+		return
 	}
-	ctx.JSON(http.StatusOK, domains.HttpResponse{
-		Message: "Establishment found successfully",
-		Code:    http.StatusOK,
-		Data:    establishment,
-	})
+
+	h.RespondWithSuccess(ctx, http.StatusOK, "Establishment found successfully", establishment)
 }
 
 // GetAllProfessinalsByEstablishmentId godoc
@@ -96,57 +84,39 @@ func (ctrl *EstablishmentUseCase) FindEstablishmentById(ctx *gin.Context) {
 // @Failure      404  {object}  domains.HttpResponse  "Professionals found successfully"
 // @Failure      500  {object}  domains.HttpResponse  "Internal Server Error"
 // @Router       /establishment/:id/professionals [get]
-func (ctrl *EstablishmentUseCase) GetAllProfessinalsByEstablishmentId(ctx *gin.Context) {
+func (h *EstablishmentHandler) GetAllProfessinalsByEstablishmentId(ctx *gin.Context) {
 	establishment_id := ctx.Param("id")
-	professionals, err := ctrl.uc.GetAllProfessionalsByEstablishmentId(ctx.Request.Context(), establishment_id)
+	professionals, err := h.uc.GetAllProfessionalsByEstablishmentId(ctx.Request.Context(), establishment_id)
 	if err != nil {
-		ctx.JSON(err.Code, domains.HttpResponse{
-			Message: err.Message,
-			Code:    err.Code,
-		})
+		h.RespondWithError(ctx, err.Code, err.Message, err)
+		return
 	}
-	ctx.JSON(http.StatusOK, domains.HttpResponse{
-		Message: "Professionals found successfully",
-		Code:    http.StatusOK,
-		Data:    professionals,
-	})
+	h.RespondWithSuccess(ctx, http.StatusOK, "Professionals found successfully", professionals)
 }
 
-func (ctrl *EstablishmentUseCase) UpdateEstablishmentById(ctx *gin.Context) {
+func (h *EstablishmentHandler) UpdateEstablishmentById(ctx *gin.Context) {
 	establishment_id := ctx.Param("id")
 	var input domains.Establishment
 	if err := ctx.ShouldBindJSON(&input); err != nil {
-		ctx.JSON(http.StatusBadRequest, domains.HttpResponse{
-			Message: err.Error(),
-		})
+		h.RespondWithError(ctx, http.StatusBadRequest, err.Error(), err)
 		return
 	}
-	establishments, err := ctrl.uc.UpdateEstablishmentById(ctx.Request.Context(), establishment_id, &input)
+	establishments, err := h.uc.UpdateEstablishmentById(ctx.Request.Context(), establishment_id, &input)
 	if err != nil {
-		ctx.JSON(err.Code, domains.HttpResponse{
-			Message: err.Message,
-			Code:    err.Code,
-		})
+		h.RespondWithError(ctx, err.Code, err.Message, err)
+		return
 	}
-	ctx.JSON(http.StatusOK, domains.HttpResponse{
-		Message: "Establishment update successfully",
-		Code:    http.StatusOK,
-		Data:    establishments,
-	})
+
+	h.RespondWithSuccess(ctx, http.StatusOK, "Establishment update successfully", establishments)
 }
 
-func (ctrl *EstablishmentUseCase) GetEstablishmentReport(ctx *gin.Context) {
+func (h *EstablishmentHandler) GetEstablishmentReport(ctx *gin.Context) {
 	establishment_id := ctx.Param("id")
-	establishmentReport, err := ctrl.uc.GetEstablishmentReport(ctx.Request.Context(), establishment_id)
+	establishmentReport, err := h.uc.GetEstablishmentReport(ctx.Request.Context(), establishment_id)
 	if err != nil {
-		ctx.JSON(err.Code, domains.HttpResponse{
-			Message: err.Message,
-			Code:    err.Code,
-		})
+		h.RespondWithError(ctx, http.StatusBadRequest, err.Error(), err)
+		return
 	}
-	ctx.JSON(http.StatusOK, domains.HttpResponse{
-		Message: "Establishment report",
-		Code:    http.StatusOK,
-		Data:    establishmentReport,
-	})
+
+	h.RespondWithSuccess(ctx, http.StatusOK, "Establishment report", establishmentReport)
 }

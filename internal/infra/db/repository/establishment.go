@@ -9,14 +9,6 @@ import (
 	"gorm.io/gorm"
 )
 
-type EstablishmentRepository interface {
-	Add(ctx context.Context, establishment *domains.Establishment) (*domains.Establishment, error)
-	GetAllProfessionalsByEstablishmentId(ctx context.Context, establishment_id string) ([]domains.Professionals, error)
-	FindEstablishmentById(ctx context.Context, email string) (*domains.Establishment, error)
-	GetEstablishmentReport(ctx context.Context, establishment_id string) (*domains.EstablishmentReport, error)
-	UpdateEstablishmentById(ctx context.Context, establishment_id string, establishmentData *domains.Establishment) (*domains.Establishment, error)
-}
-
 type EstablishmentDatabaseRepository struct {
 	db     *gorm.DB
 	logger *logrus.Logger

@@ -13,12 +13,13 @@ type ServicesController interface {
 	GetAllServicesByProfessionalId(ctx *gin.Context)
 }
 
-type ServicesUseCase struct {
+type ServicesHandler struct {
+	BaseHandler
 	uc domains.ServicesUseCase
 }
 
-func NewServicesController(uc domains.ServicesUseCase) *ServicesUseCase {
-	return &ServicesUseCase{uc: uc}
+func NewServicesController(uc domains.ServicesUseCase) *ServicesHandler {
+	return &ServicesHandler{uc: uc}
 }
 
 // AddService godoc
@@ -32,28 +33,20 @@ func NewServicesController(uc domains.ServicesUseCase) *ServicesUseCase {
 // @Failure      400      {object}  domains.HttpResponse  "Bad Request"
 // @Failure      500      {object}  domains.HttpResponse  "Internal Server Error"
 // @Router       /services [post]
-func (ctrl *ServicesUseCase) Add(ctx *gin.Context) {
+func (h *ServicesHandler) Add(ctx *gin.Context) {
 	var input domains.Services
 	if err := ctx.ShouldBindJSON(&input); err != nil {
-		ctx.JSON(http.StatusBadRequest, domains.HttpResponse{
-			Message: err.Error(),
-		})
+		h.RespondWithError(ctx, http.StatusBadRequest, err.Error(), err)
 		return
 	}
 
-	service, err := ctrl.uc.Add(ctx.Request.Context(), &input)
+	service, err := h.uc.Add(ctx.Request.Context(), &input)
 	if err != nil {
-		ctx.JSON(err.Code, domains.HttpResponse{
-			Message: err.Message,
-			Code:    err.Code,
-		})
+		h.RespondWithError(ctx, err.Code, err.Message, err)
 		return
 	}
-	ctx.JSON(http.StatusOK, domains.HttpResponse{
-		Message: "service created successfully",
-		Code:    http.StatusCreated,
-		Data:    service,
-	})
+
+	h.RespondWithSuccess(ctx, http.StatusCreated, "service created successfully", service)
 }
 
 // FindServiceById godoc
@@ -67,34 +60,23 @@ func (ctrl *ServicesUseCase) Add(ctx *gin.Context) {
 // @Failure      404  {object}  domains.HttpResponse  "Service not found"
 // @Failure      500  {object}  domains.HttpResponse  "Internal Server Error"
 // @Router       /service_id/{id} [get]
-func (ctrl *ServicesUseCase) FindServiceById(ctx *gin.Context) {
+func (h *ServicesHandler) FindServiceById(ctx *gin.Context) {
 	id := ctx.Param("id")
-	service, err := ctrl.uc.FindServiceById(ctx.Request.Context(), id)
+	service, err := h.uc.FindServiceById(ctx.Request.Context(), id)
 	if err != nil {
-		ctx.JSON(err.Code, domains.HttpResponse{
-			Message: err.Message,
-			Code:    err.Code,
-		})
+		h.RespondWithError(ctx, err.Code, err.Message, err)
+		return
 	}
-	ctx.JSON(http.StatusOK, domains.HttpResponse{
-		Message: "service found successfully",
-		Code:    http.StatusOK,
-		Data:    service,
-	})
+
+	h.RespondWithSuccess(ctx, http.StatusOK, "service found successfully", service)
 }
 
-func (ctrl *ServicesUseCase) GetAllServicesByProfessionalId(ctx *gin.Context) {
+func (h *ServicesHandler) GetAllServicesByProfessionalId(ctx *gin.Context) {
 	professional_id := ctx.Param("id")
-	services, err := ctrl.uc.GetAllServicesByProfessionalId(ctx.Request.Context(), professional_id)
+	services, err := h.uc.GetAllServicesByProfessionalId(ctx.Request.Context(), professional_id)
 	if err != nil {
-		ctx.JSON(err.Code, domains.HttpResponse{
-			Message: err.Message,
-			Code:    err.Code,
-		})
+		h.RespondWithError(ctx, err.Code, err.Message, err)
 	}
-	ctx.JSON(http.StatusOK, domains.HttpResponse{
-		Message: "services found successfully",
-		Code:    http.StatusOK,
-		Data:    services,
-	})
+
+	h.RespondWithSuccess(ctx, http.StatusOK, "all services found successfully", services)
 }

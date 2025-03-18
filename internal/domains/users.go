@@ -23,3 +23,11 @@ type UserUseCase interface {
 	FindAllUsers(ctx context.Context) ([]User, *core.Exception)
 	FindAllEstablishmentsByUserId(ctx context.Context, user_id string) ([]Establishment, *core.Exception)
 }
+
+type UserRepository interface {
+	Add(ctx context.Context, user *User) (*User, error)
+	FindUserByEmail(ctx context.Context, email string) (*User, error)
+	FindUserById(ctx context.Context, id string) (*User, error)
+	FindAllEstablishmentsByUserId(ctx context.Context, user_id string) ([]Establishment, error)
+	FindAllUsers(ctx context.Context) ([]User, error)
+}

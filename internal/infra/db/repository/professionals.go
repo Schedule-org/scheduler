@@ -9,12 +9,6 @@ import (
 	"gorm.io/gorm"
 )
 
-type ProfessionalsRepository interface {
-	Add(ctx context.Context, establishment *domains.Professionals) (*domains.Professionals, error)
-	FindProfessionalById(ctx context.Context, email string) (*domains.Professionals, error)
-	UpdateProfessionalById(ctx context.Context, professional_id string, professionalData *domains.Professionals) (*domains.Professionals, error)
-}
-
 type ProfessionalsDatabaseRepository struct {
 	db     *gorm.DB
 	logger *logrus.Logger
