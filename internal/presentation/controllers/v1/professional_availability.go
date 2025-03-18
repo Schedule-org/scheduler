@@ -13,6 +13,7 @@ type ProfessionalAvailabilityController interface {
 }
 
 type ProfessionalAvailabilityHandler struct {
+	BaseHandler
 	uc domains.ProfessionalsAvailabilityUseCase
 }
 
@@ -23,40 +24,26 @@ func NewProfessionalAvailabilityController(uc domains.ProfessionalsAvailabilityU
 func (h *ProfessionalAvailabilityHandler) Add(ctx *gin.Context) {
 	var input domains.ProfessionalAvailability
 	if err := ctx.ShouldBindJSON(&input); err != nil {
-		ctx.JSON(http.StatusBadRequest, domains.HttpResponse{
-			Message: err.Error(),
-		})
+		h.RespondWithError(ctx, http.StatusBadRequest, err.Error(), err)
 		return
 	}
 
 	availability, err := h.uc.Add(ctx.Request.Context(), &input)
 	if err != nil {
-		ctx.JSON(err.Code, domains.HttpResponse{
-			Message: err.Message,
-			Code:    err.Code,
-		})
+		h.RespondWithError(ctx, err.Code, err.Message, err)
 		return
 	}
-	ctx.JSON(http.StatusOK, domains.HttpResponse{
-		Message: "professional availability created successfully",
-		Code:    http.StatusCreated,
-		Data:    availability,
-	})
+
+	h.RespondWithSuccess(ctx, http.StatusCreated, "professional availability created successfully", availability)
 }
 
 func (h *ProfessionalAvailabilityHandler) GetProfessionalAvailabilityById(ctx *gin.Context) {
 	professional_id := ctx.Param("id")
 	availability, err := h.uc.GetProfessionalAvailabilityById(ctx.Request.Context(), professional_id)
 	if err != nil {
-		ctx.JSON(err.Code, domains.HttpResponse{
-			Message: err.Message,
-			Code:    err.Code,
-		})
+		h.RespondWithError(ctx, err.Code, err.Message, err)
 		return
 	}
-	ctx.JSON(http.StatusOK, domains.HttpResponse{
-		Message: "professional availability retrieved successfully",
-		Code:    http.StatusCreated,
-		Data:    availability,
-	})
+
+	h.RespondWithSuccess(ctx, http.StatusOK, "professional availability retrieved successfully", availability)
 }

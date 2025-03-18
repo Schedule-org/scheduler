@@ -106,6 +106,7 @@ func (h *EstablishmentHandler) UpdateEstablishmentById(ctx *gin.Context) {
 		h.RespondWithError(ctx, err.Code, err.Message, err)
 		return
 	}
+
 	h.RespondWithSuccess(ctx, http.StatusOK, "Establishment update successfully", establishments)
 }
 
