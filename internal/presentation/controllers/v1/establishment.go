@@ -16,6 +16,7 @@ type EstablishmentController interface {
 }
 
 type EstablishmentHandler struct {
+	BaseHandler
 	uc domains.EstablishmentUseCase
 }
 
@@ -37,25 +38,16 @@ func NewEstablishmentController(uc domains.EstablishmentUseCase) *EstablishmentH
 func (h *EstablishmentHandler) Add(ctx *gin.Context) {
 	var input domains.Establishment
 	if err := ctx.ShouldBindJSON(&input); err != nil {
-		ctx.JSON(http.StatusBadRequest, domains.HttpResponse{
-			Message: err.Error(),
-		})
+		h.RespondWithError(ctx, http.StatusBadRequest, err.Error(), err)
 		return
 	}
 
 	establishment, err := h.uc.Add(ctx.Request.Context(), &input)
 	if err != nil {
-		ctx.JSON(err.Code, domains.HttpResponse{
-			Message: err.Message,
-			Code:    err.Code,
-		})
+		h.RespondWithError(ctx, err.Code, err.Message, err)
 		return
 	}
-	ctx.JSON(http.StatusOK, domains.HttpResponse{
-		Message: "Establishment created successfully",
-		Code:    http.StatusCreated,
-		Data:    establishment,
-	})
+	h.RespondWithSuccess(ctx, http.StatusCreated, "Establishment created successfully", establishment)
 }
 
 // FindEstablishmentById godoc
@@ -71,18 +63,14 @@ func (h *EstablishmentHandler) Add(ctx *gin.Context) {
 // @Router       /establishment_id/{id} [get]
 func (h *EstablishmentHandler) FindEstablishmentById(ctx *gin.Context) {
 	id := ctx.Param("id")
+
 	establishment, err := h.uc.FindEstablishmentById(ctx.Request.Context(), id)
 	if err != nil {
-		ctx.JSON(err.Code, domains.HttpResponse{
-			Message: err.Message,
-			Code:    err.Code,
-		})
+		h.RespondWithError(ctx, err.Code, err.Message, err)
+		return
 	}
-	ctx.JSON(http.StatusOK, domains.HttpResponse{
-		Message: "Establishment found successfully",
-		Code:    http.StatusOK,
-		Data:    establishment,
-	})
+
+	h.RespondWithSuccess(ctx, http.StatusOK, "Establishment found successfully", establishment)
 }
 
 // GetAllProfessinalsByEstablishmentId godoc
@@ -100,53 +88,34 @@ func (h *EstablishmentHandler) GetAllProfessinalsByEstablishmentId(ctx *gin.Cont
 	establishment_id := ctx.Param("id")
 	professionals, err := h.uc.GetAllProfessionalsByEstablishmentId(ctx.Request.Context(), establishment_id)
 	if err != nil {
-		ctx.JSON(err.Code, domains.HttpResponse{
-			Message: err.Message,
-			Code:    err.Code,
-		})
+		h.RespondWithError(ctx, err.Code, err.Message, err)
+		return
 	}
-	ctx.JSON(http.StatusOK, domains.HttpResponse{
-		Message: "Professionals found successfully",
-		Code:    http.StatusOK,
-		Data:    professionals,
-	})
+	h.RespondWithSuccess(ctx, http.StatusOK, "Professionals found successfully", professionals)
 }
 
 func (h *EstablishmentHandler) UpdateEstablishmentById(ctx *gin.Context) {
 	establishment_id := ctx.Param("id")
 	var input domains.Establishment
 	if err := ctx.ShouldBindJSON(&input); err != nil {
-		ctx.JSON(http.StatusBadRequest, domains.HttpResponse{
-			Message: err.Error(),
-		})
+		h.RespondWithError(ctx, http.StatusBadRequest, err.Error(), err)
 		return
 	}
 	establishments, err := h.uc.UpdateEstablishmentById(ctx.Request.Context(), establishment_id, &input)
 	if err != nil {
-		ctx.JSON(err.Code, domains.HttpResponse{
-			Message: err.Message,
-			Code:    err.Code,
-		})
+		h.RespondWithError(ctx, err.Code, err.Message, err)
+		return
 	}
-	ctx.JSON(http.StatusOK, domains.HttpResponse{
-		Message: "Establishment update successfully",
-		Code:    http.StatusOK,
-		Data:    establishments,
-	})
+	h.RespondWithSuccess(ctx, http.StatusOK, "Establishment update successfully", establishments)
 }
 
 func (h *EstablishmentHandler) GetEstablishmentReport(ctx *gin.Context) {
 	establishment_id := ctx.Param("id")
 	establishmentReport, err := h.uc.GetEstablishmentReport(ctx.Request.Context(), establishment_id)
 	if err != nil {
-		ctx.JSON(err.Code, domains.HttpResponse{
-			Message: err.Message,
-			Code:    err.Code,
-		})
+		h.RespondWithError(ctx, http.StatusBadRequest, err.Error(), err)
+		return
 	}
-	ctx.JSON(http.StatusOK, domains.HttpResponse{
-		Message: "Establishment report",
-		Code:    http.StatusOK,
-		Data:    establishmentReport,
-	})
+
+	h.RespondWithSuccess(ctx, http.StatusOK, "Establishment report", establishmentReport)
 }
