@@ -14,12 +14,12 @@ type UserController interface {
 	FindAllEstablishmentsByUserId(ctx *gin.Context)
 }
 
-type UserUseCase struct {
+type UserHandler struct {
 	uc domains.UserUseCase
 }
 
-func NewUserController(uc domains.UserUseCase) *UserUseCase {
-	return &UserUseCase{uc: uc}
+func NewUserController(uc domains.UserUseCase) *UserHandler {
+	return &UserHandler{uc: uc}
 }
 
 // Add godoc
@@ -33,7 +33,7 @@ func NewUserController(uc domains.UserUseCase) *UserUseCase {
 // @Failure      400   {object}  domains.HttpResponse  "Bad Request"
 // @Failure      500   {object}  domains.HttpResponse  "Internal Server Error"
 // @Router       /users [post]
-func (ctrl *UserUseCase) Add(ctx *gin.Context) {
+func (h *UserHandler) Add(ctx *gin.Context) {
 	var input domains.User
 	if err := ctx.ShouldBindJSON(&input); err != nil {
 		ctx.JSON(http.StatusBadRequest, domains.HttpResponse{
@@ -42,7 +42,7 @@ func (ctrl *UserUseCase) Add(ctx *gin.Context) {
 		return
 	}
 
-	users, err := ctrl.uc.Add(ctx.Request.Context(), &input)
+	users, err := h.uc.Add(ctx.Request.Context(), &input)
 	if err != nil {
 		ctx.JSON(err.Code, domains.HttpResponse{
 			Message: err.Message,
@@ -69,9 +69,9 @@ func (ctrl *UserUseCase) Add(ctx *gin.Context) {
 // @Failure      404  {object}  domains.HttpResponse  "User not found"
 // @Failure      500  {object}  domains.HttpResponse  "Internal Server Error"
 // @Router       /users/{id} [get]
-func (ctrl *UserUseCase) FindUserById(ctx *gin.Context) {
+func (h *UserHandler) FindUserById(ctx *gin.Context) {
 	id := ctx.Param("id")
-	users, err := ctrl.uc.FindUserById(ctx.Request.Context(), id)
+	users, err := h.uc.FindUserById(ctx.Request.Context(), id)
 	if err != nil {
 		ctx.JSON(err.Code, domains.HttpResponse{
 			Message: err.Message,
@@ -94,8 +94,8 @@ func (ctrl *UserUseCase) FindUserById(ctx *gin.Context) {
 // @Success      200  {object}  domains.HttpResponse{data=[]dto.UserDTO}  "Users retrieved successfully"
 // @Failure      500  {object}  domains.HttpResponse  "Internal Server Error"
 // @Router       /users [get]
-func (ctrl *UserUseCase) FindAllUsers(ctx *gin.Context) {
-	users, err := ctrl.uc.FindAllUsers(ctx.Request.Context())
+func (h *UserHandler) FindAllUsers(ctx *gin.Context) {
+	users, err := h.uc.FindAllUsers(ctx.Request.Context())
 	if err != nil {
 		ctx.JSON(err.Code, domains.HttpResponse{
 			Message: err.Message,
@@ -109,9 +109,9 @@ func (ctrl *UserUseCase) FindAllUsers(ctx *gin.Context) {
 	})
 }
 
-func (ctrl *UserUseCase) FindAllEstablishmentsByUserId(ctx *gin.Context) {
+func (h *UserHandler) FindAllEstablishmentsByUserId(ctx *gin.Context) {
 	id := ctx.Param("id")
-	establishments, err := ctrl.uc.FindAllEstablishmentsByUserId(ctx.Request.Context(), id)
+	establishments, err := h.uc.FindAllEstablishmentsByUserId(ctx.Request.Context(), id)
 	if err != nil {
 		ctx.JSON(err.Code, domains.HttpResponse{
 			Message: err.Message,

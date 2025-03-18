@@ -13,12 +13,12 @@ type ServicesController interface {
 	GetAllServicesByProfessionalId(ctx *gin.Context)
 }
 
-type ServicesUseCase struct {
+type ServicesHandler struct {
 	uc domains.ServicesUseCase
 }
 
-func NewServicesController(uc domains.ServicesUseCase) *ServicesUseCase {
-	return &ServicesUseCase{uc: uc}
+func NewServicesController(uc domains.ServicesUseCase) *ServicesHandler {
+	return &ServicesHandler{uc: uc}
 }
 
 // AddService godoc
@@ -32,7 +32,7 @@ func NewServicesController(uc domains.ServicesUseCase) *ServicesUseCase {
 // @Failure      400      {object}  domains.HttpResponse  "Bad Request"
 // @Failure      500      {object}  domains.HttpResponse  "Internal Server Error"
 // @Router       /services [post]
-func (ctrl *ServicesUseCase) Add(ctx *gin.Context) {
+func (h *ServicesHandler) Add(ctx *gin.Context) {
 	var input domains.Services
 	if err := ctx.ShouldBindJSON(&input); err != nil {
 		ctx.JSON(http.StatusBadRequest, domains.HttpResponse{
@@ -41,7 +41,7 @@ func (ctrl *ServicesUseCase) Add(ctx *gin.Context) {
 		return
 	}
 
-	service, err := ctrl.uc.Add(ctx.Request.Context(), &input)
+	service, err := h.uc.Add(ctx.Request.Context(), &input)
 	if err != nil {
 		ctx.JSON(err.Code, domains.HttpResponse{
 			Message: err.Message,
@@ -67,9 +67,9 @@ func (ctrl *ServicesUseCase) Add(ctx *gin.Context) {
 // @Failure      404  {object}  domains.HttpResponse  "Service not found"
 // @Failure      500  {object}  domains.HttpResponse  "Internal Server Error"
 // @Router       /service_id/{id} [get]
-func (ctrl *ServicesUseCase) FindServiceById(ctx *gin.Context) {
+func (h *ServicesHandler) FindServiceById(ctx *gin.Context) {
 	id := ctx.Param("id")
-	service, err := ctrl.uc.FindServiceById(ctx.Request.Context(), id)
+	service, err := h.uc.FindServiceById(ctx.Request.Context(), id)
 	if err != nil {
 		ctx.JSON(err.Code, domains.HttpResponse{
 			Message: err.Message,
@@ -83,9 +83,9 @@ func (ctrl *ServicesUseCase) FindServiceById(ctx *gin.Context) {
 	})
 }
 
-func (ctrl *ServicesUseCase) GetAllServicesByProfessionalId(ctx *gin.Context) {
+func (h *ServicesHandler) GetAllServicesByProfessionalId(ctx *gin.Context) {
 	professional_id := ctx.Param("id")
-	services, err := ctrl.uc.GetAllServicesByProfessionalId(ctx.Request.Context(), professional_id)
+	services, err := h.uc.GetAllServicesByProfessionalId(ctx.Request.Context(), professional_id)
 	if err != nil {
 		ctx.JSON(err.Code, domains.HttpResponse{
 			Message: err.Message,

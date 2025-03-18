@@ -13,12 +13,12 @@ type ProfessionalsController interface {
 	UpdateProfessionalById(ctx *gin.Context)
 }
 
-type ProfessionalsUseCase struct {
+type ProfessionalsHandler struct {
 	uc domains.ProfessionalsUseCase
 }
 
-func NewProfessionalController(uc domains.ProfessionalsUseCase) *ProfessionalsUseCase {
-	return &ProfessionalsUseCase{uc: uc}
+func NewProfessionalController(uc domains.ProfessionalsUseCase) *ProfessionalsHandler {
+	return &ProfessionalsHandler{uc: uc}
 }
 
 // Add godoc
@@ -32,7 +32,7 @@ func NewProfessionalController(uc domains.ProfessionalsUseCase) *ProfessionalsUs
 // @Failure      400           {object}  domains.HttpResponse  "Bad Request"
 // @Failure      500           {object}  domains.HttpResponse  "Internal Server Error"
 // @Router       /professionals [post]
-func (ctrl *ProfessionalsUseCase) Add(ctx *gin.Context) {
+func (h *ProfessionalsHandler) Add(ctx *gin.Context) {
 	var input domains.Professionals
 	if err := ctx.ShouldBindJSON(&input); err != nil {
 		ctx.JSON(http.StatusBadRequest, domains.HttpResponse{
@@ -41,7 +41,7 @@ func (ctrl *ProfessionalsUseCase) Add(ctx *gin.Context) {
 		return
 	}
 
-	professional, err := ctrl.uc.Add(ctx.Request.Context(), &input)
+	professional, err := h.uc.Add(ctx.Request.Context(), &input)
 	if err != nil {
 		ctx.JSON(err.Code, domains.HttpResponse{
 			Message: err.Message,
@@ -67,9 +67,9 @@ func (ctrl *ProfessionalsUseCase) Add(ctx *gin.Context) {
 // @Failure      404  {object}  domains.HttpResponse  "Professional not found"
 // @Failure      500  {object}  domains.HttpResponse  "Internal Server Error"
 // @Router       /professionals/{id} [get]
-func (ctrl *ProfessionalsUseCase) FindProfessionalById(ctx *gin.Context) {
+func (h *ProfessionalsHandler) FindProfessionalById(ctx *gin.Context) {
 	id := ctx.Param("id")
-	professional, err := ctrl.uc.FindProfessionalById(ctx.Request.Context(), id)
+	professional, err := h.uc.FindProfessionalById(ctx.Request.Context(), id)
 	if err != nil {
 		ctx.JSON(err.Code, domains.HttpResponse{
 			Message: err.Message,
@@ -83,10 +83,10 @@ func (ctrl *ProfessionalsUseCase) FindProfessionalById(ctx *gin.Context) {
 	})
 }
 
-func (ctrl *ProfessionalsUseCase) UpdateProfessionalById(ctx *gin.Context) {
+func (h *ProfessionalsHandler) UpdateProfessionalById(ctx *gin.Context) {
 	var input domains.Professionals
 	id := ctx.Param("id")
-	professional, err := ctrl.uc.UpdateProfessionalById(ctx.Request.Context(), id, &input)
+	professional, err := h.uc.UpdateProfessionalById(ctx.Request.Context(), id, &input)
 	if err != nil {
 		ctx.JSON(err.Code, domains.HttpResponse{
 			Message: err.Message,

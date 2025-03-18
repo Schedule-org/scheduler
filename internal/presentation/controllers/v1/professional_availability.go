@@ -12,15 +12,15 @@ type ProfessionalAvailabilityController interface {
 	GetProfessionalAvailabilityById(ctx *gin.Context)
 }
 
-type ProfessionalAvailabilityUseCase struct {
+type ProfessionalAvailabilityHandler struct {
 	uc domains.ProfessionalsAvailabilityUseCase
 }
 
-func NewProfessionalAvailabilityController(uc domains.ProfessionalsAvailabilityUseCase) *ProfessionalAvailabilityUseCase {
-	return &ProfessionalAvailabilityUseCase{uc: uc}
+func NewProfessionalAvailabilityController(uc domains.ProfessionalsAvailabilityUseCase) *ProfessionalAvailabilityHandler {
+	return &ProfessionalAvailabilityHandler{uc: uc}
 }
 
-func (ctrl *ProfessionalAvailabilityUseCase) Add(ctx *gin.Context) {
+func (h *ProfessionalAvailabilityHandler) Add(ctx *gin.Context) {
 	var input domains.ProfessionalAvailability
 	if err := ctx.ShouldBindJSON(&input); err != nil {
 		ctx.JSON(http.StatusBadRequest, domains.HttpResponse{
@@ -29,7 +29,7 @@ func (ctrl *ProfessionalAvailabilityUseCase) Add(ctx *gin.Context) {
 		return
 	}
 
-	availability, err := ctrl.uc.Add(ctx.Request.Context(), &input)
+	availability, err := h.uc.Add(ctx.Request.Context(), &input)
 	if err != nil {
 		ctx.JSON(err.Code, domains.HttpResponse{
 			Message: err.Message,
@@ -44,9 +44,9 @@ func (ctrl *ProfessionalAvailabilityUseCase) Add(ctx *gin.Context) {
 	})
 }
 
-func (ctrl *ProfessionalAvailabilityUseCase) GetProfessionalAvailabilityById(ctx *gin.Context) {
+func (h *ProfessionalAvailabilityHandler) GetProfessionalAvailabilityById(ctx *gin.Context) {
 	professional_id := ctx.Param("id")
-	availability, err := ctrl.uc.GetProfessionalAvailabilityById(ctx.Request.Context(), professional_id)
+	availability, err := h.uc.GetProfessionalAvailabilityById(ctx.Request.Context(), professional_id)
 	if err != nil {
 		ctx.JSON(err.Code, domains.HttpResponse{
 			Message: err.Message,
