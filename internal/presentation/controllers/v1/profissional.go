@@ -14,6 +14,7 @@ type ProfessionalsController interface {
 }
 
 type ProfessionalsHandler struct {
+	BaseHandler
 	uc domains.ProfessionalsUseCase
 }
 
@@ -35,25 +36,17 @@ func NewProfessionalController(uc domains.ProfessionalsUseCase) *ProfessionalsHa
 func (h *ProfessionalsHandler) Add(ctx *gin.Context) {
 	var input domains.Professionals
 	if err := ctx.ShouldBindJSON(&input); err != nil {
-		ctx.JSON(http.StatusBadRequest, domains.HttpResponse{
-			Message: err.Error(),
-		})
+		h.RespondWithError(ctx, http.StatusBadRequest, err.Error(), err)
 		return
 	}
 
 	professional, err := h.uc.Add(ctx.Request.Context(), &input)
 	if err != nil {
-		ctx.JSON(err.Code, domains.HttpResponse{
-			Message: err.Message,
-			Code:    err.Code,
-		})
+		h.RespondWithError(ctx, err.Code, err.Message, err)
 		return
 	}
-	ctx.JSON(http.StatusOK, domains.HttpResponse{
-		Message: "Professional created successfully",
-		Code:    http.StatusCreated,
-		Data:    professional,
-	})
+
+	h.RespondWithSuccess(ctx, http.StatusCreated, "professional created successfully", professional)
 }
 
 // FindProfessionalById godoc
@@ -71,16 +64,11 @@ func (h *ProfessionalsHandler) FindProfessionalById(ctx *gin.Context) {
 	id := ctx.Param("id")
 	professional, err := h.uc.FindProfessionalById(ctx.Request.Context(), id)
 	if err != nil {
-		ctx.JSON(err.Code, domains.HttpResponse{
-			Message: err.Message,
-			Code:    err.Code,
-		})
+		h.RespondWithError(ctx, err.Code, err.Message, err)
+		return
 	}
-	ctx.JSON(http.StatusOK, domains.HttpResponse{
-		Message: "Professional found successfully",
-		Code:    http.StatusOK,
-		Data:    professional,
-	})
+
+	h.RespondWithSuccess(ctx, http.StatusOK, "professional found successfully", professional)
 }
 
 func (h *ProfessionalsHandler) UpdateProfessionalById(ctx *gin.Context) {
@@ -88,14 +76,9 @@ func (h *ProfessionalsHandler) UpdateProfessionalById(ctx *gin.Context) {
 	id := ctx.Param("id")
 	professional, err := h.uc.UpdateProfessionalById(ctx.Request.Context(), id, &input)
 	if err != nil {
-		ctx.JSON(err.Code, domains.HttpResponse{
-			Message: err.Message,
-			Code:    err.Code,
-		})
+		h.RespondWithError(ctx, err.Code, err.Message, err)
+		return
 	}
-	ctx.JSON(http.StatusOK, domains.HttpResponse{
-		Message: "Professional update successfully",
-		Code:    http.StatusOK,
-		Data:    professional,
-	})
+
+	h.RespondWithSuccess(ctx, http.StatusOK, "professional update successfully", professional)
 }
