@@ -41,32 +41,20 @@ func (h *AppointmentHandler) GetAllAppointmentsByProfessionalId(ctx *gin.Context
 	id := ctx.Param("id")
 	appointments, err := h.uc.GetAllAppointmentsByProfessionalId(ctx.Request.Context(), id)
 	if err != nil {
-		ctx.JSON(err.Code, domains.HttpResponse{
-			Message: err.Message,
-			Code:    err.Code,
-		})
+		h.RespondWithError(ctx, err.Code, err.Message, err)
 		return
 	}
-	ctx.JSON(http.StatusOK, domains.HttpResponse{
-		Message: "appointments by professional id successfully retrieved",
-		Code:    http.StatusCreated,
-		Data:    appointments,
-	})
+
+	h.RespondWithSuccess(ctx, http.StatusOK, "appointments by professional id successfully retrieved", appointments)
 }
 
 func (h *AppointmentHandler) GetAppointmentById(ctx *gin.Context) {
 	id := ctx.Param("id")
 	appointment, err := h.uc.GetAppointmentById(ctx.Request.Context(), id)
 	if err != nil {
-		ctx.JSON(err.Code, domains.HttpResponse{
-			Message: err.Message,
-			Code:    err.Code,
-		})
+		h.RespondWithError(ctx, err.Code, err.Message, err)
 		return
 	}
-	ctx.JSON(http.StatusOK, domains.HttpResponse{
-		Message: "appointment by id successfully retrieved",
-		Code:    http.StatusCreated,
-		Data:    appointment,
-	})
+
+	h.RespondWithSuccess(ctx, http.StatusOK, "appointment by id successfully retrieved", appointment)
 }
