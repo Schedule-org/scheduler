@@ -9,8 +9,8 @@ import (
 )
 
 func EstablishmentFactory(db *gorm.DB, logger *logrus.Logger) controllers.EstablishmentController {
-	er := repository.NewEstablishmentRepository(db, logger)
-	ec := usecases.NewEstablishmentUseCase(er, logger)
-	eh := controllers.NewEstablishmentController(ec)
-	return eh
+	repo := repository.NewEstablishmentRepository(db, logger)
+	useCase := usecases.NewEstablishmentUseCase(repo, logger)
+	handler := controllers.NewEstablishmentController(useCase)
+	return handler
 }

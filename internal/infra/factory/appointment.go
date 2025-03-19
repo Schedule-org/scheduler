@@ -9,8 +9,8 @@ import (
 )
 
 func AppointmentFactory(db *gorm.DB, logger *logrus.Logger) controllers.AppointmentController {
-	er := repository.NewAppointmentRepository(db, logger)
-	ec := usecases.NewAppointmentUseCase(er, logger)
-	eh := controllers.NewAppointmentController(ec)
-	return eh
+	repo := repository.NewAppointmentRepository(db, logger)
+	useCases := usecases.NewAppointmentUseCase(repo, logger)
+	handler := controllers.NewAppointmentController(useCases)
+	return handler
 }
