@@ -125,7 +125,7 @@ func (h *EstablishmentHandler) UpdateEstablishmentById(ctx *gin.Context) {
 // @Failure      200  {object}  domains.HttpResponse  "Establishment report"
 // @Failure      400  {object}  domains.HttpResponse  "Establishment id not found"
 // @Failure      500  {object}  domains.HttpResponse  "Internal Server Error"
-// @Router       /establishments/:id/report [put]
+// @Router       /establishments/:id/report [get]
 func (h *EstablishmentHandler) GetEstablishmentReport(ctx *gin.Context) {
 	establishment_id := ctx.Param("id")
 	establishmentReport, err := h.uc.GetEstablishmentReport(ctx.Request.Context(), establishment_id)
