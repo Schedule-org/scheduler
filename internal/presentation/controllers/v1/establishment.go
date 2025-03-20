@@ -65,10 +65,6 @@ func (h *EstablishmentHandler) Add(ctx *gin.Context) {
 // @Router       /establishment_id/{id} [get]
 func (h *EstablishmentHandler) FindEstablishmentById(ctx *gin.Context) {
 	id := ctx.Param("id")
-	if id == "" {
-		h.RespondWithError(ctx, http.StatusBadRequest, "id is required", nil)
-		return
-	}
 	establishment, err := h.uc.FindEstablishmentById(ctx.Request.Context(), id)
 	if err != nil {
 		h.RespondWithError(ctx, err.Code, err.Message, err)
@@ -91,10 +87,6 @@ func (h *EstablishmentHandler) FindEstablishmentById(ctx *gin.Context) {
 // @Router       /establishment/:id/professionals [get]
 func (h *EstablishmentHandler) GetAllProfessinalsByEstablishmentId(ctx *gin.Context) {
 	establishment_id := ctx.Param("id")
-	if establishment_id == "" {
-		h.RespondWithError(ctx, http.StatusBadRequest, "establishment_id is required", nil)
-		return
-	}
 	professionals, err := h.uc.GetAllProfessionalsByEstablishmentId(ctx.Request.Context(), establishment_id)
 	if err != nil {
 		h.RespondWithError(ctx, err.Code, err.Message, err)
@@ -105,10 +97,6 @@ func (h *EstablishmentHandler) GetAllProfessinalsByEstablishmentId(ctx *gin.Cont
 
 func (h *EstablishmentHandler) UpdateEstablishmentById(ctx *gin.Context) {
 	establishment_id := ctx.Param("id")
-	if establishment_id == "" {
-		h.RespondWithError(ctx, http.StatusBadRequest, "establishment_id is required", nil)
-		return
-	}
 	var input domains.Establishment
 	establishments, err := h.uc.UpdateEstablishmentById(ctx.Request.Context(), establishment_id, &input)
 	if err != nil {
