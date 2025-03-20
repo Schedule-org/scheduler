@@ -6,7 +6,7 @@ import (
 	"gorm.io/gorm"
 )
 
-func InitRoutes(router *gin.Engine, db *gorm.DB, logger *logrus.Logger) error {
+func InitRoutes(router *gin.Engine, db *gorm.DB, logger *logrus.Logger) {
 	UsersGroupRouter(router, db, logger)
 	EstablishmentGroupRouter(router, db, logger)
 	ProfessionalsGroupRouter(router, db, logger)
