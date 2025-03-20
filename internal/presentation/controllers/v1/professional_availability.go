@@ -2,8 +2,10 @@ package controllers
 
 import (
 	"net/http"
+	"time"
 
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 	"github.com/hebertzin/scheduler/internal/domains"
 )
 
@@ -16,6 +18,13 @@ type (
 	ProfessionalAvailabilityHandler struct {
 		BaseHandler
 		uc domains.ProfessionalsAvailabilityUseCase
+	}
+
+	professionalAvailabilityRequest struct {
+		ProfessionalID uuid.UUID `json:"professional_id" validate:"required"`
+		DayOfWeek      string    `json:"day_of_week" validate:"required"`
+		StartTime      time.Time `json:"start_time" validate:"required"`
+		EndTime        time.Time `json:"end_time" validate:"required"`
 	}
 )
 
@@ -35,13 +44,20 @@ func NewProfessionalAvailabilityController(uc domains.ProfessionalsAvailabilityU
 // @Failure      500            {object}  domains.HttpResponse  "Internal Server Error"
 // @Router       /availability/ [post]
 func (h *ProfessionalAvailabilityHandler) Add(ctx *gin.Context) {
-	var input domains.ProfessionalAvailability
-	if err := ctx.ShouldBindJSON(&input); err != nil {
+	var req professionalAvailabilityRequest
+	if err := ctx.ShouldBindJSON(&req); err != nil {
 		h.RespondWithError(ctx, http.StatusBadRequest, err.Error(), err)
 		return
 	}
 
-	availability, err := h.uc.Add(ctx.Request.Context(), &input)
+	professionalAvailabilityCreated := domains.ProfessionalAvailability{
+		ProfessionalID: req.ProfessionalID,
+		DayOfWeek:      req.DayOfWeek,
+		StartTime:      req.StartTime,
+		EndTime:        req.EndTime,
+	}
+
+	availability, err := h.uc.Add(ctx.Request.Context(), &professionalAvailabilityCreated)
 	if err != nil {
 		h.RespondWithError(ctx, err.Code, err.Message, err)
 		return
