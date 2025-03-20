@@ -9,8 +9,8 @@ import (
 )
 
 func ServiceFactory(db *gorm.DB, logger *logrus.Logger) controllers.ServicesController {
-	sr := repository.NewServicesRepository(db, logger)
-	sc := usecases.NewServicesUseCase(sr, logger)
-	sh := controllers.NewServicesController(sc)
-	return sh
+	repo := repository.NewServicesRepository(db, logger)
+	useCase := usecases.NewServicesUseCase(repo, logger)
+	handler := controllers.NewServicesController(useCase)
+	return handler
 }

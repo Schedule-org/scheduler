@@ -9,8 +9,8 @@ import (
 )
 
 func ProfessionalFactory(db *gorm.DB, logger *logrus.Logger) controllers.ProfessionalsController {
-	pr := repository.NewProfessionalsRepository(db, logger)
-	pc := usecases.NewProfissionalUseCase(pr, logger)
-	ph := controllers.NewProfessionalController(pc)
-	return ph
+	repo := repository.NewProfessionalsRepository(db, logger)
+	useCase := usecases.NewProfissionalUseCase(repo, logger)
+	handler := controllers.NewProfessionalController(useCase)
+	return handler
 }
