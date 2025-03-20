@@ -95,6 +95,15 @@ func (h *EstablishmentHandler) GetAllProfessinalsByEstablishmentId(ctx *gin.Cont
 	h.RespondWithSuccess(ctx, http.StatusOK, "Professionals found successfully", professionals)
 }
 
+// UpdateEstablishmentById godoc
+// @Summary      Update establishment by id
+// @Tags         Establishments
+// @Accept       json
+// @Produce      json
+// @Param        id   path      string  true  "id"
+// @Failure      200  {object}  domains.HttpResponse  "Establishment update successfully"
+// @Failure      500  {object}  domains.HttpResponse  "Internal Server Error"
+// @Router       /establishments/:id/update [put]
 func (h *EstablishmentHandler) UpdateEstablishmentById(ctx *gin.Context) {
 	establishment_id := ctx.Param("id")
 	var input domains.Establishment
@@ -107,6 +116,16 @@ func (h *EstablishmentHandler) UpdateEstablishmentById(ctx *gin.Context) {
 	h.RespondWithSuccess(ctx, http.StatusOK, "Establishment update successfully", establishments)
 }
 
+// GetEstablishmentReport godoc
+// @Summary      Get establishmentReport
+// @Tags         Establishments
+// @Accept       json
+// @Produce      json
+// @Param        id   path      string  true  "id"
+// @Failure      200  {object}  domains.HttpResponse  "Establishment report"
+// @Failure      400  {object}  domains.HttpResponse  "Establishment id not found"
+// @Failure      500  {object}  domains.HttpResponse  "Internal Server Error"
+// @Router       /establishments/:id/report [put]
 func (h *EstablishmentHandler) GetEstablishmentReport(ctx *gin.Context) {
 	establishment_id := ctx.Param("id")
 	establishmentReport, err := h.uc.GetEstablishmentReport(ctx.Request.Context(), establishment_id)
