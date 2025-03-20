@@ -51,8 +51,8 @@ func (h *ProfessionalAvailabilityHandler) Add(ctx *gin.Context) {
 }
 
 // Add godoc
-// @Summary      Add
-// @Description  Add
+// @Summary      GetProfessionalAvailabilityById
+// @Description  GetProfessionalAvailabilityById
 // @Tags         ProfessionalAvailability
 // @Accept       json
 // @Produce      json

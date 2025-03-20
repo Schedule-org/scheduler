@@ -73,6 +73,17 @@ func (h *ProfessionalsHandler) FindProfessionalById(ctx *gin.Context) {
 	h.RespondWithSuccess(ctx, http.StatusOK, "professional found successfully", professional)
 }
 
+// UpdateProfessionalById godoc
+// @Summary      UpdateProfessionalById
+// @Description  Retrieve a professional using its unique ID
+// @Tags         Professionals
+// @Accept       json
+// @Produce      json
+// @Param        id   path      string  true  "Professional ID"
+// @Success      200  {object}  domains.HttpResponse{data=domains.Professionals}  "professional update successfully"
+// @Failure      404  {object}  domains.HttpResponse  "Professional not found"
+// @Failure      500  {object}  domains.HttpResponse  "Internal Server Error"
+// @Router       /professionals/{id} [get]
 func (h *ProfessionalsHandler) UpdateProfessionalById(ctx *gin.Context) {
 	var input domains.Professionals
 	id := ctx.Param("id")
