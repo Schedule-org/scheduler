@@ -24,11 +24,11 @@ type (
 		ProfessionalID string    `json:"professional_id" validate:"required"`
 		ServiceID      string    `json:"service_id" validate:"required"`
 		ScheduledDate  time.Time `json:"schedule_date" validate:"required"`
-		Email          string    `json:"user_email" validate: "required"`
-		Phone          string    `json:"user_phone" validate: "required"`
-		Notes          string    `json:"notes" validate: "required"`
-		CreatedAt      time.Time `json:"created_at" validate: "required"`
-		UpdatedAt      time.Time `json:"updated_at" validate: "required"`
+		Email          string    `json:"user_email" validate:"required"`
+		Phone          string    `json:"user_phone" validate:"required"`
+		Notes          string    `json:"notes" validate:"required"`
+		CreatedAt      time.Time `json:"created_at" validate:"required"`
+		UpdatedAt      time.Time `json:"updated_at" validate:"required"`
 	}
 )
 
