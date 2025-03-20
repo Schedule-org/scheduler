@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"net/http"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/hebertzin/scheduler/internal/domains"
@@ -13,9 +14,21 @@ type (
 		GetAllAppointmentsByProfessionalId(ctx *gin.Context)
 		GetAppointmentById(ctx *gin.Context)
 	}
+
 	AppointmentHandler struct {
 		BaseHandler
 		uc domains.AppointmentUseCase
+	}
+
+	request struct {
+		ProfessionalID string    `json:"professional_id" validate:"required"`
+		ServiceID      string    `json:"service_id" validate:"required"`
+		ScheduledDate  time.Time `json:"schedule_date" validate:"required"`
+		Email          string    `json:"user_email" validate:"required"`
+		Phone          string    `json:"user_phone" validate:"required"`
+		Notes          string    `json:"notes" validate:"required"`
+		CreatedAt      time.Time `json:"created_at" validate:"required"`
+		UpdatedAt      time.Time `json:"updated_at" validate:"required"`
 	}
 )
 
@@ -35,19 +48,30 @@ func NewAppointmentController(uc domains.AppointmentUseCase) *AppointmentHandler
 // @Failure      500            {object}  domains.HttpResponse  "Internal Server Error"
 // @Router       /appointments [post]
 func (h *AppointmentHandler) Add(ctx *gin.Context) {
-	var input domains.Appointment
-	if err := ctx.ShouldBindJSON(&input); err != nil {
+	var req request
+	if err := ctx.ShouldBindJSON(&req); err != nil {
 		h.RespondWithError(ctx, http.StatusBadRequest, "Invalid request payload", err)
 		return
 	}
 
-	appointment, err := h.uc.Add(ctx.Request.Context(), &input)
+	appointment := domains.Appointment{
+		ProfessionalID: req.ProfessionalID,
+		ServiceID:      req.ServiceID,
+		ScheduledDate:  req.ScheduledDate,
+		Email:          req.Email,
+		Phone:          req.Phone,
+		Notes:          req.Notes,
+		CreatedAt:      req.CreatedAt,
+		UpdatedAt:      req.UpdatedAt,
+	}
+
+	appointmentCreated, err := h.uc.Add(ctx.Request.Context(), &appointment)
 	if err != nil {
 		h.RespondWithError(ctx, err.Code, err.Message, err)
 		return
 	}
 
-	h.RespondWithSuccess(ctx, http.StatusCreated, "Appointment created successfully", appointment)
+	h.RespondWithSuccess(ctx, http.StatusCreated, "Appointment created successfully", appointmentCreated)
 }
 
 // Add godoc
