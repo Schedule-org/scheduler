@@ -7,18 +7,20 @@ import (
 	"github.com/hebertzin/scheduler/internal/domains"
 )
 
-type EstablishmentController interface {
-	Add(ctx *gin.Context)
-	FindEstablishmentById(ctx *gin.Context)
-	GetAllProfessinalsByEstablishmentId(ctx *gin.Context)
-	UpdateEstablishmentById(ctx *gin.Context)
-	GetEstablishmentReport(ctx *gin.Context)
-}
+type (
+	EstablishmentController interface {
+		Add(ctx *gin.Context)
+		FindEstablishmentById(ctx *gin.Context)
+		GetAllProfessinalsByEstablishmentId(ctx *gin.Context)
+		UpdateEstablishmentById(ctx *gin.Context)
+		GetEstablishmentReport(ctx *gin.Context)
+	}
 
-type EstablishmentHandler struct {
-	BaseHandler
-	uc domains.EstablishmentUseCase
-}
+	EstablishmentHandler struct {
+		BaseHandler
+		uc domains.EstablishmentUseCase
+	}
+)
 
 func NewEstablishmentController(uc domains.EstablishmentUseCase) *EstablishmentHandler {
 	return &EstablishmentHandler{uc: uc}
@@ -63,7 +65,6 @@ func (h *EstablishmentHandler) Add(ctx *gin.Context) {
 // @Router       /establishment_id/{id} [get]
 func (h *EstablishmentHandler) FindEstablishmentById(ctx *gin.Context) {
 	id := ctx.Param("id")
-
 	establishment, err := h.uc.FindEstablishmentById(ctx.Request.Context(), id)
 	if err != nil {
 		h.RespondWithError(ctx, err.Code, err.Message, err)
@@ -94,13 +95,18 @@ func (h *EstablishmentHandler) GetAllProfessinalsByEstablishmentId(ctx *gin.Cont
 	h.RespondWithSuccess(ctx, http.StatusOK, "Professionals found successfully", professionals)
 }
 
+// UpdateEstablishmentById godoc
+// @Summary      Update establishment by id
+// @Tags         Establishments
+// @Accept       json
+// @Produce      json
+// @Param        id   path      string  true  "id"
+// @Failure      200  {object}  domains.HttpResponse  "Establishment update successfully"
+// @Failure      500  {object}  domains.HttpResponse  "Internal Server Error"
+// @Router       /establishments/:id/update [put]
 func (h *EstablishmentHandler) UpdateEstablishmentById(ctx *gin.Context) {
 	establishment_id := ctx.Param("id")
 	var input domains.Establishment
-	if err := ctx.ShouldBindJSON(&input); err != nil {
-		h.RespondWithError(ctx, http.StatusBadRequest, err.Error(), err)
-		return
-	}
 	establishments, err := h.uc.UpdateEstablishmentById(ctx.Request.Context(), establishment_id, &input)
 	if err != nil {
 		h.RespondWithError(ctx, err.Code, err.Message, err)
@@ -110,6 +116,16 @@ func (h *EstablishmentHandler) UpdateEstablishmentById(ctx *gin.Context) {
 	h.RespondWithSuccess(ctx, http.StatusOK, "Establishment update successfully", establishments)
 }
 
+// GetEstablishmentReport godoc
+// @Summary      Get establishmentReport
+// @Tags         Establishments
+// @Accept       json
+// @Produce      json
+// @Param        id   path      string  true  "id"
+// @Failure      200  {object}  domains.HttpResponse  "Establishment report"
+// @Failure      400  {object}  domains.HttpResponse  "Establishment id not found"
+// @Failure      500  {object}  domains.HttpResponse  "Internal Server Error"
+// @Router       /establishments/:id/report [get]
 func (h *EstablishmentHandler) GetEstablishmentReport(ctx *gin.Context) {
 	establishment_id := ctx.Param("id")
 	establishmentReport, err := h.uc.GetEstablishmentReport(ctx.Request.Context(), establishment_id)

@@ -7,17 +7,19 @@ import (
 	"github.com/hebertzin/scheduler/internal/domains"
 )
 
-type UserController interface {
-	Add(ctx *gin.Context)
-	FindUserById(ctx *gin.Context)
-	FindAllUsers(ctx *gin.Context)
-	FindAllEstablishmentsByUserId(ctx *gin.Context)
-}
+type (
+	UserController interface {
+		Add(ctx *gin.Context)
+		FindUserById(ctx *gin.Context)
+		FindAllUsers(ctx *gin.Context)
+		FindAllEstablishmentsByUserId(ctx *gin.Context)
+	}
 
-type UserHandler struct {
-	BaseHandler
-	uc domains.UserUseCase
-}
+	UserHandler struct {
+		BaseHandler
+		uc domains.UserUseCase
+	}
+)
 
 func NewUserController(uc domains.UserUseCase) *UserHandler {
 	return &UserHandler{uc: uc}

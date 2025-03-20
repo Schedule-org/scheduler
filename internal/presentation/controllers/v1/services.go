@@ -7,16 +7,18 @@ import (
 	"github.com/hebertzin/scheduler/internal/domains"
 )
 
-type ServicesController interface {
-	Add(ctx *gin.Context)
-	FindServiceById(ctx *gin.Context)
-	GetAllServicesByProfessionalId(ctx *gin.Context)
-}
+type (
+	ServicesController interface {
+		Add(ctx *gin.Context)
+		FindServiceById(ctx *gin.Context)
+		GetAllServicesByProfessionalId(ctx *gin.Context)
+	}
 
-type ServicesHandler struct {
-	BaseHandler
-	uc domains.ServicesUseCase
-}
+	ServicesHandler struct {
+		BaseHandler
+		uc domains.ServicesUseCase
+	}
+)
 
 func NewServicesController(uc domains.ServicesUseCase) *ServicesHandler {
 	return &ServicesHandler{uc: uc}
@@ -59,7 +61,7 @@ func (h *ServicesHandler) Add(ctx *gin.Context) {
 // @Success      200  {object}  domains.HttpResponse{data=domains.Services}  "Service found successfully"
 // @Failure      404  {object}  domains.HttpResponse  "Service not found"
 // @Failure      500  {object}  domains.HttpResponse  "Internal Server Error"
-// @Router       /service_id/{id} [get]
+// @Router       /services/{id} [get]
 func (h *ServicesHandler) FindServiceById(ctx *gin.Context) {
 	id := ctx.Param("id")
 	service, err := h.uc.FindServiceById(ctx.Request.Context(), id)
@@ -71,6 +73,17 @@ func (h *ServicesHandler) FindServiceById(ctx *gin.Context) {
 	h.RespondWithSuccess(ctx, http.StatusOK, "service found successfully", service)
 }
 
+// FindServiceById godoc
+// @Summary      GetAllServicesByProfessionalId
+// @Description  GetAllServicesByProfessionalId
+// @Tags         Services
+// @Accept       json
+// @Produce      json
+// @Param        id   path      string  true  "Service ID"
+// @Success      200  {object}  domains.HttpResponse{data=domains.Services}  "all services found successfully"
+// @Failure      404  {object}  domains.HttpResponse  "Service not found"
+// @Failure      500  {object}  domains.HttpResponse  "Internal Server Error"
+// @Router       /services/{id}/all [get]
 func (h *ServicesHandler) GetAllServicesByProfessionalId(ctx *gin.Context) {
 	professional_id := ctx.Param("id")
 	services, err := h.uc.GetAllServicesByProfessionalId(ctx.Request.Context(), professional_id)
