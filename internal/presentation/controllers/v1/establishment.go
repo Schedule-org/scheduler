@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"net/http"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/hebertzin/scheduler/internal/domains"
@@ -19,6 +20,17 @@ type (
 	EstablishmentHandler struct {
 		BaseHandler
 		uc domains.EstablishmentUseCase
+	}
+
+	establishmentRequest struct {
+		Name       string    `json:"name" validate:"required"`
+		City       string    `json:"city" validate:"required"`
+		State      string    `json:"state" validate:"required"`
+		PostalCode string    `json:"postal_code" validate:"required"`
+		Number     string    `json:"number" validate:"required"`
+		UserId     string    `json:"user_id" validate:"required"`
+		CreatedAt  time.Time `json:"created_at"`
+		UpdatedAt  time.Time `json:"updated_at"`
 	}
 )
 
@@ -38,13 +50,22 @@ func NewEstablishmentController(uc domains.EstablishmentUseCase) *EstablishmentH
 // @Failure      500            {object}  domains.HttpResponse  "Internal Server Error"
 // @Router       /establishments [post]
 func (h *EstablishmentHandler) Add(ctx *gin.Context) {
-	var input domains.Establishment
-	if err := ctx.ShouldBindJSON(&input); err != nil {
+	var req establishmentRequest
+	if err := ctx.ShouldBindJSON(&req); err != nil {
 		h.RespondWithError(ctx, http.StatusBadRequest, err.Error(), err)
 		return
 	}
 
-	establishment, err := h.uc.Add(ctx.Request.Context(), &input)
+	estblishmentCreated := domains.Establishment{
+		Name:       req.Name,
+		City:       req.City,
+		PostalCode: req.PostalCode,
+		State:      req.State,
+		Number:     req.Number,
+		UserId:     req.UserId,
+	}
+
+	establishment, err := h.uc.Add(ctx.Request.Context(), &estblishmentCreated)
 	if err != nil {
 		h.RespondWithError(ctx, err.Code, err.Message, err)
 		return
@@ -53,8 +74,8 @@ func (h *EstablishmentHandler) Add(ctx *gin.Context) {
 }
 
 // FindEstablishmentById godoc
-// @Summary      Find establishment by ID
-// @Description  Retrieve an establishment using its unique ID
+// @Summary      Find establishment by id
+// @Description  The enpoint retrieve an establishment using its unique ID
 // @Tags         Establishments
 // @Accept       json
 // @Produce      json
@@ -76,7 +97,7 @@ func (h *EstablishmentHandler) FindEstablishmentById(ctx *gin.Context) {
 
 // GetAllProfessinalsByEstablishmentId godoc
 // @Summary      Get All professionals by establishment ID
-// @Description  Retrieve professionals using unique ID
+// @Description  The endpoint retrieve professionals using establishment id
 // @Tags         Establishments
 // @Accept       json
 // @Produce      json
@@ -97,6 +118,7 @@ func (h *EstablishmentHandler) GetAllProfessinalsByEstablishmentId(ctx *gin.Cont
 
 // UpdateEstablishmentById godoc
 // @Summary      Update establishment by id
+// @Description  The endpoint update establishment using id
 // @Tags         Establishments
 // @Accept       json
 // @Produce      json
@@ -118,6 +140,7 @@ func (h *EstablishmentHandler) UpdateEstablishmentById(ctx *gin.Context) {
 
 // GetEstablishmentReport godoc
 // @Summary      Get establishmentReport
+// @Description  The endpoint get establishment report using id
 // @Tags         Establishments
 // @Accept       json
 // @Produce      json

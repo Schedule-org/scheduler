@@ -19,6 +19,12 @@ type (
 		BaseHandler
 		uc domains.UserUseCase
 	}
+
+	userRequest struct {
+		Name     string `json:"name" validate:"required"`
+		Email    string `json:"email" validate:"required"`
+		Password string `json:"password" validate:"required"`
+	}
 )
 
 func NewUserController(uc domains.UserUseCase) *UserHandler {
@@ -37,13 +43,19 @@ func NewUserController(uc domains.UserUseCase) *UserHandler {
 // @Failure      500   {object}  domains.HttpResponse  "Internal Server Error"
 // @Router       /users [post]
 func (h *UserHandler) Add(ctx *gin.Context) {
-	var input domains.User
-	if err := ctx.ShouldBindJSON(&input); err != nil {
+	var req userRequest
+	if err := ctx.ShouldBindJSON(&req); err != nil {
 		h.RespondWithError(ctx, http.StatusBadRequest, err.Error(), err)
 		return
 	}
 
-	user, err := h.uc.Add(ctx.Request.Context(), &input)
+	userCreated := domains.User{
+		Name:     req.Name,
+		Email:    req.Email,
+		Password: req.Password,
+	}
+
+	user, err := h.uc.Add(ctx.Request.Context(), &userCreated)
 	if err != nil {
 		h.RespondWithError(ctx, err.Code, err.Message, err)
 		return

@@ -20,7 +20,7 @@ type (
 		uc domains.AppointmentUseCase
 	}
 
-	request struct {
+	appointmentRequest struct {
 		ProfessionalID string    `json:"professional_id" validate:"required"`
 		ServiceID      string    `json:"service_id" validate:"required"`
 		ScheduledDate  time.Time `json:"schedule_date" validate:"required"`
@@ -46,7 +46,7 @@ func NewAppointmentController(uc domains.AppointmentUseCase) *AppointmentHandler
 // @Failure      500            {object}  domains.HttpResponse  "Internal Server Error"
 // @Router       /appointments [post]
 func (h *AppointmentHandler) Add(ctx *gin.Context) {
-	var req request
+	var req appointmentRequest
 	if err := ctx.ShouldBindJSON(&req); err != nil {
 		h.RespondWithError(ctx, http.StatusBadRequest, "Invalid request payload", err)
 		return

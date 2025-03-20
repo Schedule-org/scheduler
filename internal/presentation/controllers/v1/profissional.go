@@ -18,6 +18,12 @@ type (
 		BaseHandler
 		uc domains.ProfessionalsUseCase
 	}
+
+	professionalRequest struct {
+		Name            string `json:"name" validate:"required"`
+		Role            string `json:"role" validate:"required"`
+		EstablishmentId string `json:"establishment" validate:"required"`
+	}
 )
 
 func NewProfessionalController(uc domains.ProfessionalsUseCase) *ProfessionalsHandler {
@@ -36,13 +42,18 @@ func NewProfessionalController(uc domains.ProfessionalsUseCase) *ProfessionalsHa
 // @Failure      500           {object}  domains.HttpResponse  "Internal Server Error"
 // @Router       /professionals [post]
 func (h *ProfessionalsHandler) Add(ctx *gin.Context) {
-	var input domains.Professionals
-	if err := ctx.ShouldBindJSON(&input); err != nil {
+	var req professionalRequest
+	if err := ctx.ShouldBindJSON(&req); err != nil {
 		h.RespondWithError(ctx, http.StatusBadRequest, err.Error(), err)
 		return
 	}
 
-	professional, err := h.uc.Add(ctx.Request.Context(), &input)
+	professionalCreated := domains.Professionals{
+		Name:            req.Name,
+		Role:            req.Role,
+		EstablishmentId: req.EstablishmentId,
+	}
+	professional, err := h.uc.Add(ctx.Request.Context(), &professionalCreated)
 	if err != nil {
 		h.RespondWithError(ctx, err.Code, err.Message, err)
 		return

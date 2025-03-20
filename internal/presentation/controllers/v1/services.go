@@ -18,6 +18,13 @@ type (
 		BaseHandler
 		uc domains.ServicesUseCase
 	}
+
+	serviceRequest struct {
+		Name           string `json:"name" validate:"required"`
+		Value          string `json:"value" validate:"required"`
+		Duration       string `json:"duration" validate:"required"`
+		ProfessionalId string `json:"professional_id" validate:"required"`
+	}
 )
 
 func NewServicesController(uc domains.ServicesUseCase) *ServicesHandler {
@@ -36,13 +43,19 @@ func NewServicesController(uc domains.ServicesUseCase) *ServicesHandler {
 // @Failure      500      {object}  domains.HttpResponse  "Internal Server Error"
 // @Router       /services [post]
 func (h *ServicesHandler) Add(ctx *gin.Context) {
-	var input domains.Services
-	if err := ctx.ShouldBindJSON(&input); err != nil {
+	var req serviceRequest
+	if err := ctx.ShouldBindJSON(&req); err != nil {
 		h.RespondWithError(ctx, http.StatusBadRequest, err.Error(), err)
 		return
 	}
 
-	service, err := h.uc.Add(ctx.Request.Context(), &input)
+	serviceCreated := domains.Services{
+		Name:           req.Name,
+		Value:          req.Value,
+		Duration:       req.Duration,
+		ProfessionalId: req.ProfessionalId,
+	}
+	service, err := h.uc.Add(ctx.Request.Context(), &serviceCreated)
 	if err != nil {
 		h.RespondWithError(ctx, err.Code, err.Message, err)
 		return
