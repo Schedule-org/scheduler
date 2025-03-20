@@ -26,9 +26,7 @@ type (
 		ScheduledDate  time.Time `json:"schedule_date" validate:"required"`
 		Email          string    `json:"user_email" validate:"required"`
 		Phone          string    `json:"user_phone" validate:"required"`
-		Notes          string    `json:"notes" validate:"required"`
-		CreatedAt      time.Time `json:"created_at" validate:"required"`
-		UpdatedAt      time.Time `json:"updated_at" validate:"required"`
+		Notes          string    `json:"notes"`
 	}
 )
 
@@ -61,8 +59,6 @@ func (h *AppointmentHandler) Add(ctx *gin.Context) {
 		Email:          req.Email,
 		Phone:          req.Phone,
 		Notes:          req.Notes,
-		CreatedAt:      req.CreatedAt,
-		UpdatedAt:      req.UpdatedAt,
 	}
 
 	appointmentCreated, err := h.uc.Add(ctx.Request.Context(), &appointment)
