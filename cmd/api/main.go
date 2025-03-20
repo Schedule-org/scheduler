@@ -50,17 +50,14 @@ func main() {
 	if err := db.Migrate(database); err != nil {
 		panic("Database migration failed: " + err.Error())
 	}
+
 	r := gin.Default()
 	r.GET("/api/v1/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	r.GET("/", handler)
 	r.GET("/metrics", gin.WrapH(promhttp.Handler()))
 
-	router.UsersGroupRouter(r, database, log)
-	router.EstablishmentGroupRouter(r, database, log)
-	router.ProfessionalsGroupRouter(r, database, log)
-	router.ServicesGroupRouter(r, database, log)
-	router.AppointmentGroupRouter(r, database, log)
-	router.ProfessionalAvailabilityGroupRouter(r, database, log)
+	router.InitRoutes(r, database, log)
+
 	if err := r.Run(":8080"); err != nil {
 		println("some error has been occurred:", err.Error())
 	}

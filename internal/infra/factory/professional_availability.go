@@ -9,8 +9,8 @@ import (
 )
 
 func ProfessionalAvailabilityFactory(db *gorm.DB, logger *logrus.Logger) controllers.ProfessionalAvailabilityController {
-	pa := repository.NewProfessionalsAvailabilityRepository(db, logger)
-	pc := usecases.NewProfessionalsAvailabilityUseCase(pa, logger)
-	ph := controllers.NewProfessionalAvailabilityController(pc)
-	return ph
+	repo := repository.NewProfessionalsAvailabilityRepository(db, logger)
+	useCase := usecases.NewProfessionalsAvailabilityUseCase(repo, logger)
+	handler := controllers.NewProfessionalAvailabilityController(useCase)
+	return handler
 }

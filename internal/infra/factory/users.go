@@ -9,8 +9,8 @@ import (
 )
 
 func UsersFactory(db *gorm.DB, logger *logrus.Logger) controllers.UserController {
-	ur := repository.NewUserRepository(db, logger)
-	uc := usecases.NewAddUserUseCase(ur, logger)
-	uh := controllers.NewUserController(uc)
-	return uh
+	repo := repository.NewUserRepository(db, logger)
+	useCase := usecases.NewAddUserUseCase(repo, logger)
+	handler := controllers.NewUserController(useCase)
+	return handler
 }
