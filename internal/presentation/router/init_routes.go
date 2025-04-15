@@ -13,5 +13,4 @@ func InitRoutes(router *gin.Engine, db *gorm.DB, logger *logrus.Logger) {
 	ServicesGroupRouter(router, db, logger)
 	AppointmentGroupRouter(router, db, logger)
 	ProfessionalAvailabilityGroupRouter(router, db, logger)
-	ProfessionalAvailabilityGroupRouter(router, db, logger)
 }

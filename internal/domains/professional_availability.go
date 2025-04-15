@@ -19,10 +19,12 @@ type ProfessionalAvailability struct {
 
 type ProfessionalsAvailabilityUseCase interface {
 	Add(ctx context.Context, availability *ProfessionalAvailability) (*ProfessionalAvailability, *core.Exception)
+
 	GetProfessionalAvailabilityById(ctx context.Context, professional_id string) ([]ProfessionalAvailability, *core.Exception)
 }
 
 type ProfessionalsAvailabilityRepository interface {
 	Add(ctx context.Context, availability *ProfessionalAvailability) (*ProfessionalAvailability, error)
+
 	GetProfessionalAvailabilityById(ctx context.Context, professional_id string) ([]ProfessionalAvailability, error)
 }

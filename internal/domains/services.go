@@ -18,12 +18,16 @@ type Services struct {
 
 type ServicesUseCase interface {
 	Add(ctx context.Context, payload *Services) (*Services, *core.Exception)
+
 	FindServiceById(ctx context.Context, id string) (*Services, *core.Exception)
+
 	GetAllServicesByProfessionalId(ctx context.Context, professional_id string) ([]Services, *core.Exception)
 }
 
 type ServicesRepository interface {
 	Add(ctx context.Context, establishment *Services) (*Services, error)
+
 	FindServiceById(ctx context.Context, service_id string) (*Services, error)
+
 	GetAllServicesByProfessionalId(ctx context.Context, professional_id string) ([]Services, error)
 }
