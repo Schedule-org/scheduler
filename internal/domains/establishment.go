@@ -20,16 +20,24 @@ type Establishment struct {
 
 type EstablishmentUseCase interface {
 	Add(ctx context.Context, payload *Establishment) (*Establishment, *core.Exception)
+
 	GetAllProfessionalsByEstablishmentId(ctx context.Context, establishment_id string) ([]Professionals, *core.Exception)
+
 	FindEstablishmentById(ctx context.Context, establishment_id string) (*Establishment, *core.Exception)
+
 	GetEstablishmentReport(ctx context.Context, establishment_id string) (*EstablishmentReport, *core.Exception)
+
 	UpdateEstablishmentById(ctx context.Context, establishment_id string, establishmentData *Establishment) (*Establishment, *core.Exception)
 }
 
 type EstablishmentRepository interface {
 	Add(ctx context.Context, establishment *Establishment) (*Establishment, error)
+
 	GetAllProfessionalsByEstablishmentId(ctx context.Context, establishment_id string) ([]Professionals, error)
+
 	FindEstablishmentById(ctx context.Context, email string) (*Establishment, error)
+
 	GetEstablishmentReport(ctx context.Context, establishment_id string) (*EstablishmentReport, error)
+
 	UpdateEstablishmentById(ctx context.Context, establishment_id string, establishmentData *Establishment) (*Establishment, error)
 }
