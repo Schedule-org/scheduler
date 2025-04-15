@@ -14,7 +14,11 @@ func ServicesGroupRouter(router *gin.Engine, db *gorm.DB, logger *logrus.Logger)
 	v1 := router.Group("/api/v1")
 	{
 		v1.POST("/services", servicesFactory.Add)
-		v1.GET("/services/:id", middlewares.ValidateParamRequest(), servicesFactory.FindServiceById)
-		v1.GET("/services/:id/all", middlewares.ValidateParamRequest(), servicesFactory.GetAllServicesByProfessionalId)
+
+		v1.Use(middlewares.ValidateParamRequest())
+
+		v1.GET("/services/:id", servicesFactory.FindServiceById)
+
+		v1.GET("/services/:id/all", servicesFactory.GetAllServicesByProfessionalId)
 	}
 }

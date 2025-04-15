@@ -13,8 +13,13 @@ func AppointmentGroupRouter(router *gin.Engine, db *gorm.DB, logger *logrus.Logg
 	appointmentFactory := factory.AppointmentFactory(db, logger)
 	v1 := router.Group("/api/v1")
 	{
-		v1.GET("/appointments/:id/professional", middlewares.ValidateParamRequest(), appointmentFactory.GetAllAppointmentsByProfessionalId)
-		v1.GET("/appointments/:id", middlewares.ValidateParamRequest(), appointmentFactory.GetAppointmentById)
-		v1.POST("/appointments", middlewares.ValidateParamRequest(), appointmentFactory.Add)
+		v1.POST("/appointments", appointmentFactory.Add)
+
+		// here we apply the middleware to all get routes from here
+		v1.Use(middlewares.ValidateParamRequest())
+
+		v1.GET("/appointments/:id/professional", appointmentFactory.GetAllAppointmentsByProfessionalId)
+
+		v1.GET("/appointments/:id", appointmentFactory.GetAppointmentById)
 	}
 }
