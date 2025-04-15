@@ -8,12 +8,6 @@ import (
 )
 
 type (
-	ServicesController interface {
-		Add(ctx *gin.Context)
-		FindServiceById(ctx *gin.Context)
-		GetAllServicesByProfessionalId(ctx *gin.Context)
-	}
-
 	ServicesHandler struct {
 		BaseHandler
 		uc domains.ServicesUseCase

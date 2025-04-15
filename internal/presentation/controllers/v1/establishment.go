@@ -9,14 +9,6 @@ import (
 )
 
 type (
-	EstablishmentController interface {
-		Add(ctx *gin.Context)
-		FindEstablishmentById(ctx *gin.Context)
-		GetAllProfessinalsByEstablishmentId(ctx *gin.Context)
-		UpdateEstablishmentById(ctx *gin.Context)
-		GetEstablishmentReport(ctx *gin.Context)
-	}
-
 	EstablishmentHandler struct {
 		BaseHandler
 		uc domains.EstablishmentUseCase

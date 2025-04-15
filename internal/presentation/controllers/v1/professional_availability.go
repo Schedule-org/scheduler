@@ -10,11 +10,6 @@ import (
 )
 
 type (
-	ProfessionalAvailabilityController interface {
-		Add(ctx *gin.Context)
-		GetProfessionalAvailabilityById(ctx *gin.Context)
-	}
-
 	ProfessionalAvailabilityHandler struct {
 		BaseHandler
 		uc domains.ProfessionalsAvailabilityUseCase

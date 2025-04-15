@@ -9,12 +9,6 @@ import (
 )
 
 type (
-	AppointmentController interface {
-		Add(ctx *gin.Context)
-		GetAllAppointmentsByProfessionalId(ctx *gin.Context)
-		GetAppointmentById(ctx *gin.Context)
-	}
-
 	AppointmentHandler struct {
 		BaseHandler
 		uc domains.AppointmentUseCase

@@ -8,12 +8,6 @@ import (
 )
 
 type (
-	ProfessionalsController interface {
-		Add(ctx *gin.Context)
-		FindProfessionalById(ctx *gin.Context)
-		UpdateProfessionalById(ctx *gin.Context)
-	}
-
 	ProfessionalsHandler struct {
 		BaseHandler
 		uc domains.ProfessionalsUseCase

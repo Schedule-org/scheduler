@@ -8,13 +8,6 @@ import (
 )
 
 type (
-	UserController interface {
-		Add(ctx *gin.Context)
-		FindUserById(ctx *gin.Context)
-		FindAllUsers(ctx *gin.Context)
-		FindAllEstablishmentsByUserId(ctx *gin.Context)
-	}
-
 	UserHandler struct {
 		BaseHandler
 		uc domains.UserUseCase
