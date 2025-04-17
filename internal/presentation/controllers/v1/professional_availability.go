@@ -16,7 +16,7 @@ type (
 	}
 
 	professionalAvailabilityRequest struct {
-		ProfessionalID uuid.UUID `json:"professional_id" validate:"required"`
+		ProfessionalId uuid.UUID `json:"professional_id" validate:"required"`
 		DayOfWeek      string    `json:"day_of_week" validate:"required"`
 		StartTime      time.Time `json:"start_time" validate:"required"`
 		EndTime        time.Time `json:"end_time" validate:"required"`
@@ -46,7 +46,7 @@ func (h *ProfessionalAvailabilityHandler) Add(ctx *gin.Context) {
 	}
 
 	professionalAvailabilityCreated := domains.ProfessionalAvailability{
-		ProfessionalID: req.ProfessionalID,
+		ProfessionalId: req.ProfessionalId,
 		DayOfWeek:      req.DayOfWeek,
 		StartTime:      req.StartTime,
 		EndTime:        req.EndTime,

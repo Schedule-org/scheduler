@@ -11,7 +11,7 @@ import (
 
 type (
 	ProfessionalAvailability struct {
-		ProfessionalID uuid.UUID `json:"professional_id"`
+		ProfessionalId uuid.UUID `json:"professional_id"`
 		DayOfWeek      string    `json:"day_of_week"`
 		StartTime      time.Time `json:"start_time"`
 		EndTime        time.Time `json:"end_time"`
@@ -23,7 +23,6 @@ type (
 	ProfessionalsAvailabilityUseCase interface {
 		// Add creates a new availability record for a professional.
 		Add(ctx context.Context, availability *ProfessionalAvailability) (*ProfessionalAvailability, *core.Exception)
-
 		// GetProfessionalAvailabilityById retrieves all availability records for a given professional.
 		GetProfessionalAvailabilityById(ctx context.Context, professional_id string) ([]ProfessionalAvailability, *core.Exception)
 	}
@@ -32,7 +31,6 @@ type (
 	ProfessionalsAvailabilityRepository interface {
 		// Add inserts a new availability record into the database.
 		Add(ctx context.Context, availability *ProfessionalAvailability) (*ProfessionalAvailability, error)
-
 		// GetProfessionalAvailabilityById fetches all availability records for a professional from the database.
 		GetProfessionalAvailabilityById(ctx context.Context, professional_id string) ([]ProfessionalAvailability, error)
 	}
@@ -41,7 +39,6 @@ type (
 	ProfessionalAvailabilityController interface {
 		// Add handles the HTTP request to create a new availability entry for a professional.
 		Add(ctx *gin.Context)
-
 		// GetProfessionalAvailabilityById handles the HTTP request to retrieve a professional's availability by ID.
 		GetProfessionalAvailabilityById(ctx *gin.Context)
 	}
