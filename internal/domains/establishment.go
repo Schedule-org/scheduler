@@ -24,16 +24,12 @@ type (
 	EstablishmentUseCase interface {
 		// Add creates a new establishment.
 		Add(ctx context.Context, payload *Establishment) (*Establishment, *core.Exception)
-
 		// GetAllProfessionalsByEstablishmentId retrieves all professionals linked to a given establishment.
 		GetAllProfessionalsByEstablishmentId(ctx context.Context, establishment_id string) ([]Professionals, *core.Exception)
-
 		// FindEstablishmentById retrieves an establishment by its ID.
 		FindEstablishmentById(ctx context.Context, establishment_id string) (*Establishment, *core.Exception)
-
 		// GetEstablishmentReport generates a report for a given establishment.
 		GetEstablishmentReport(ctx context.Context, establishment_id string) (*EstablishmentReport, *core.Exception)
-
 		// UpdateEstablishmentById updates establishment data by its ID.
 		UpdateEstablishmentById(ctx context.Context, establishment_id string, establishmentData *Establishment) (*Establishment, *core.Exception)
 	}
@@ -42,16 +38,12 @@ type (
 	EstablishmentRepository interface {
 		// Add inserts a new establishment into the database.
 		Add(ctx context.Context, establishment *Establishment) (*Establishment, error)
-
 		// GetAllProfessionalsByEstablishmentId fetches all professionals associated with a specific establishment.
 		GetAllProfessionalsByEstablishmentId(ctx context.Context, establishment_id string) ([]Professionals, error)
-
 		// FindEstablishmentById retrieves an establishment by its ID from the database.
 		FindEstablishmentById(ctx context.Context, email string) (*Establishment, error)
-
 		// GetEstablishmentReport retrieves a report for the specified establishment.
 		GetEstablishmentReport(ctx context.Context, establishment_id string) (*EstablishmentReport, error)
-
 		// UpdateEstablishmentById updates the data of an existing establishment in the database.
 		UpdateEstablishmentById(ctx context.Context, establishment_id string, establishmentData *Establishment) (*Establishment, error)
 	}
@@ -60,16 +52,12 @@ type (
 	EstablishmentController interface {
 		// Add handles the HTTP request to create a new establishment.
 		Add(ctx *gin.Context)
-
 		// FindEstablishmentById handles the HTTP request to retrieve an establishment by ID.
 		FindEstablishmentById(ctx *gin.Context)
-
 		// GetAllProfessinalsByEstablishmentId handles the HTTP request to get all professionals linked to an establishment.
 		GetAllProfessinalsByEstablishmentId(ctx *gin.Context)
-
 		// UpdateEstablishmentById handles the HTTP request to update establishment data by ID.
 		UpdateEstablishmentById(ctx *gin.Context)
-
 		// GetEstablishmentReport handles the HTTP request to generate a report for a specific establishment.
 		GetEstablishmentReport(ctx *gin.Context)
 	}
