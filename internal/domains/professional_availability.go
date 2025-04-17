@@ -11,7 +11,7 @@ import (
 
 type (
 	ProfessionalAvailability struct {
-		ProfessionalID uuid.UUID `json:"professional_id"`
+		ProfessionalId uuid.UUID `json:"professional_id"`
 		DayOfWeek      string    `json:"day_of_week"`
 		StartTime      time.Time `json:"start_time"`
 		EndTime        time.Time `json:"end_time"`

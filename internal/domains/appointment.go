@@ -10,8 +10,8 @@ import (
 
 type (
 	Appointment struct {
-		ProfessionalID string    `json:"professional_id"`
-		ServiceID      string    `json:"service_id"`
+		ProfessionalId string    `json:"professional_id"`
+		ServiceId      string    `json:"service_id"`
 		ScheduledDate  time.Time `json:"schedule_date"`
 		Email          string    `json:"user_email"`
 		Phone          string    `json:"user_phone"`

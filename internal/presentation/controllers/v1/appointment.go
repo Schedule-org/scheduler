@@ -47,8 +47,8 @@ func (h *AppointmentHandler) Add(ctx *gin.Context) {
 	}
 
 	appointment := domains.Appointment{
-		ProfessionalID: req.ProfessionalID,
-		ServiceID:      req.ServiceID,
+		ProfessionalId: req.ProfessionalID,
+		ServiceId:      req.ServiceID,
 		ScheduledDate:  req.ScheduledDate,
 		Email:          req.Email,
 		Phone:          req.Phone,

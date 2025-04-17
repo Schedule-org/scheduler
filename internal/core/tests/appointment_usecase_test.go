@@ -37,11 +37,11 @@ func TestAppointmentUseCase_Add_Success(t *testing.T) {
 
 	scheduledDate := time.Date(2025, 1, 15, 10, 0, 0, 0, time.UTC)
 	appointment := &domains.Appointment{
-		ProfessionalID: "5689c151-c968-47d7-9ff8-97a863047f19",
+		ProfessionalId: "5689c151-c968-47d7-9ff8-97a863047f19",
 		ScheduledDate:  scheduledDate,
 		Email:          "hebertsantosdeveloper@gmail.com",
 		Phone:          "13996612070",
-		ServiceID:      "5689c151-c968-47d7-9ff8-97a863047f19",
+		ServiceId:      "5689c151-c968-47d7-9ff8-97a863047f19",
 		Notes:          "Some note",
 	}
 
@@ -49,11 +49,11 @@ func TestAppointmentUseCase_Add_Success(t *testing.T) {
 	result, _ := appointmentUseCase.Add(context.Background(), appointment)
 
 	assert.NotNil(t, result)
-	assert.Equal(t, appointment.ProfessionalID, result.ProfessionalID)
+	assert.Equal(t, appointment.ProfessionalId, result.ProfessionalId)
 	assert.Equal(t, appointment.ScheduledDate, result.ScheduledDate)
 	assert.Equal(t, appointment.Email, result.Email)
 	assert.Equal(t, appointment.Phone, result.Phone)
-	assert.Equal(t, appointment.ServiceID, result.ServiceID)
+	assert.Equal(t, appointment.ServiceId, result.ServiceId)
 	assert.Equal(t, appointment.Notes, result.Notes)
 
 	mockRepo.AssertCalled(t, "Add", mock.Anything, appointment)
