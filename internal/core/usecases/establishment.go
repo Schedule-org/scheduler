@@ -4,20 +4,20 @@ import (
 	"context"
 
 	"github.com/hebertzin/scheduler/internal/core"
-	"github.com/hebertzin/scheduler/internal/domains"
+	"github.com/hebertzin/scheduler/internal/domain"
 	"github.com/sirupsen/logrus"
 )
 
 type EstablishmentUserUseCase struct {
-	repository domains.EstablishmentRepository
+	repository domain.EstablishmentRepository
 	logger     *logrus.Logger
 }
 
-func NewEstablishmentUseCase(repository domains.EstablishmentRepository, logger *logrus.Logger) domains.EstablishmentUseCase {
+func NewEstablishmentUseCase(repository domain.EstablishmentRepository, logger *logrus.Logger) domain.EstablishmentUseCase {
 	return &EstablishmentUserUseCase{repository: repository, logger: logger}
 }
 
-func (s *EstablishmentUserUseCase) FindEstablishmentById(ctx context.Context, id string) (*domains.Establishment, *core.Exception) {
+func (s *EstablishmentUserUseCase) FindEstablishmentById(ctx context.Context, id string) (*domain.Establishment, *core.Exception) {
 	establishment, err := s.repository.FindEstablishmentById(ctx, id)
 	if err != nil {
 		return nil, core.Unexpected(core.WithMessage("error finding establishment"), core.WithError(err))
@@ -25,7 +25,7 @@ func (s *EstablishmentUserUseCase) FindEstablishmentById(ctx context.Context, id
 	return establishment, nil
 }
 
-func (s *EstablishmentUserUseCase) Add(ctx context.Context, payload *domains.Establishment) (*domains.Establishment, *core.Exception) {
+func (s *EstablishmentUserUseCase) Add(ctx context.Context, payload *domain.Establishment) (*domain.Establishment, *core.Exception) {
 	establishment, err := s.repository.Add(ctx, payload)
 	if err != nil {
 		return nil, core.Unexpected()
@@ -33,7 +33,7 @@ func (s *EstablishmentUserUseCase) Add(ctx context.Context, payload *domains.Est
 	return establishment, nil
 }
 
-func (s *EstablishmentUserUseCase) GetAllProfessionalsByEstablishmentId(ctx context.Context, establishment_id string) ([]domains.Professionals, *core.Exception) {
+func (s *EstablishmentUserUseCase) GetAllProfessionalsByEstablishmentId(ctx context.Context, establishment_id string) ([]domain.Professionals, *core.Exception) {
 	professionails, err := s.repository.GetAllProfessionalsByEstablishmentId(ctx, establishment_id)
 	if err != nil {
 		return nil, core.Unexpected()
@@ -41,7 +41,7 @@ func (s *EstablishmentUserUseCase) GetAllProfessionalsByEstablishmentId(ctx cont
 	return professionails, nil
 }
 
-func (s *EstablishmentUserUseCase) UpdateEstablishmentById(ctx context.Context, establishment_id string, establishmentData *domains.Establishment) (*domains.Establishment, *core.Exception) {
+func (s *EstablishmentUserUseCase) UpdateEstablishmentById(ctx context.Context, establishment_id string, establishmentData *domain.Establishment) (*domain.Establishment, *core.Exception) {
 	establishment, err := s.repository.UpdateEstablishmentById(ctx, establishment_id, establishmentData)
 	if err != nil {
 		return nil, core.Unexpected(core.WithMessage("Some error has been ocurred trying update a establishment"))
@@ -49,7 +49,7 @@ func (s *EstablishmentUserUseCase) UpdateEstablishmentById(ctx context.Context, 
 	return establishment, nil
 }
 
-func (s *EstablishmentUserUseCase) GetEstablishmentReport(ctx context.Context, establishment_id string) (*domains.EstablishmentReport, *core.Exception) {
+func (s *EstablishmentUserUseCase) GetEstablishmentReport(ctx context.Context, establishment_id string) (*domain.EstablishmentReport, *core.Exception) {
 	stats, err := s.repository.GetEstablishmentReport(ctx, establishment_id)
 	if err != nil {
 		return nil, core.Unexpected(core.WithMessage("Some error has been ocurred trying update a establishment"))

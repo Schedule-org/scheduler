@@ -4,21 +4,21 @@ import (
 	"context"
 
 	"github.com/hebertzin/scheduler/internal/core"
-	"github.com/hebertzin/scheduler/internal/domains"
+	"github.com/hebertzin/scheduler/internal/domain"
 	"github.com/sirupsen/logrus"
 	"golang.org/x/crypto/bcrypt"
 )
 
 type UserUseCase struct {
-	repository domains.UserRepository
+	repository domain.UserRepository
 	logger     *logrus.Logger
 }
 
-func NewAddUserUseCase(repository domains.UserRepository, logger *logrus.Logger) domains.UserUseCase {
+func NewAddUserUseCase(repository domain.UserRepository, logger *logrus.Logger) domain.UserUseCase {
 	return &UserUseCase{repository: repository, logger: logger}
 }
 
-func (s *UserUseCase) Add(ctx context.Context, payload *domains.User) (*domains.User, *core.Exception) {
+func (s *UserUseCase) Add(ctx context.Context, payload *domain.User) (*domain.User, *core.Exception) {
 	if payload.Name == "" || payload.Email == "" || payload.Password == "" {
 		return nil, core.BadRequest(core.WithMessage("Some fields are missing"))
 	}
@@ -42,7 +42,7 @@ func (s *UserUseCase) Add(ctx context.Context, payload *domains.User) (*domains.
 	return user, nil
 }
 
-func (s *UserUseCase) FindUserById(ctx context.Context, id string) (*domains.User, *core.Exception) {
+func (s *UserUseCase) FindUserById(ctx context.Context, id string) (*domain.User, *core.Exception) {
 	user, err := s.repository.FindUserById(ctx, id)
 	if err != nil {
 		return nil, core.Unexpected(core.WithMessage("error finding user"), core.WithError(err))
@@ -50,7 +50,7 @@ func (s *UserUseCase) FindUserById(ctx context.Context, id string) (*domains.Use
 	return user, nil
 }
 
-func (s *UserUseCase) FindAllUsers(ctx context.Context) ([]domains.User, *core.Exception) {
+func (s *UserUseCase) FindAllUsers(ctx context.Context) ([]domain.User, *core.Exception) {
 	users, err := s.repository.FindAllUsers(ctx)
 	if err != nil {
 		return nil, core.Unexpected(core.WithMessage("Some error has been ocurred"))
@@ -58,7 +58,7 @@ func (s *UserUseCase) FindAllUsers(ctx context.Context) ([]domains.User, *core.E
 	return users, nil
 }
 
-func (s *UserUseCase) FindAllEstablishmentsByUserId(ctx context.Context, user_id string) ([]domains.Establishment, *core.Exception) {
+func (s *UserUseCase) FindAllEstablishmentsByUserId(ctx context.Context, user_id string) ([]domain.Establishment, *core.Exception) {
 	establishments, err := s.repository.FindAllEstablishmentsByUserId(ctx, user_id)
 	if err != nil {
 		return nil, core.Unexpected(core.WithMessage("Some error has been ocurred"))

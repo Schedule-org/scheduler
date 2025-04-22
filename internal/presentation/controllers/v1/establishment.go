@@ -5,13 +5,13 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
-	"github.com/hebertzin/scheduler/internal/domains"
+	"github.com/hebertzin/scheduler/internal/domain"
 )
 
 type (
 	EstablishmentHandler struct {
 		BaseHandler
-		uc domains.EstablishmentUseCase
+		uc domain.EstablishmentUseCase
 	}
 
 	establishmentRequest struct {
@@ -26,7 +26,7 @@ type (
 	}
 )
 
-func NewEstablishmentController(uc domains.EstablishmentUseCase) *EstablishmentHandler {
+func NewEstablishmentController(uc domain.EstablishmentUseCase) *EstablishmentHandler {
 	return &EstablishmentHandler{uc: uc}
 }
 
@@ -36,10 +36,10 @@ func NewEstablishmentController(uc domains.EstablishmentUseCase) *EstablishmentH
 // @Tags         Establishments
 // @Accept       json
 // @Produce      json
-// @Param        establishment  body      domains.Establishment  true  "Establishment data"
-// @Success      201            {object}  domains.HttpResponse{data=domains.Establishment}  "Establishment created successfully"
-// @Failure      400            {object}  domains.HttpResponse  "Bad Request"
-// @Failure      500            {object}  domains.HttpResponse  "Internal Server Error"
+// @Param        establishment  body      domain.Establishment  true  "Establishment data"
+// @Success      201            {object}  domain.HttpResponse{data=domain.Establishment}  "Establishment created successfully"
+// @Failure      400            {object}  domain.HttpResponse  "Bad Request"
+// @Failure      500            {object}  domain.HttpResponse  "Internal Server Error"
 // @Router       /establishments [post]
 func (h *EstablishmentHandler) Add(ctx *gin.Context) {
 	var req establishmentRequest
@@ -48,7 +48,7 @@ func (h *EstablishmentHandler) Add(ctx *gin.Context) {
 		return
 	}
 
-	estblishmentCreated := domains.Establishment{
+	estblishmentCreated := domain.Establishment{
 		Name:       req.Name,
 		City:       req.City,
 		PostalCode: req.PostalCode,
@@ -62,6 +62,7 @@ func (h *EstablishmentHandler) Add(ctx *gin.Context) {
 		h.RespondWithError(ctx, err.Code, err.Message, err)
 		return
 	}
+
 	h.RespondWithSuccess(ctx, http.StatusCreated, "Establishment created successfully", establishment)
 }
 
@@ -72,9 +73,9 @@ func (h *EstablishmentHandler) Add(ctx *gin.Context) {
 // @Accept       json
 // @Produce      json
 // @Param        id   path      string  true  "Establishment ID"
-// @Success      200  {object}  domains.HttpResponse{data=domains.Establishment}  "Establishment found successfully"
-// @Failure      404  {object}  domains.HttpResponse  "Establishment not found"
-// @Failure      500  {object}  domains.HttpResponse  "Internal Server Error"
+// @Success      200  {object}  domain.HttpResponse{data=domain.Establishment}  "Establishment found successfully"
+// @Failure      404  {object}  domain.HttpResponse  "Establishment not found"
+// @Failure      500  {object}  domain.HttpResponse  "Internal Server Error"
 // @Router       /establishment_id/{id} [get]
 func (h *EstablishmentHandler) FindEstablishmentById(ctx *gin.Context) {
 	id := ctx.Param("id")
@@ -94,9 +95,9 @@ func (h *EstablishmentHandler) FindEstablishmentById(ctx *gin.Context) {
 // @Accept       json
 // @Produce      json
 // @Param        id   path      string  true  "id"
-// @Success      200  {object}  domains.HttpResponse{data=domains.Establishment}  "Establishment found successfully"
-// @Failure      404  {object}  domains.HttpResponse  "Professionals found successfully"
-// @Failure      500  {object}  domains.HttpResponse  "Internal Server Error"
+// @Success      200  {object}  domain.HttpResponse{data=domain.Establishment}  "Establishment found successfully"
+// @Failure      404  {object}  domain.HttpResponse  "Professionals found successfully"
+// @Failure      500  {object}  domain.HttpResponse  "Internal Server Error"
 // @Router       /establishment/:id/professionals [get]
 func (h *EstablishmentHandler) GetAllProfessinalsByEstablishmentId(ctx *gin.Context) {
 	establishment_id := ctx.Param("id")
@@ -115,12 +116,12 @@ func (h *EstablishmentHandler) GetAllProfessinalsByEstablishmentId(ctx *gin.Cont
 // @Accept       json
 // @Produce      json
 // @Param        id   path      string  true  "id"
-// @Failure      200  {object}  domains.HttpResponse  "Establishment update successfully"
-// @Failure      500  {object}  domains.HttpResponse  "Internal Server Error"
+// @Failure      200  {object}  domain.HttpResponse  "Establishment update successfully"
+// @Failure      500  {object}  domain.HttpResponse  "Internal Server Error"
 // @Router       /establishments/:id/update [put]
 func (h *EstablishmentHandler) UpdateEstablishmentById(ctx *gin.Context) {
 	establishment_id := ctx.Param("id")
-	var input domains.Establishment
+	var input domain.Establishment
 	establishments, err := h.uc.UpdateEstablishmentById(ctx.Request.Context(), establishment_id, &input)
 	if err != nil {
 		h.RespondWithError(ctx, err.Code, err.Message, err)
@@ -137,9 +138,9 @@ func (h *EstablishmentHandler) UpdateEstablishmentById(ctx *gin.Context) {
 // @Accept       json
 // @Produce      json
 // @Param        id   path      string  true  "id"
-// @Failure      200  {object}  domains.HttpResponse  "Establishment report"
-// @Failure      400  {object}  domains.HttpResponse  "Establishment id not found"
-// @Failure      500  {object}  domains.HttpResponse  "Internal Server Error"
+// @Failure      200  {object}  domain.HttpResponse  "Establishment report"
+// @Failure      400  {object}  domain.HttpResponse  "Establishment id not found"
+// @Failure      500  {object}  domain.HttpResponse  "Internal Server Error"
 // @Router       /establishments/:id/report [get]
 func (h *EstablishmentHandler) GetEstablishmentReport(ctx *gin.Context) {
 	establishment_id := ctx.Param("id")

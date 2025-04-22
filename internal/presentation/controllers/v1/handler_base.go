@@ -2,7 +2,7 @@ package controllers
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/hebertzin/scheduler/internal/domains"
+	"github.com/hebertzin/scheduler/internal/domain"
 )
 
 type BaseHandler struct{}
@@ -11,7 +11,7 @@ type BaseHandler struct{}
 // This standardized structure provides a machine-readable and human-readable error format.
 // More info: https://www.rfc-editor.org/rfc/rfc9457.html
 func (b *BaseHandler) RespondWithError(ctx *gin.Context, status int, title string, err error) {
-	ctx.JSON(status, domains.ErrorResponse{
+	ctx.JSON(status, domain.ErrorResponse{
 		Title:    title,
 		Status:   status,
 		Instance: ctx.Request.URL.String(),
@@ -19,7 +19,7 @@ func (b *BaseHandler) RespondWithError(ctx *gin.Context, status int, title strin
 }
 
 func (b *BaseHandler) RespondWithSuccess(ctx *gin.Context, code int, message string, data interface{}) {
-	ctx.JSON(code, domains.HttpResponse{
+	ctx.JSON(code, domain.HttpResponse{
 		Message: message,
 		Status:  code,
 		Data:    data,

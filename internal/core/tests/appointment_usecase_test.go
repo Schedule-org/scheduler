@@ -6,7 +6,7 @@ import (
 	"time"
 
 	"github.com/hebertzin/scheduler/internal/core/usecases"
-	"github.com/hebertzin/scheduler/internal/domains"
+	"github.com/hebertzin/scheduler/internal/domain"
 	"github.com/sirupsen/logrus"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
@@ -16,16 +16,16 @@ type MockAppointmentRepository struct {
 	mock.Mock
 }
 
-func (m *MockAppointmentRepository) Add(ctx context.Context, appointment *domains.Appointment) (*domains.Appointment, error) {
+func (m *MockAppointmentRepository) Add(ctx context.Context, appointment *domain.Appointment) (*domain.Appointment, error) {
 	args := m.Called(ctx, appointment)
-	return args.Get(0).(*domains.Appointment), args.Error(1)
+	return args.Get(0).(*domain.Appointment), args.Error(1)
 }
 
-func (m *MockAppointmentRepository) GetAllAppointmentsByProfessionalId(ctx context.Context, professionalID string) ([]domains.Appointment, error) {
+func (m *MockAppointmentRepository) GetAllAppointmentsByProfessionalId(ctx context.Context, professionalID string) ([]domain.Appointment, error) {
 	return nil, nil
 }
 
-func (m *MockAppointmentRepository) GetAppointmentById(ctx context.Context, appointmentID string) (*domains.Appointment, error) {
+func (m *MockAppointmentRepository) GetAppointmentById(ctx context.Context, appointmentID string) (*domain.Appointment, error) {
 	return nil, nil
 }
 
@@ -36,7 +36,7 @@ func TestAppointmentUseCase_Add_Success(t *testing.T) {
 	appointmentUseCase := usecases.NewAppointmentUseCase(mockRepo, logger)
 
 	scheduledDate := time.Date(2025, 1, 15, 10, 0, 0, 0, time.UTC)
-	appointment := &domains.Appointment{
+	appointment := &domain.Appointment{
 		ProfessionalId: "5689c151-c968-47d7-9ff8-97a863047f19",
 		ScheduledDate:  scheduledDate,
 		Email:          "hebertsantosdeveloper@gmail.com",

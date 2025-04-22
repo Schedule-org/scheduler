@@ -5,13 +5,13 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
-	"github.com/hebertzin/scheduler/internal/domains"
+	"github.com/hebertzin/scheduler/internal/domain"
 )
 
 type (
 	AppointmentHandler struct {
 		BaseHandler
-		uc domains.AppointmentUseCase
+		uc domain.AppointmentUseCase
 	}
 
 	appointmentRequest struct {
@@ -24,7 +24,7 @@ type (
 	}
 )
 
-func NewAppointmentController(uc domains.AppointmentUseCase) *AppointmentHandler {
+func NewAppointmentController(uc domain.AppointmentUseCase) *AppointmentHandler {
 	return &AppointmentHandler{uc: uc}
 }
 
@@ -34,10 +34,10 @@ func NewAppointmentController(uc domains.AppointmentUseCase) *AppointmentHandler
 // @Tags         Appointment
 // @Accept       json
 // @Produce      json
-// @Param        establishment  body      domains.Establishment  true  "Appointment data"
-// @Success      201            {object}  domains.HttpResponse{data=domains.Appointment}  "Appointment created successfully"
-// @Failure      400            {object}  domains.HttpResponse  "Bad Request"
-// @Failure      500            {object}  domains.HttpResponse  "Internal Server Error"
+// @Param        establishment  body      domain.Establishment  true  "Appointment data"
+// @Success      201            {object}  domain.HttpResponse{data=domain.Appointment}  "Appointment created successfully"
+// @Failure      400            {object}  domain.HttpResponse  "Bad Request"
+// @Failure      500            {object}  domain.HttpResponse  "Internal Server Error"
 // @Router       /appointments [post]
 func (h *AppointmentHandler) Add(ctx *gin.Context) {
 	var req appointmentRequest
@@ -46,7 +46,7 @@ func (h *AppointmentHandler) Add(ctx *gin.Context) {
 		return
 	}
 
-	appointment := domains.Appointment{
+	appointment := domain.Appointment{
 		ProfessionalId: req.ProfessionalID,
 		ServiceId:      req.ServiceID,
 		ScheduledDate:  req.ScheduledDate,
@@ -70,10 +70,10 @@ func (h *AppointmentHandler) Add(ctx *gin.Context) {
 // @Tags         Appointment
 // @Accept       json
 // @Produce      json
-// @Param        establishment  body      domains.Establishment  true  "Appointment data"
-// @Success      201            {object}  domains.HttpResponse{data=domains.Appointment}  "appointment by id successfully retrieved"
-// @Failure      400            {object}  domains.HttpResponse  "Bad Request"
-// @Failure      500            {object}  domains.HttpResponse  "Internal Server Error"
+// @Param        establishment  body      domain.Establishment  true  "Appointment data"
+// @Success      201            {object}  domain.HttpResponse{data=domain.Appointment}  "appointment by id successfully retrieved"
+// @Failure      400            {object}  domain.HttpResponse  "Bad Request"
+// @Failure      500            {object}  domain.HttpResponse  "Internal Server Error"
 // @Router       /appointments/:id/professional [get]
 func (h *AppointmentHandler) GetAllAppointmentsByProfessionalId(ctx *gin.Context) {
 	id := ctx.Param("id")
@@ -92,10 +92,10 @@ func (h *AppointmentHandler) GetAllAppointmentsByProfessionalId(ctx *gin.Context
 // @Tags         Appointment
 // @Accept       json
 // @Produce      json
-// @Param        establishment  body      domains.Establishment  true  "Appointment data"
-// @Success      201            {object}  domains.HttpResponse{data=domains.Appointment}  "appointment by id successfully retrieved"
-// @Failure      400            {object}  domains.HttpResponse  "Bad Request"
-// @Failure      500            {object}  domains.HttpResponse  "Internal Server Error"
+// @Param        establishment  body      domain.Establishment  true  "Appointment data"
+// @Success      201            {object}  domain.HttpResponse{data=domain.Appointment}  "appointment by id successfully retrieved"
+// @Failure      400            {object}  domain.HttpResponse  "Bad Request"
+// @Failure      500            {object}  domain.HttpResponse  "Internal Server Error"
 // @Router       /appointments/:id [get]
 func (h *AppointmentHandler) GetAppointmentById(ctx *gin.Context) {
 	id := ctx.Param("id")
