@@ -2,6 +2,12 @@ package domains
 
 type HttpResponse struct {
 	Message string      `json:"message"`
-	Code    int         `json:"code"`
+	Status  int         `json:"status"`
 	Data    interface{} `json:"data,omitempty"`
+}
+
+type ErrorResponse struct {
+	Title    string      `json:"title"`
+	Status   int         `json:"status"`
+	Instance interface{} `json:"Instance,omitempty"`
 }
