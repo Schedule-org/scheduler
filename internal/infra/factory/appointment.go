@@ -5,7 +5,7 @@ import (
 	"github.com/hebertzin/scheduler/internal/domain"
 
 	"github.com/hebertzin/scheduler/internal/infra/db/repository"
-	"github.com/hebertzin/scheduler/internal/presentation/controllers/v1"
+	"github.com/hebertzin/scheduler/internal/presentation/controllers"
 	"github.com/sirupsen/logrus"
 	"gorm.io/gorm"
 )
