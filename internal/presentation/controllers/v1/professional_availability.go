@@ -6,13 +6,13 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
-	"github.com/hebertzin/scheduler/internal/domains"
+	"github.com/hebertzin/scheduler/internal/domain"
 )
 
 type (
 	ProfessionalAvailabilityHandler struct {
 		BaseHandler
-		uc domains.ProfessionalsAvailabilityUseCase
+		uc domain.ProfessionalsAvailabilityUseCase
 	}
 
 	professionalAvailabilityRequest struct {
@@ -23,7 +23,7 @@ type (
 	}
 )
 
-func NewProfessionalAvailabilityController(uc domains.ProfessionalsAvailabilityUseCase) *ProfessionalAvailabilityHandler {
+func NewProfessionalAvailabilityController(uc domain.ProfessionalsAvailabilityUseCase) *ProfessionalAvailabilityHandler {
 	return &ProfessionalAvailabilityHandler{uc: uc}
 }
 
@@ -33,10 +33,10 @@ func NewProfessionalAvailabilityController(uc domains.ProfessionalsAvailabilityU
 // @Tags         ProfessionalAvailability
 // @Accept       json
 // @Produce      json
-// @Param        establishment  body      domains.Establishment  true  "ProfessionalAvailabilityHandler data"
-// @Success      201            {object}  domains.HttpResponse{data=domains.ProfessionalAvailability}  "professional availability created successfully by id successfully retrieved"
-// @Failure      400            {object}  domains.HttpResponse  "Bad Request"
-// @Failure      500            {object}  domains.HttpResponse  "Internal Server Error"
+// @Param        establishment  body      domain.Establishment  true  "ProfessionalAvailabilityHandler data"
+// @Success      201            {object}  domain.HttpResponse{data=domain.ProfessionalAvailability}  "professional availability created successfully by id successfully retrieved"
+// @Failure      400            {object}  domain.HttpResponse  "Bad Request"
+// @Failure      500            {object}  domain.HttpResponse  "Internal Server Error"
 // @Router       /availability/ [post]
 func (h *ProfessionalAvailabilityHandler) Add(ctx *gin.Context) {
 	var req professionalAvailabilityRequest
@@ -45,7 +45,7 @@ func (h *ProfessionalAvailabilityHandler) Add(ctx *gin.Context) {
 		return
 	}
 
-	professionalAvailabilityCreated := domains.ProfessionalAvailability{
+	professionalAvailabilityCreated := domain.ProfessionalAvailability{
 		ProfessionalId: req.ProfessionalId,
 		DayOfWeek:      req.DayOfWeek,
 		StartTime:      req.StartTime,
@@ -67,10 +67,10 @@ func (h *ProfessionalAvailabilityHandler) Add(ctx *gin.Context) {
 // @Tags         ProfessionalAvailability
 // @Accept       json
 // @Produce      json
-// @Param        establishment  body      domains.Establishment  true  "ProfessionalAvailabilityHandler data"
-// @Success      201            {object}  domains.HttpResponse{data=domains.ProfessionalAvailability}  "professional availability retrieved successfullys availability created successfully by id successfully retrieved"
-// @Failure      400            {object}  domains.HttpResponse  "Bad Request"
-// @Failure      500            {object}  domains.HttpResponse  "Internal Server Error"
+// @Param        establishment  body      domain.Establishment  true  "ProfessionalAvailabilityHandler data"
+// @Success      201            {object}  domain.HttpResponse{data=domain.ProfessionalAvailability}  "professional availability retrieved successfullys availability created successfully by id successfully retrieved"
+// @Failure      400            {object}  domain.HttpResponse  "Bad Request"
+// @Failure      500            {object}  domain.HttpResponse  "Internal Server Error"
 // @Router       /availability/:id/professional [get]
 func (h *ProfessionalAvailabilityHandler) GetProfessionalAvailabilityById(ctx *gin.Context) {
 	professional_id := ctx.Param("id")

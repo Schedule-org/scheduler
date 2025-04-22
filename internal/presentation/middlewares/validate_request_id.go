@@ -5,16 +5,16 @@ import (
 	"strings"
 
 	"github.com/gin-gonic/gin"
-	"github.com/hebertzin/scheduler/internal/domains"
+	"github.com/hebertzin/scheduler/internal/domain"
 )
 
 func ValidateParamRequest() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		id := strings.TrimSpace(ctx.Param("id"))
 		if id == "" {
-			ctx.JSON(http.StatusBadRequest, domains.HttpResponse{
+			ctx.JSON(http.StatusBadRequest, domain.HttpResponse{
 				Message: "The 'id' parameter is required",
-				Code:    http.StatusBadRequest,
+				Status:  http.StatusBadRequest,
 			})
 			ctx.Abort()
 			return

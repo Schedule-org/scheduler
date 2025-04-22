@@ -3,7 +3,7 @@ package repository
 import (
 	"context"
 
-	"github.com/hebertzin/scheduler/internal/domains"
+	"github.com/hebertzin/scheduler/internal/domain"
 	"github.com/hebertzin/scheduler/internal/infra/db/models"
 	"github.com/sirupsen/logrus"
 	"gorm.io/gorm"
@@ -21,7 +21,7 @@ func NewProfessionalsAvailabilityRepository(db *gorm.DB, logger *logrus.Logger) 
 	}
 }
 
-func (repo *ProfessionalsAvailabilityDatabaseRepository) Add(ctx context.Context, availability *domains.ProfessionalAvailability) (*domains.ProfessionalAvailability, error) {
+func (repo *ProfessionalsAvailabilityDatabaseRepository) Add(ctx context.Context, availability *domain.ProfessionalAvailability) (*domain.ProfessionalAvailability, error) {
 	if err := repo.db.WithContext(ctx).
 		Create(availability).Error; err != nil {
 		return nil, err
@@ -29,8 +29,8 @@ func (repo *ProfessionalsAvailabilityDatabaseRepository) Add(ctx context.Context
 	return availability, nil
 }
 
-func (repo *ProfessionalsAvailabilityDatabaseRepository) GetProfessionalAvailabilityById(ctx context.Context, professional_id string) ([]domains.ProfessionalAvailability, error) {
-	var availability []domains.ProfessionalAvailability
+func (repo *ProfessionalsAvailabilityDatabaseRepository) GetProfessionalAvailabilityById(ctx context.Context, professional_id string) ([]domain.ProfessionalAvailability, error) {
+	var availability []domain.ProfessionalAvailability
 	if err := repo.db.WithContext(ctx).
 		Model(&models.Professional{}).
 		Where("professional_id = ?", professional_id).Error; err != nil {

@@ -5,7 +5,7 @@ import (
 	"log"
 	"time"
 
-	"github.com/hebertzin/scheduler/internal/domains"
+	"github.com/hebertzin/scheduler/internal/domain"
 	"github.com/sirupsen/logrus"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -14,7 +14,7 @@ import (
 
 var db *gorm.DB
 
-func ConnectDatabase(cfg *domains.Config) *gorm.DB {
+func ConnectDatabase(cfg *domain.Config) *gorm.DB {
 	dsn := fmt.Sprintf("user=%s password=%s dbname=%s port=%s host=%s",
 		cfg.User, cfg.Password, cfg.Database, cfg.Port, cfg.Host)
 

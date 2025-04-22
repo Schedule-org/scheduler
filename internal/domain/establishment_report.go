@@ -1,4 +1,4 @@
-package domains
+package domain
 
 type EstablishmentReport struct {
 	TotalProfessionals int64 `json:"total_professionals"`

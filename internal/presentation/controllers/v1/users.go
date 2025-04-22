@@ -4,13 +4,13 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/hebertzin/scheduler/internal/domains"
+	"github.com/hebertzin/scheduler/internal/domain"
 )
 
 type (
 	UserHandler struct {
 		BaseHandler
-		uc domains.UserUseCase
+		uc domain.UserUseCase
 	}
 
 	userRequest struct {
@@ -20,7 +20,7 @@ type (
 	}
 )
 
-func NewUserController(uc domains.UserUseCase) *UserHandler {
+func NewUserController(uc domain.UserUseCase) *UserHandler {
 	return &UserHandler{uc: uc}
 }
 
@@ -30,10 +30,10 @@ func NewUserController(uc domains.UserUseCase) *UserHandler {
 // @Tags         Users
 // @Accept       json
 // @Produce      json
-// @Param        user  body      domains.User  true  "User data"
-// @Success      201   {object}  domains.HttpResponse{data=dto.UserDTO}  "User created successfully"
-// @Failure      400   {object}  domains.HttpResponse  "Bad Request"
-// @Failure      500   {object}  domains.HttpResponse  "Internal Server Error"
+// @Param        user  body      domain.User  true  "User data"
+// @Success      201   {object}  domain.HttpResponse{data=dto.UserDTO}  "User created successfully"
+// @Failure      400   {object}  domain.HttpResponse  "Bad Request"
+// @Failure      500   {object}  domain.HttpResponse  "Internal Server Error"
 // @Router       /users [post]
 func (h *UserHandler) Add(ctx *gin.Context) {
 	var req userRequest
@@ -42,7 +42,7 @@ func (h *UserHandler) Add(ctx *gin.Context) {
 		return
 	}
 
-	userCreated := domains.User{
+	userCreated := domain.User{
 		Name:     req.Name,
 		Email:    req.Email,
 		Password: req.Password,
@@ -64,10 +64,10 @@ func (h *UserHandler) Add(ctx *gin.Context) {
 // @Accept       json
 // @Produce      json
 // @Param        id  path      string  true  "User ID"
-// @Success      200  {object}  domains.HttpResponse{data=dto.UserDTO}  "User found successfully"
-// @Failure      400  {object}  domains.HttpResponse  "Bad Request"
-// @Failure      404  {object}  domains.HttpResponse  "User not found"
-// @Failure      500  {object}  domains.HttpResponse  "Internal Server Error"
+// @Success      200  {object}  domain.HttpResponse{data=dto.UserDTO}  "User found successfully"
+// @Failure      400  {object}  domain.HttpResponse  "Bad Request"
+// @Failure      404  {object}  domain.HttpResponse  "User not found"
+// @Failure      500  {object}  domain.HttpResponse  "Internal Server Error"
 // @Router       /users/{id} [get]
 func (h *UserHandler) FindUserById(ctx *gin.Context) {
 	id := ctx.Param("id")
@@ -86,8 +86,8 @@ func (h *UserHandler) FindUserById(ctx *gin.Context) {
 // @Tags         Users
 // @Accept       json
 // @Produce      json
-// @Success      200  {object}  domains.HttpResponse{data=[]dto.UserDTO}  "Users retrieved successfully"
-// @Failure      500  {object}  domains.HttpResponse  "Internal Server Error"
+// @Success      200  {object}  domain.HttpResponse{data=[]dto.UserDTO}  "Users retrieved successfully"
+// @Failure      500  {object}  domain.HttpResponse  "Internal Server Error"
 // @Router       /users [get]
 func (h *UserHandler) FindAllUsers(ctx *gin.Context) {
 	users, err := h.uc.FindAllUsers(ctx.Request.Context())

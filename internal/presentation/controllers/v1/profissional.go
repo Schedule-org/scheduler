@@ -4,13 +4,13 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/hebertzin/scheduler/internal/domains"
+	"github.com/hebertzin/scheduler/internal/domain"
 )
 
 type (
 	ProfessionalsHandler struct {
 		BaseHandler
-		uc domains.ProfessionalsUseCase
+		uc domain.ProfessionalsUseCase
 	}
 
 	professionalRequest struct {
@@ -20,7 +20,7 @@ type (
 	}
 )
 
-func NewProfessionalController(uc domains.ProfessionalsUseCase) *ProfessionalsHandler {
+func NewProfessionalController(uc domain.ProfessionalsUseCase) *ProfessionalsHandler {
 	return &ProfessionalsHandler{uc: uc}
 }
 
@@ -30,10 +30,10 @@ func NewProfessionalController(uc domains.ProfessionalsUseCase) *ProfessionalsHa
 // @Tags         Professionals
 // @Accept       json
 // @Produce      json
-// @Param        professional  body      domains.Professionals  true  "Professional data"
-// @Success      201           {object}  domains.HttpResponse{data=domains.Professionals}  "Professional created successfully"
-// @Failure      400           {object}  domains.HttpResponse  "Bad Request"
-// @Failure      500           {object}  domains.HttpResponse  "Internal Server Error"
+// @Param        professional  body      domain.Professionals  true  "Professional data"
+// @Success      201           {object}  domain.HttpResponse{data=domain.Professionals}  "Professional created successfully"
+// @Failure      400           {object}  domain.HttpResponse  "Bad Request"
+// @Failure      500           {object}  domain.HttpResponse  "Internal Server Error"
 // @Router       /professionals [post]
 func (h *ProfessionalsHandler) Add(ctx *gin.Context) {
 	var req professionalRequest
@@ -42,12 +42,14 @@ func (h *ProfessionalsHandler) Add(ctx *gin.Context) {
 		return
 	}
 
-	professionalCreated := domains.Professionals{
+	professionalCreated := domain.Professionals{
 		Name:            req.Name,
 		Role:            req.Role,
 		EstablishmentId: req.EstablishmentId,
 	}
+
 	professional, err := h.uc.Add(ctx.Request.Context(), &professionalCreated)
+
 	if err != nil {
 		h.RespondWithError(ctx, err.Code, err.Message, err)
 		return
@@ -63,9 +65,9 @@ func (h *ProfessionalsHandler) Add(ctx *gin.Context) {
 // @Accept       json
 // @Produce      json
 // @Param        id   path      string  true  "Professional ID"
-// @Success      200  {object}  domains.HttpResponse{data=domains.Professionals}  "Professional found successfully"
-// @Failure      404  {object}  domains.HttpResponse  "Professional not found"
-// @Failure      500  {object}  domains.HttpResponse  "Internal Server Error"
+// @Success      200  {object}  domain.HttpResponse{data=domain.Professionals}  "Professional found successfully"
+// @Failure      404  {object}  domain.HttpResponse  "Professional not found"
+// @Failure      500  {object}  domain.HttpResponse  "Internal Server Error"
 // @Router       /professionals/{id} [get]
 func (h *ProfessionalsHandler) FindProfessionalById(ctx *gin.Context) {
 	id := ctx.Param("id")
@@ -85,12 +87,12 @@ func (h *ProfessionalsHandler) FindProfessionalById(ctx *gin.Context) {
 // @Accept       json
 // @Produce      json
 // @Param        id   path      string  true  "Professional ID"
-// @Success      200  {object}  domains.HttpResponse{data=domains.Professionals}  "professional update successfully"
-// @Failure      404  {object}  domains.HttpResponse  "Professional not found"
-// @Failure      500  {object}  domains.HttpResponse  "Internal Server Error"
+// @Success      200  {object}  domain.HttpResponse{data=domain.Professionals}  "professional update successfully"
+// @Failure      404  {object}  domain.HttpResponse  "Professional not found"
+// @Failure      500  {object}  domain.HttpResponse  "Internal Server Error"
 // @Router       /professionals/{id} [get]
 func (h *ProfessionalsHandler) UpdateProfessionalById(ctx *gin.Context) {
-	var input domains.Professionals
+	var input domain.Professionals
 	id := ctx.Param("id")
 	professional, err := h.uc.UpdateProfessionalById(ctx.Request.Context(), id, &input)
 	if err != nil {

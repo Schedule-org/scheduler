@@ -3,13 +3,13 @@ package env
 import (
 	"os"
 
-	"github.com/hebertzin/scheduler/internal/domains"
+	"github.com/hebertzin/scheduler/internal/domain"
 	"github.com/hebertzin/scheduler/internal/infra/config/logging"
 	"github.com/joho/godotenv"
 	"github.com/sirupsen/logrus"
 )
 
-func LoadConfig() *domains.Config {
+func LoadConfig() *domain.Config {
 	err := godotenv.Load()
 	if err != nil {
 		logging.Log.WithFields(logrus.Fields{
@@ -17,7 +17,7 @@ func LoadConfig() *domains.Config {
 		}).Error("Some error has been ocurred load env variables")
 	}
 
-	config := &domains.Config{
+	config := &domain.Config{
 		User:     os.Getenv("USER_DATABASE"),
 		Password: os.Getenv("USER_PASSWORD"),
 		Database: os.Getenv("DATABASE"),

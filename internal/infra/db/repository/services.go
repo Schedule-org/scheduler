@@ -3,7 +3,7 @@ package repository
 import (
 	"context"
 
-	"github.com/hebertzin/scheduler/internal/domains"
+	"github.com/hebertzin/scheduler/internal/domain"
 	"github.com/sirupsen/logrus"
 	"gorm.io/gorm"
 )
@@ -20,7 +20,7 @@ func NewServicesRepository(db *gorm.DB, logger *logrus.Logger) *ServicesDatabase
 	}
 }
 
-func (repo *ServicesDatabaseRepository) Add(ctx context.Context, service *domains.Services) (*domains.Services, error) {
+func (repo *ServicesDatabaseRepository) Add(ctx context.Context, service *domain.Services) (*domain.Services, error) {
 	if err := repo.db.WithContext(ctx).
 		Create(service).Error; err != nil {
 		return nil, err
@@ -28,8 +28,8 @@ func (repo *ServicesDatabaseRepository) Add(ctx context.Context, service *domain
 	return service, nil
 }
 
-func (repo *ServicesDatabaseRepository) FindServiceById(ctx context.Context, service_id string) (*domains.Services, error) {
-	var service domains.Services
+func (repo *ServicesDatabaseRepository) FindServiceById(ctx context.Context, service_id string) (*domain.Services, error) {
+	var service domain.Services
 	if err := repo.db.WithContext(ctx).
 		Where("id = ?", service_id).
 		First(&service).Error; err != nil {
@@ -38,8 +38,8 @@ func (repo *ServicesDatabaseRepository) FindServiceById(ctx context.Context, ser
 	return &service, nil
 }
 
-func (repo *ServicesDatabaseRepository) GetAllServicesByProfessionalId(ctx context.Context, professional_id string) ([]domains.Services, error) {
-	var services []domains.Services
+func (repo *ServicesDatabaseRepository) GetAllServicesByProfessionalId(ctx context.Context, professional_id string) ([]domain.Services, error) {
+	var services []domain.Services
 	if err := repo.db.WithContext(ctx).
 		Where("professional_id = ?", professional_id).
 		Find(&services).Error; err != nil {
