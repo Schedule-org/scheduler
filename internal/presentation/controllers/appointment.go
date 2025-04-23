@@ -107,3 +107,14 @@ func (h *AppointmentHandler) GetAppointmentById(ctx *gin.Context) {
 
 	h.RespondWithSuccess(ctx, http.StatusOK, "appointment by id successfully retrieved", appointment)
 }
+
+func (h *AppointmentHandler) DeleteAppointment(ctx *gin.Context) {
+	id := ctx.Param("id")
+	err := h.uc.DeleteAppointment(ctx.Request.Context(), id)
+	if err != nil {
+		h.RespondWithError(ctx, err.Code, err.Message, err)
+		return
+	}
+
+	h.RespondWithSuccess(ctx, http.StatusNoContent, "appointment deleted", nil)
+}
