@@ -31,7 +31,7 @@ type (
 		// GetAppointmentById retrieves a specific appointment by its ID.
 		// Returns the appointment and a possible business exception.
 		GetAppointmentById(ctx context.Context, appointment_id string) (*Appointment, *core.Exception)
-
+		// DeleteAppointment delete an appointment
 		DeleteAppointment(ctx context.Context, appointment_id string) *core.Exception
 	}
 
@@ -58,7 +58,7 @@ type (
 		GetAllAppointmentsByProfessionalId(ctx *gin.Context)
 		// GetAppointmentById handles the HTTP request to fetch a specific appointment by its ID.
 		GetAppointmentById(ctx *gin.Context)
-
+		// DeleteAppointment delete an appointment
 		DeleteAppointment(ctx *gin.Context)
 	}
 )
