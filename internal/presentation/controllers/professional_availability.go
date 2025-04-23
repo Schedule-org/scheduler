@@ -58,7 +58,7 @@ func (h *ProfessionalAvailabilityHandler) Add(ctx *gin.Context) {
 		return
 	}
 
-	h.RespondWithSuccess(ctx, http.StatusCreated, "professional availability created successfully", availability)
+	h.RespondWithSuccess(ctx, http.StatusCreated, "Professional availability created successfully", availability)
 }
 
 // Add godoc
@@ -80,5 +80,5 @@ func (h *ProfessionalAvailabilityHandler) GetProfessionalAvailabilityById(ctx *g
 		return
 	}
 
-	h.RespondWithSuccess(ctx, http.StatusOK, "professional availability retrieved successfully", availability)
+	h.RespondWithSuccess(ctx, http.StatusOK, "Professional availability retrieved successfully", availability)
 }

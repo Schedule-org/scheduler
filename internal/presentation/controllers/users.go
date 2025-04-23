@@ -77,7 +77,7 @@ func (h *UserHandler) FindUserById(ctx *gin.Context) {
 		return
 	}
 
-	h.RespondWithSuccess(ctx, http.StatusOK, "user found successfully", user)
+	h.RespondWithSuccess(ctx, http.StatusOK, "User found successfully", user)
 }
 
 // FindAllUsers godoc

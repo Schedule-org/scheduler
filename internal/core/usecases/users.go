@@ -45,7 +45,7 @@ func (s *UserUseCase) Add(ctx context.Context, payload *domain.User) (*domain.Us
 func (s *UserUseCase) FindUserById(ctx context.Context, id string) (*domain.User, *core.Exception) {
 	user, err := s.repository.FindUserById(ctx, id)
 	if err != nil {
-		return nil, core.Unexpected(core.WithMessage("error finding user"), core.WithError(err))
+		return nil, core.Unexpected(core.WithMessage("Error finding user"), core.WithError(err))
 	}
 	return user, nil
 }

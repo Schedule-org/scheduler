@@ -20,7 +20,7 @@ func NewProfissionalUseCase(repository domain.ProfessionalsRepository, logger *l
 func (s *ProfessionalsUseCase) FindProfessionalById(ctx context.Context, id string) (*domain.Professionals, *core.Exception) {
 	professional, err := s.repository.FindProfessionalById(ctx, id)
 	if err != nil {
-		return nil, core.Unexpected(core.WithMessage("error finding professional"), core.WithError(err))
+		return nil, core.Unexpected(core.WithMessage("Error finding professional"), core.WithError(err))
 	}
 	return professional, nil
 }

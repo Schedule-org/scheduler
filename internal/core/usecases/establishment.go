@@ -20,7 +20,7 @@ func NewEstablishmentUseCase(repository domain.EstablishmentRepository, logger *
 func (s *EstablishmentUserUseCase) FindEstablishmentById(ctx context.Context, id string) (*domain.Establishment, *core.Exception) {
 	establishment, err := s.repository.FindEstablishmentById(ctx, id)
 	if err != nil {
-		return nil, core.Unexpected(core.WithMessage("error finding establishment"), core.WithError(err))
+		return nil, core.Unexpected(core.WithMessage("Error finding establishment"), core.WithError(err))
 	}
 	return establishment, nil
 }
