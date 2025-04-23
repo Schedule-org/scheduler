@@ -46,3 +46,7 @@ func (repo *AppointmentDatabaseRepository) GetAppointmentById(ctx context.Contex
 	}
 	return &appointment, nil
 }
+
+func (repo *AppointmentDatabaseRepository) DeleteAppointment(ctx context.Context, appointment_id string) {
+	repo.db.Where("id = ?", appointment_id).Delete(&appointment_id)
+}
