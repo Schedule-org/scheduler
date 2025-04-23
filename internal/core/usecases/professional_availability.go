@@ -20,7 +20,7 @@ func NewProfessionalsAvailabilityUseCase(repository domain.ProfessionalsAvailabi
 func (s *ProfessionalsAvailabilityUseCase) Add(ctx context.Context, availability *domain.ProfessionalAvailability) (*domain.ProfessionalAvailability, *core.Exception) {
 	availability, err := s.repository.Add(ctx, availability)
 	if err != nil {
-		return nil, core.Unexpected(core.WithMessage("error creating availability"), core.WithError(err))
+		return nil, core.Unexpected(core.WithMessage("Error creating availability"), core.WithError(err))
 	}
 	return availability, nil
 }
@@ -28,7 +28,7 @@ func (s *ProfessionalsAvailabilityUseCase) Add(ctx context.Context, availability
 func (s *ProfessionalsAvailabilityUseCase) GetProfessionalAvailabilityById(ctx context.Context, professionail_id string) ([]domain.ProfessionalAvailability, *core.Exception) {
 	availability, err := s.repository.GetProfessionalAvailabilityById(ctx, professionail_id)
 	if err != nil {
-		return nil, core.Unexpected(core.WithMessage("error get professional availability"), core.WithError(err))
+		return nil, core.Unexpected(core.WithMessage("Error get professional availability"), core.WithError(err))
 	}
 	return availability, nil
 }

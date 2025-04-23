@@ -31,6 +31,8 @@ type (
 		// GetAppointmentById retrieves a specific appointment by its ID.
 		// Returns the appointment and a possible business exception.
 		GetAppointmentById(ctx context.Context, appointment_id string) (*Appointment, *core.Exception)
+
+		DeleteAppointment(ctx context.Context, appointment_id string) *core.Exception
 	}
 
 	// AppointmentRepository defines the data persistence methods for appointments.
@@ -44,6 +46,8 @@ type (
 		// GetAppointmentById fetches an appointment by its ID from the database.
 		// Returns the appointment and a possible error.
 		GetAppointmentById(ctx context.Context, appointment_id string) (*Appointment, error)
+		// DeleteAppointment delete an appointment
+		DeleteAppointment(ctx context.Context, appointment_id string) error
 	}
 
 	// AppointmentController defines the HTTP handlers for appointments.
@@ -54,5 +58,7 @@ type (
 		GetAllAppointmentsByProfessionalId(ctx *gin.Context)
 		// GetAppointmentById handles the HTTP request to fetch a specific appointment by its ID.
 		GetAppointmentById(ctx *gin.Context)
+
+		DeleteAppointment(ctx *gin.Context)
 	}
 )

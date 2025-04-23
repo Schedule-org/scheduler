@@ -105,5 +105,26 @@ func (h *AppointmentHandler) GetAppointmentById(ctx *gin.Context) {
 		return
 	}
 
-	h.RespondWithSuccess(ctx, http.StatusOK, "appointment by id successfully retrieved", appointment)
+	h.RespondWithSuccess(ctx, http.StatusOK, "Appointment by id successfully retrieved", appointment)
+}
+
+// @Summary      DeleteAppointment
+// @Description  Delete an appointment by ID
+// @Tags         Appointment
+// @Accept       json
+// @Produce      json
+// @Param        id   path      string  true  "Appointment ID"
+// @Success      204  {object}  domain.HttpResponse  "appointment deleted"
+// @Failure      400  {object}  domain.HttpResponse  "Bad Request"
+// @Failure      500  {object}  domain.HttpResponse  "Internal Server Error"
+// @Router       /appointments/{id} [delete]
+func (h *AppointmentHandler) DeleteAppointment(ctx *gin.Context) {
+	id := ctx.Param("id")
+	err := h.uc.DeleteAppointment(ctx.Request.Context(), id)
+	if err != nil {
+		h.RespondWithError(ctx, err.Code, err.Message, err)
+		return
+	}
+
+	h.RespondWithSuccess(ctx, http.StatusNoContent, "Appointment deleted", nil)
 }

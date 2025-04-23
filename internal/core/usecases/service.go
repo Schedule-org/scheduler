@@ -20,7 +20,7 @@ func NewServicesUseCase(repository domain.ServicesRepository, logger *logrus.Log
 func (s *ServicesUseCase) FindServiceById(ctx context.Context, id string) (*domain.Services, *core.Exception) {
 	service, err := s.repository.FindServiceById(ctx, id)
 	if err != nil {
-		return nil, core.Unexpected(core.WithMessage("error finding service"), core.WithError(err))
+		return nil, core.Unexpected(core.WithMessage("Error finding service"), core.WithError(err))
 	}
 	return service, nil
 }

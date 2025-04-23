@@ -29,6 +29,10 @@ func (m *MockAppointmentRepository) GetAppointmentById(ctx context.Context, appo
 	return nil, nil
 }
 
+func (m *MockAppointmentRepository) DeleteAppointment(ctx context.Context, appointmentID string) error {
+	return nil
+}
+
 func TestAppointmentUseCase_Add_Success(t *testing.T) {
 	mockRepo := new(MockAppointmentRepository)
 	logger := logrus.New()
