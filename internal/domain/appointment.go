@@ -44,6 +44,8 @@ type (
 		// GetAppointmentById fetches an appointment by its ID from the database.
 		// Returns the appointment and a possible error.
 		GetAppointmentById(ctx context.Context, appointment_id string) (*Appointment, error)
+
+		DeleteAppointment(ctx context.Context, appointment_id string) error
 	}
 
 	// AppointmentController defines the HTTP handlers for appointments.

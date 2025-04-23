@@ -40,3 +40,11 @@ func (s *AppointmentUseCase) GetAppointmentById(ctx context.Context, appointment
 	}
 	return appointment, nil
 }
+
+func (s *AppointmentUseCase) DeleteAppointment(ctx context.Context, appointment_id string) *core.Exception {
+	err := s.repository.DeleteAppointment(ctx, appointment_id)
+	if err != nil {
+		return core.Unexpected(core.WithMessage("error get appointment by id"), core.WithError(err))
+	}
+	return nil
+}
