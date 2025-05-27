@@ -18,6 +18,7 @@ func Migrate(database *gorm.DB) error {
 		&models.Services{},
 		&models.ProfessionalAvailability{},
 		&models.Appointment{},
+		&models.Account{},
 	)
 	if err != nil {
 		return fmt.Errorf("failed to migrate models: %w", err)
