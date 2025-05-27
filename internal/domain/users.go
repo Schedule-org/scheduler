@@ -10,7 +10,7 @@ import (
 )
 
 type (
-	User struct {
+	Account struct {
 		Name        string       `json:"name"`
 		Email       string       `json:"email"`
 		Cnpj        string       `gorm:"size:100;unique;not null"`
@@ -20,41 +20,41 @@ type (
 		UpdatedAt   time.Time    `json:"updated_at"`
 	}
 
-	// UserUseCase defines the business logic related to users.
-	UserUseCase interface {
-		// Add creates a new user.
-		Add(ctx context.Context, payload *User) (*User, *core.Exception)
-		// FindUserById retrieves a user by their ID.
-		FindUserById(ctx context.Context, id string) (*User, *core.Exception)
-		// FindAllUsers returns a list of all users.
-		FindAllUsers(ctx context.Context) ([]User, *core.Exception)
-		// FindAllEstablishmentsByUserId retrieves all establishments associated with a specific user.
-		FindAllEstablishmentsByUserId(ctx context.Context, user_id string) ([]Establishment, *core.Exception)
+	// AccountUseCase defines the business logic related to Accounts.
+	AccountUseCase interface {
+		// Add creates a new Account.
+		Add(ctx context.Context, payload *Account) (*Account, *core.Exception)
+		// FindAccountById retrieves a Account by their ID.
+		FindAccountById(ctx context.Context, id string) (*Account, *core.Exception)
+		// FindAllAccounts returns a list of all Accounts.
+		FindAllAccounts(ctx context.Context) ([]Account, *core.Exception)
+		// FindAllEstablishmentsByAccountId retrieves all establishments associated with a specific Account.
+		FindAllEstablishmentsByAccountId(ctx context.Context, Account_id string) ([]Establishment, *core.Exception)
 	}
 
-	// UserRepository defines the data access layer for users.
-	UserRepository interface {
-		// Add inserts a new user into the database.
-		Add(ctx context.Context, user *User) (*User, error)
-		// FindUserByEmail retrieves a user by their email address.
-		FindUserByEmail(ctx context.Context, email string) (*User, error)
-		// FindUserById retrieves a user by their ID from the database.
-		FindUserById(ctx context.Context, id string) (*User, error)
-		// FindAllEstablishmentsByUserId fetches all establishments linked to a user.
-		FindAllEstablishmentsByUserId(ctx context.Context, user_id string) ([]Establishment, error)
-		// FindAllUsers retrieves all users from the database.
-		FindAllUsers(ctx context.Context) ([]User, error)
+	// AccountRepository defines the data access layer for Accounts.
+	AccountRepository interface {
+		// Add inserts a new Account into the database.
+		Add(ctx context.Context, Account *Account) (*Account, error)
+		// FindAccountByEmail retrieves a Account by their email address.
+		FindAccountByEmail(ctx context.Context, email string) (*Account, error)
+		// FindAccountById retrieves a Account by their ID from the database.
+		FindAccountById(ctx context.Context, id string) (*Account, error)
+		// FindAllEstablishmentsByAccountId fetches all establishments linked to a Account.
+		FindAllEstablishmentsByAccountId(ctx context.Context, Account_id string) ([]Establishment, error)
+		// FindAllAccounts retrieves all Accounts from the database.
+		FindAllAccounts(ctx context.Context) ([]Account, error)
 	}
 
-	// UserController defines the HTTP handlers for managing users.
+	// AccountController defines the HTTP handlers for managing Accounts.
 	AccountController interface {
-		// Add handles the HTTP request to create a new user.
+		// Add handles the HTTP request to create a new Account.
 		Add(ctx *gin.Context)
-		// FindUserById handles the HTTP request to retrieve a user by ID.
-		FindUserById(ctx *gin.Context)
-		// FindAllUsers handles the HTTP request to return a list of all users.
-		FindAllUsers(ctx *gin.Context)
-		// FindAllEstablishmentsByUserId handles the HTTP request to fetch all establishments linked to a user.
-		FindAllEstablishmentsByUserId(ctx *gin.Context)
+		// FindAccountById handles the HTTP request to retrieve a Account by ID.
+		FindAccountById(ctx *gin.Context)
+		// FindAllAccounts handles the HTTP request to return a list of all Accounts.
+		FindAllAccounts(ctx *gin.Context)
+		// FindAllEstablishmentsByAccountId handles the HTTP request to fetch all establishments linked to a Account.
+		FindAllEstablishmentsByAccountId(ctx *gin.Context)
 	}
 )
