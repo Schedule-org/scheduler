@@ -23,8 +23,8 @@ func (s *AccountUseCase) Add(ctx context.Context, payload *domain.Account) (*dom
 		return nil, core.BadRequest(core.WithMessage("Some fields are missing"))
 	}
 
-	existentUser, _ := s.repository.FindAccountByEmail(ctx, payload.Email)
-	if existentUser != nil {
+	existentAccount, _ := s.repository.FindAccountByEmail(ctx, payload.Email)
+	if existentAccount != nil {
 		return nil, core.Confilct(core.WithMessage("Account already exists in the database"))
 	}
 
@@ -34,32 +34,32 @@ func (s *AccountUseCase) Add(ctx context.Context, payload *domain.Account) (*dom
 	}
 	payload.Password = string(hashedPassword)
 
-	user, err := s.repository.Add(ctx, payload)
+	account, err := s.repository.Add(ctx, payload)
 	if err != nil {
 		return nil, core.Unexpected()
 	}
 
-	return user, nil
+	return account, nil
 }
 
 func (s *AccountUseCase) FindAccountById(ctx context.Context, id string) (*domain.Account, *core.Exception) {
-	user, err := s.repository.FindAccountById(ctx, id)
+	account, err := s.repository.FindAccountById(ctx, id)
 	if err != nil {
-		return nil, core.Unexpected(core.WithMessage("Error finding user"), core.WithError(err))
+		return nil, core.Unexpected(core.WithMessage("Error finding account"), core.WithError(err))
 	}
-	return user, nil
+	return account, nil
 }
 
 func (s *AccountUseCase) FindAllAccounts(ctx context.Context) ([]domain.Account, *core.Exception) {
-	users, err := s.repository.FindAllAccounts(ctx)
+	account, err := s.repository.FindAllAccounts(ctx)
 	if err != nil {
 		return nil, core.Unexpected(core.WithMessage("Some error has been ocurred"))
 	}
-	return users, nil
+	return account, nil
 }
 
-func (s *AccountUseCase) FindAllEstablishmentsByAccountId(ctx context.Context, user_id string) ([]domain.Establishment, *core.Exception) {
-	establishments, err := s.repository.FindAllEstablishmentsByAccountId(ctx, user_id)
+func (s *AccountUseCase) FindAllEstablishmentsByAccountId(ctx context.Context, account_id string) ([]domain.Establishment, *core.Exception) {
+	establishments, err := s.repository.FindAllEstablishmentsByAccountId(ctx, account_id)
 	if err != nil {
 		return nil, core.Unexpected(core.WithMessage("Some error has been ocurred"))
 	}
