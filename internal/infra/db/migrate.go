@@ -12,12 +12,13 @@ func Migrate(database *gorm.DB) error {
 		return fmt.Errorf("failed to enable uuid-ossp extension: %w", err)
 	}
 	err := database.AutoMigrate(
-		&models.Users{},
+		&models.Accounts{},
 		&models.Establishment{},
 		&models.Professional{},
 		&models.Services{},
 		&models.ProfessionalAvailability{},
 		&models.Appointment{},
+		&models.Clients{},
 	)
 	if err != nil {
 		return fmt.Errorf("failed to migrate models: %w", err)

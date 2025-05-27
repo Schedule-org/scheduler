@@ -18,6 +18,6 @@ type Establishment struct {
 	CreatedAt  time.Time `json:"created_at"`
 	UpdatedAt  time.Time `json:"updated_at"`
 
-	UserID uuid.UUID `gorm:"type:uuid;not null"`
-	User   Users     `gorm:"foreignKey:UserID"`
+	UserID   uuid.UUID `gorm:"type:uuid;not null"`
+	Accounts Accounts  `gorm:"foreignKey:UserID"`
 }

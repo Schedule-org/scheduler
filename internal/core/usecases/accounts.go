@@ -9,23 +9,23 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-type UserUseCase struct {
-	repository domain.UserRepository
+type AccountUseCase struct {
+	repository domain.AccountRepository
 	logger     *logrus.Logger
 }
 
-func NewAddUserUseCase(repository domain.UserRepository, logger *logrus.Logger) domain.UserUseCase {
-	return &UserUseCase{repository: repository, logger: logger}
+func NewAccountUseCase(repository domain.AccountRepository, logger *logrus.Logger) domain.AccountUseCase {
+	return &AccountUseCase{repository: repository, logger: logger}
 }
 
-func (s *UserUseCase) Add(ctx context.Context, payload *domain.User) (*domain.User, *core.Exception) {
+func (s *AccountUseCase) Add(ctx context.Context, payload *domain.Account) (*domain.Account, *core.Exception) {
 	if payload.Name == "" || payload.Email == "" || payload.Password == "" {
 		return nil, core.BadRequest(core.WithMessage("Some fields are missing"))
 	}
 
-	existentUser, _ := s.repository.FindUserByEmail(ctx, payload.Email)
+	existentUser, _ := s.repository.FindAccountByEmail(ctx, payload.Email)
 	if existentUser != nil {
-		return nil, core.Confilct(core.WithMessage("User already exists in the database"))
+		return nil, core.Confilct(core.WithMessage("Account already exists in the database"))
 	}
 
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(payload.Password), bcrypt.DefaultCost)
@@ -42,24 +42,24 @@ func (s *UserUseCase) Add(ctx context.Context, payload *domain.User) (*domain.Us
 	return user, nil
 }
 
-func (s *UserUseCase) FindUserById(ctx context.Context, id string) (*domain.User, *core.Exception) {
-	user, err := s.repository.FindUserById(ctx, id)
+func (s *AccountUseCase) FindAccountById(ctx context.Context, id string) (*domain.Account, *core.Exception) {
+	user, err := s.repository.FindAccountById(ctx, id)
 	if err != nil {
 		return nil, core.Unexpected(core.WithMessage("Error finding user"), core.WithError(err))
 	}
 	return user, nil
 }
 
-func (s *UserUseCase) FindAllUsers(ctx context.Context) ([]domain.User, *core.Exception) {
-	users, err := s.repository.FindAllUsers(ctx)
+func (s *AccountUseCase) FindAllAccounts(ctx context.Context) ([]domain.Account, *core.Exception) {
+	users, err := s.repository.FindAllAccounts(ctx)
 	if err != nil {
 		return nil, core.Unexpected(core.WithMessage("Some error has been ocurred"))
 	}
 	return users, nil
 }
 
-func (s *UserUseCase) FindAllEstablishmentsByUserId(ctx context.Context, user_id string) ([]domain.Establishment, *core.Exception) {
-	establishments, err := s.repository.FindAllEstablishmentsByUserId(ctx, user_id)
+func (s *AccountUseCase) FindAllEstablishmentsByAccountId(ctx context.Context, user_id string) ([]domain.Establishment, *core.Exception) {
+	establishments, err := s.repository.FindAllEstablishmentsByAccountId(ctx, user_id)
 	if err != nil {
 		return nil, core.Unexpected(core.WithMessage("Some error has been ocurred"))
 	}
