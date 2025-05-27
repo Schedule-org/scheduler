@@ -8,16 +8,16 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-type AccountUseCase struct {
-	repository domain.AccountUseCase
+type ClientUseCase struct {
+	repository domain.ClientUseCase
 	logger     *logrus.Logger
 }
 
-func NewAccountUseCase(repository domain.AccountRepository, logger *logrus.Logger) domain.AccountUseCase {
-	return &AccountUseCase{repository: repository, logger: logger}
+func NewClientUseCase(repository domain.ClientRepository, logger *logrus.Logger) domain.ClientUseCase {
+	return &ClientUseCase{repository: repository, logger: logger}
 }
 
-func (s *AccountUseCase) Add(ctx context.Context, account *domain.Account) (*domain.Account, *core.Exception) {
+func (s *ClientUseCase) Add(ctx context.Context, account *domain.Client) (*domain.Client, *core.Exception) {
 	account, err := s.repository.Add(ctx, account)
 	if err != nil {
 		return nil, core.Unexpected(core.WithMessage("Error creating account"), core.WithError(err))

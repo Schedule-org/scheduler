@@ -8,22 +8,22 @@ import (
 	"gorm.io/gorm"
 )
 
-type AccountDatabaseRepository struct {
+type ClientDatabaseRepository struct {
 	db     *gorm.DB
 	logger *logrus.Logger
 }
 
-func NewAccountRepository(db *gorm.DB, logger *logrus.Logger) *AccountDatabaseRepository {
-	return &AccountDatabaseRepository{
+func NewClientRepository(db *gorm.DB, logger *logrus.Logger) *ClientDatabaseRepository {
+	return &ClientDatabaseRepository{
 		db:     db,
 		logger: logger,
 	}
 }
 
-func (repo *AccountDatabaseRepository) Add(ctx context.Context, account *domain.Account) (*domain.Account, error) {
+func (repo *ClientDatabaseRepository) Add(ctx context.Context, Client *domain.Client) (*domain.Client, error) {
 	if err := repo.db.WithContext(ctx).
-		Create(account).Error; err != nil {
+		Create(Client).Error; err != nil {
 		return nil, err
 	}
-	return account, nil
+	return Client, nil
 }

@@ -7,24 +7,26 @@ import (
 	"github.com/hebertzin/scheduler/internal/core"
 )
 
+// represent client in the system
 type (
-	Account struct {
-		Email string `json:"email"`
-		Cnpj  string `json:"cnpj"`
+	Client struct {
+		Email    string `json:"email"`
+		Phone    string `json:"phone"`
+		Location string `json:"location"`
 	}
 
-	AccountUseCase interface {
-		// Add creates a new account.
-		Add(ctx context.Context, payload *Account) (*Account, *core.Exception)
+	ClientUseCase interface {
+		// Add creates a new Client.
+		Add(ctx context.Context, payload *Client) (*Client, *core.Exception)
 	}
 
-	AccountRepository interface {
-		// Add creates a new account.
-		Add(ctx context.Context, payload *Account) (*Account, *core.Exception)
+	ClientRepository interface {
+		// Add creates a new Client.
+		Add(ctx context.Context, payload *Client) (*Client, *core.Exception)
 	}
 
-	AccountController interface {
-		// Add handles the HTTP request to create a new account.
+	ClientController interface {
+		// Add handles the HTTP request to create a new Client.
 		Add(ctx *gin.Context)
 	}
 )

@@ -10,9 +10,9 @@ import (
 	"gorm.io/gorm"
 )
 
-func UsersFactory(db *gorm.DB, logger *logrus.Logger) domain.UserController {
+func AccountFactory(db *gorm.DB, logger *logrus.Logger) domain.AccountController {
 	repo := repository.NewUserRepository(db, logger)
 	useCase := usecases.NewAddUserUseCase(repo, logger)
-	handler := controllers.NewUserController(useCase)
+	handler := controllers.NewAccountController(useCase)
 	return handler
 }

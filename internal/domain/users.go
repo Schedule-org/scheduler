@@ -13,6 +13,7 @@ type (
 	User struct {
 		Name        string       `json:"name"`
 		Email       string       `json:"email"`
+		Cnpj        string       `gorm:"size:100;unique;not null"`
 		Password    string       `json:"password"`
 		ActivatedAt sql.NullTime `json:"activate_at"`
 		CreatedAt   time.Time    `json:"created_at"`
@@ -46,7 +47,7 @@ type (
 	}
 
 	// UserController defines the HTTP handlers for managing users.
-	UserController interface {
+	AccountController interface {
 		// Add handles the HTTP request to create a new user.
 		Add(ctx *gin.Context)
 		// FindUserById handles the HTTP request to retrieve a user by ID.
