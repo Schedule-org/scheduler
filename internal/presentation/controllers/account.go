@@ -10,10 +10,10 @@ import (
 type (
 	AccountHandler struct {
 		BaseHandler
-		uc domain.UserUseCase
+		uc domain.AccountUseCase
 	}
 
-	userRequest struct {
+	accountRequest struct {
 		Name     string `json:"name" validate:"required"`
 		Email    string `json:"email" validate:"required"`
 		Password string `json:"password" validate:"required"`
@@ -21,92 +21,93 @@ type (
 	}
 )
 
-func NewAccountController(uc domain.UserUseCase) *AccountHandler {
+func NewAccountController(uc domain.AccountUseCase) *AccountHandler {
 	return &AccountHandler{uc: uc}
 }
 
 // Add godoc
-// @Summary      Add a new user
-// @Description  Create a new user with the provided data
-// @Tags         Users
+// @Summary      Add a new account
+// @Description  Create a new account with the provided data
+// @Tags         accounts
 // @Accept       json
 // @Produce      json
-// @Param        user  body      domain.User  true  "User data"
-// @Success      201   {object}  domain.HttpResponse{data=dto.UserDTO}  "User created successfully"
+// @Param        account  body      domain.account  true  "account data"
+// @Success      201   {object}  domain.HttpResponse{data=dto.accountDTO}  "account created successfully"
 // @Failure      400   {object}  domain.HttpResponse  "Bad Request"
 // @Failure      500   {object}  domain.HttpResponse  "Internal Server Error"
-// @Router       /users [post]
+// @Router       /accounts [post]
 func (h *AccountHandler) Add(ctx *gin.Context) {
-	var req userRequest
+	var req accountRequest
 	if err := ctx.ShouldBindJSON(&req); err != nil {
 		h.RespondWithError(ctx, http.StatusBadRequest, err.Error(), err)
 		return
 	}
 
-	userCreated := domain.User{
+	accountCreated := domain.Account{
 		Name:     req.Name,
 		Email:    req.Email,
 		Password: req.Password,
 		Cnpj:     req.Cnpj,
 	}
 
-	user, err := h.uc.Add(ctx.Request.Context(), &userCreated)
+	account, err := h.uc.Add(ctx.Request.Context(), &accountCreated)
 	if err != nil {
 		h.RespondWithError(ctx, err.Code, err.Message, err)
 		return
 	}
 
-	h.RespondWithSuccess(ctx, http.StatusCreated, "User created successfully", user)
+	h.RespondWithSuccess(ctx, http.StatusCreated, "account created successfully", account)
 }
 
-// FindUserById godoc
-// @Summary      Find a user by ID
-// @Description  Retrieve a user by their unique ID
-// @Tags         Users
+// FindaccountById godoc
+// @Summary      Find a account by ID
+// @Description  Retrieve a account by their unique ID
+// @Tags         accounts
 // @Accept       json
 // @Produce      json
-// @Param        id  path      string  true  "User ID"
-// @Success      200  {object}  domain.HttpResponse{data=dto.UserDTO}  "User found successfully"
+// @Param        id  path      string  true  "account ID"
+// @Success      200  {object}  domain.HttpResponse{data=dto.accountDTO}  "account found successfully"
 // @Failure      400  {object}  domain.HttpResponse  "Bad Request"
-// @Failure      404  {object}  domain.HttpResponse  "User not found"
+// @Failure      404  {object}  domain.HttpResponse  "account not found"
 // @Failure      500  {object}  domain.HttpResponse  "Internal Server Error"
-// @Router       /users/{id} [get]
-func (h *AccountHandler) FindUserById(ctx *gin.Context) {
+// @Router       /accounts/{id} [get]
+func (h *AccountHandler) FindAccountById(ctx *gin.Context) {
 	id := ctx.Param("id")
-	user, err := h.uc.FindUserById(ctx.Request.Context(), id)
+	account, err := h.uc.FindAccountById(ctx.Request.Context(), id)
 	if err != nil {
 		h.RespondWithError(ctx, err.Code, err.Message, err)
 		return
 	}
 
-	h.RespondWithSuccess(ctx, http.StatusOK, "User found successfully", user)
+	h.RespondWithSuccess(ctx, http.StatusOK, "account found successfully", account)
 }
 
-// FindAllUsers godoc
-// @Summary      Get all users
-// @Description  Retrieve a list of all users in the system
-// @Tags         Users
+// we realy need this route ???
+// FindAllaccounts godoc
+// @Summary      Get all accounts
+// @Description  Retrieve a list of all accounts in the system
+// @Tags         accounts
 // @Accept       json
 // @Produce      json
-// @Success      200  {object}  domain.HttpResponse{data=[]dto.UserDTO}  "Users retrieved successfully"
+// @Success      200  {object}  domain.HttpResponse{data=[]dto.accountDTO}  "accounts retrieved successfully"
 // @Failure      500  {object}  domain.HttpResponse  "Internal Server Error"
-// @Router       /users [get]
-func (h *AccountHandler) FindAllUsers(ctx *gin.Context) {
-	users, err := h.uc.FindAllUsers(ctx.Request.Context())
+// @Router       /accounts [get]
+func (h *AccountHandler) FindAllAccounts(ctx *gin.Context) {
+	accounts, err := h.uc.FindAllAccounts(ctx.Request.Context())
 	if err != nil {
 		h.RespondWithError(ctx, err.Code, err.Message, err)
 		return
 	}
 
-	h.RespondWithSuccess(ctx, http.StatusOK, "Users retrieved", users)
+	h.RespondWithSuccess(ctx, http.StatusOK, "accounts retrieved", accounts)
 }
 
-func (h *AccountHandler) FindAllEstablishmentsByUserId(ctx *gin.Context) {
+func (h *AccountHandler) FindAllEstablishmentsByAccountId(ctx *gin.Context) {
 	id := ctx.Param("id")
-	establishments, err := h.uc.FindAllEstablishmentsByUserId(ctx.Request.Context(), id)
+	establishments, err := h.uc.FindAllEstablishmentsByAccountId(ctx.Request.Context(), id)
 	if err != nil {
 		h.RespondWithError(ctx, err.Code, err.Message, err)
 	}
 
-	h.RespondWithSuccess(ctx, http.StatusOK, "Users establishments retrieved", establishments)
+	h.RespondWithSuccess(ctx, http.StatusOK, "accounts establishments retrieved", establishments)
 }

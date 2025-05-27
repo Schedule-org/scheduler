@@ -11,8 +11,8 @@ import (
 )
 
 func AccountFactory(db *gorm.DB, logger *logrus.Logger) domain.AccountController {
-	repo := repository.NewUserRepository(db, logger)
-	useCase := usecases.NewAddUserUseCase(repo, logger)
+	repo := repository.NewAccountsRepository(db, logger)
+	useCase := usecases.NewAccountUseCase(repo, logger)
 	handler := controllers.NewAccountController(useCase)
 	return handler
 }

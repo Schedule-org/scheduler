@@ -7,7 +7,7 @@ import (
 )
 
 func InitRoutes(router *gin.Engine, db *gorm.DB, logger *logrus.Logger) {
-	UsersGroupRouter(router, db, logger)
+	AccountsGroupRouter(router, db, logger)
 	EstablishmentGroupRouter(router, db, logger)
 	ProfessionalsGroupRouter(router, db, logger)
 	ServicesGroupRouter(router, db, logger)

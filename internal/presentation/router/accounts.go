@@ -9,18 +9,18 @@ import (
 	"gorm.io/gorm"
 )
 
-func UsersGroupRouter(router *gin.Engine, db *gorm.DB, logger *logrus.Logger) {
+func AccountsGroupRouter(router *gin.Engine, db *gorm.DB, logger *logrus.Logger) {
 	accountFactory := factory.AccountFactory(db, logger)
 	v1 := router.Group("/api/v1")
 	{
-		v1.GET("/accounts", accountFactory.FindAllUsers)
+		v1.GET("/accounts", accountFactory.FindAllAccounts)
 
 		v1.POST("/accounts", accountFactory.Add)
 
 		v1.Use(middlewares.ValidateParamRequest())
 
-		v1.GET("/accounts/:id", accountFactory.FindUserById)
+		v1.GET("/accounts/:id", accountFactory.FindAccountById)
 
-		v1.GET("/accounts/:id/establishments", accountFactory.FindAllEstablishmentsByUserId)
+		v1.GET("/accounts/:id/establishments", accountFactory.FindAllEstablishmentsByAccountId)
 	}
 }

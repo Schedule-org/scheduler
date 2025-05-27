@@ -9,47 +9,47 @@ import (
 	"gorm.io/gorm"
 )
 
-type UserDatabaseRepository struct {
+type AccountDatabaseRepository struct {
 	db     *gorm.DB
 	logger *logrus.Logger
 }
 
-func NewUserRepository(db *gorm.DB, logger *logrus.Logger) *UserDatabaseRepository {
-	return &UserDatabaseRepository{
+func NewAccountsRepository(db *gorm.DB, logger *logrus.Logger) *AccountDatabaseRepository {
+	return &AccountDatabaseRepository{
 		db:     db,
 		logger: logger,
 	}
 }
 
-func (repo *UserDatabaseRepository) Add(ctx context.Context, user *domain.User) (*domain.User, error) {
+func (repo *AccountDatabaseRepository) Add(ctx context.Context, user *domain.Account) (*domain.Account, error) {
 	if err := repo.db.WithContext(ctx).Create(user).Error; err != nil {
 		return nil, err
 	}
 	return user, nil
 }
 
-func (repo *UserDatabaseRepository) FindUserById(ctx context.Context, id string) (*domain.User, error) {
-	var user *domain.User
+func (repo *AccountDatabaseRepository) FindAccountById(ctx context.Context, id string) (*domain.Account, error) {
+	var user *domain.Account
 	if err := repo.db.WithContext(ctx).
-		Model(&models.Users{}).
+		Model(&models.Accounts{}).
 		Where("id = ?", id).Error; err != nil {
 		return nil, err
 	}
 	return user, nil
 }
 
-func (repo *UserDatabaseRepository) FindUserByEmail(ctx context.Context, email string) (*domain.User, error) {
-	var user *domain.User
+func (repo *AccountDatabaseRepository) FindAccountByEmail(ctx context.Context, email string) (*domain.Account, error) {
+	var user *domain.Account
 	if err := repo.db.WithContext(ctx).
-		Model(&models.Users{}).
+		Model(&models.Accounts{}).
 		Where("email = ?", email).Error; err != nil {
 		return nil, err
 	}
 	return user, nil
 }
 
-func (repo *UserDatabaseRepository) FindAllUsers(ctx context.Context) ([]domain.User, error) {
-	var users []domain.User
+func (repo *AccountDatabaseRepository) FindAllAccounts(ctx context.Context) ([]domain.Account, error) {
+	var users []domain.Account
 	err := repo.db.WithContext(ctx).Find(&users).Error
 	if err != nil {
 		return nil, err
@@ -57,7 +57,7 @@ func (repo *UserDatabaseRepository) FindAllUsers(ctx context.Context) ([]domain.
 	return users, nil
 }
 
-func (repo *UserDatabaseRepository) FindAllEstablishmentsByUserId(ctx context.Context, user_id string) ([]domain.Establishment, error) {
+func (repo *AccountDatabaseRepository) FindAllEstablishmentsByAccountId(ctx context.Context, user_id string) ([]domain.Establishment, error) {
 	var establishments []domain.Establishment
 	err := repo.db.WithContext(ctx).
 		Where("user_id = ?", user_id).

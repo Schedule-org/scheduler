@@ -9,7 +9,7 @@ import (
 )
 
 // account
-type Users struct {
+type Accounts struct {
 	gorm.Model
 	ID             uuid.UUID `gorm:"primaryKey;type:uuid;default:uuid_generate_v4()"`
 	Name           string    `gorm:"size:100;not null"`
