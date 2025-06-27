@@ -6,11 +6,11 @@ import (
 	"gorm.io/gorm"
 )
 
-func InitRoutes(router *gin.Engine, db *gorm.DB, logger *logrus.Logger) {
-	AccountsGroupRouter(router, db, logger)
-	EstablishmentGroupRouter(router, db, logger)
-	ProfessionalsGroupRouter(router, db, logger)
-	ServicesGroupRouter(router, db, logger)
-	AppointmentGroupRouter(router, db, logger)
-	ProfessionalAvailabilityGroupRouter(router, db, logger)
+func StartApi(router *gin.Engine, db *gorm.DB, logger *logrus.Logger) {
+	StartAccountsApi(router, db, logger)
+	StartEstablishmentApi(router, db, logger)
+	StartProfessionalsApi(router, db, logger)
+	StartServicesApi(router, db, logger)
+	StartAppointmentApi(router, db, logger)
+	StartProfessionalAvailabilityApi(router, db, logger)
 }

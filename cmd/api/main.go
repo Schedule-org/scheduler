@@ -36,7 +36,7 @@ func handler(c *gin.Context) {
 
 // @title Scheduler app
 // @version 1.0
-// @description Saas plataforma
+// @description Saas plataform
 
 // @contact.name Hebert Santos
 // @contact.url https://www.hebertzin.com/
@@ -51,15 +51,20 @@ func main() {
 		panic("Database migration failed: " + err.Error())
 	}
 
-	r := gin.Default()
+	r := createRouter()
 	r.GET("/api/v1/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	r.GET("/", handler)
 	r.GET("/metrics", gin.WrapH(promhttp.Handler()))
 
-	router.InitRoutes(r, database, log)
+	router.StartApi(r, database, log)
 
 	if err := r.Run(":8080"); err != nil {
 		println("some error has been occurred:", err.Error())
 	}
 
+}
+
+func createRouter() *gin.Engine {
+	r := gin.Default()
+	return r
 }

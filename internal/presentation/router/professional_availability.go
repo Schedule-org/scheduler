@@ -9,7 +9,7 @@ import (
 	"gorm.io/gorm"
 )
 
-func ProfessionalAvailabilityGroupRouter(router *gin.Engine, db *gorm.DB, logger *logrus.Logger) {
+func StartProfessionalAvailabilityApi(router *gin.Engine, db *gorm.DB, logger *logrus.Logger) {
 	professionalsAvailabilityFactory := factory.ProfessionalAvailabilityFactory(db, logger)
 	v1 := router.Group("/api/v1")
 	{

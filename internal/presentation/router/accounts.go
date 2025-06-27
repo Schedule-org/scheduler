@@ -9,7 +9,7 @@ import (
 	"gorm.io/gorm"
 )
 
-func AccountsGroupRouter(router *gin.Engine, db *gorm.DB, logger *logrus.Logger) {
+func StartAccountsApi(router *gin.Engine, db *gorm.DB, logger *logrus.Logger) {
 	accountFactory := factory.AccountFactory(db, logger)
 	v1 := router.Group("/api/v1")
 	{
