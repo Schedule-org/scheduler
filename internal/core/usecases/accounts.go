@@ -2,6 +2,7 @@ package usecases
 
 import (
 	"context"
+	"regexp"
 
 	"github.com/hebertzin/scheduler/internal/core"
 	"github.com/hebertzin/scheduler/internal/domain"
@@ -19,27 +20,28 @@ func NewAccountUseCase(repository domain.AccountRepository, logger *logrus.Logge
 }
 
 func (s *AccountUseCase) Add(ctx context.Context, payload *domain.Account) (*domain.Account, *core.Exception) {
-	if payload.Name == "" || payload.Email == "" || payload.Password == "" {
-		return nil, core.BadRequest(core.WithMessage("Some fields are missing"))
+	isValidEmail := validateAccountEmail(payload.Email)
+	if !isValidEmail {
+		return nil, core.BadRequest(core.WithMessage("Email invalid"))
 	}
 
-	existentAccount, _ := s.repository.FindAccountByEmail(ctx, payload.Email)
-	if existentAccount != nil {
+	account, _ := s.repository.FindAccountByEmail(ctx, payload.Email)
+	if account == nil {
 		return nil, core.Confilct(core.WithMessage("Account already exists in the database"))
 	}
 
-	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(payload.Password), bcrypt.DefaultCost)
+	hash, err := bcrypt.GenerateFromPassword([]byte(payload.Password), bcrypt.DefaultCost)
 	if err != nil {
 		return nil, core.Unexpected(core.WithMessage("Error generating password hash"))
 	}
-	payload.Password = string(hashedPassword)
+	payload.Password = string(hash)
 
-	account, err := s.repository.Add(ctx, payload)
+	a, err := s.repository.Add(ctx, payload)
 	if err != nil {
 		return nil, core.Unexpected()
 	}
 
-	return account, nil
+	return a, nil
 }
 
 func (s *AccountUseCase) FindAccountById(ctx context.Context, id string) (*domain.Account, *core.Exception) {
@@ -64,4 +66,9 @@ func (s *AccountUseCase) FindAllEstablishmentsByAccountId(ctx context.Context, a
 		return nil, core.Unexpected(core.WithMessage("Some error has been ocurred"))
 	}
 	return establishments, nil
+}
+
+func validateAccountEmail(email string) bool {
+	regex := regexp.MustCompile(`^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$`)
+	return regex.MatchString(email)
 }
