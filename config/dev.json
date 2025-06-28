@@ -1,0 +1,12 @@
+{
+    "port": "8080",
+    "run_migration_enabled": true,
+    "swagger_enabled": true,
+    "database": {
+        "port": "5432",
+        "user": "",
+        "password": "",
+        "database": "",
+        "host": ""
+    }
+}

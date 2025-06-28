@@ -9,7 +9,7 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-func LoadConfig() *domain.Config {
+func LoadEnvConfig() *domain.Config {
 	err := godotenv.Load()
 	if err != nil {
 		logging.Log.WithFields(logrus.Fields{

@@ -44,7 +44,7 @@ func handler(c *gin.Context) {
 
 // @BasePath /api/v1
 func main() {
-	appConfig := env.LoadConfig()
+	appConfig := env.LoadEnvConfig()
 	log := logging.InitLogger()
 	database := db.ConnectDatabase(appConfig)
 	if err := db.Migrate(database); err != nil {
