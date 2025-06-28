@@ -1,38 +1,20 @@
 package main
 
 import (
-	"net/http"
-
 	"github.com/gin-gonic/gin"
+	"github.com/hebertzin/scheduler/internal/domain"
 	"github.com/hebertzin/scheduler/internal/infra/config/env"
 	"github.com/hebertzin/scheduler/internal/infra/config/logging"
 	"github.com/hebertzin/scheduler/internal/infra/db"
 	"github.com/hebertzin/scheduler/internal/presentation/router"
+	"github.com/sirupsen/logrus"
+	"gorm.io/gorm"
 
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 )
-
-var (
-	requests = prometheus.NewCounterVec(
-		prometheus.CounterOpts{
-			Name: "http_requests_total",
-			Help: "Total number of HTTP requests",
-		},
-		[]string{"method", "endpoint"},
-	)
-)
-
-func init() {
-	prometheus.MustRegister(requests)
-}
-
-func handler(c *gin.Context) {
-	requests.WithLabelValues(c.Request.Method, c.FullPath()).Inc()
-	c.String(http.StatusOK, "Hello, Grafana!")
-}
 
 // @title Scheduler app
 // @version 1.0
@@ -44,27 +26,61 @@ func handler(c *gin.Context) {
 
 // @BasePath /api/v1
 func main() {
-	appConfig := env.LoadEnvConfig()
-	log := logging.InitLogger()
-	database := db.ConnectDatabase(appConfig)
-	if err := db.Migrate(database); err != nil {
-		panic("Database migration failed: " + err.Error())
-	}
-
+	config, _ := env.LoadConfiguration("/config/dev.json")
+	database := db.ConnectDatabase(config)
 	r := createRouter()
-	r.GET("/api/v1/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
-	r.GET("/", handler)
-	r.GET("/metrics", gin.WrapH(promhttp.Handler()))
-
-	router.StartApi(r, database, log)
-
-	if err := r.Run(":8080"); err != nil {
+	configureSwagger(config, r)
+	configureMigration(config, database)
+	cofigureMetrics(config, r)
+	loggging := configureLogging(config)
+	router.StartApi(r, database, loggging)
+	if err := r.Run(config.Port); err != nil {
 		println("some error has been occurred:", err.Error())
 	}
-
 }
 
 func createRouter() *gin.Engine {
-	r := gin.Default()
-	return r
+	return gin.Default()
+}
+
+func configureMigration(config *domain.ServiceConfig, database *gorm.DB) {
+	if config.RunMigrationEnabled {
+		if err := db.Migrate(database); err != nil {
+			panic("Database migration failed: " + err.Error())
+		}
+	}
+}
+
+func configureSwagger(config *domain.ServiceConfig, router *gin.Engine) {
+	if config.SwaggerEnabled {
+		router.GET("/api/v1/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+	}
+}
+
+func grafanaHandler(c *gin.Context) {
+	var requests *prometheus.CounterVec
+	requests.WithLabelValues(c.Request.Method, c.FullPath()).Inc()
+}
+
+func cofigureMetrics(config *domain.ServiceConfig, router *gin.Engine) {
+	if config.GrafanaEnabled {
+		requests := prometheus.NewCounterVec(
+			prometheus.CounterOpts{
+				Name: "http_requests_total",
+				Help: "Total number of HTTP requests",
+			},
+			[]string{"method", "endpoint"},
+		)
+		prometheus.MustRegister(requests)
+
+		router.GET("/grafana", grafanaHandler)
+		router.GET("/metrics", gin.WrapH(promhttp.Handler()))
+	}
+}
+
+func configureLogging(config *domain.ServiceConfig) *logrus.Logger {
+	if config.LoggingEnabled {
+		return logging.InitLogger()
+	}
+	return nil
 }

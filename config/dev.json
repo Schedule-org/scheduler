@@ -1,7 +1,10 @@
 {
     "port": "8080",
     "run_migration_enabled": true,
+    "dev_mode_enabled": true,
     "swagger_enabled": true,
+    "grafana_enabled":true,
+    "logging_enabled": true,
     "database": {
         "port": "5432",
         "user": "",
