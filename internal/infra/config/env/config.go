@@ -23,6 +23,9 @@ func LoadEnvConfig() *domain.ServiceConfig {
 		Port:                os.Getenv("PORT"),
 		RunMigrationEnabled: false,
 		SwaggerEnabled:      true,
+		DevModeEnabled:      false,
+		GrafanaEnabled:      false,
+		LoggingEnabled:      true,
 		Database: domain.DatabaseConfig{
 			User:     os.Getenv("USER"),
 			Port:     os.Getenv("PORT"),
@@ -44,10 +47,15 @@ func LoadJSONConfig(path string) (*domain.ServiceConfig, error) {
 	if err != nil {
 		return nil, err
 	}
-	defer file.Close()
+	var closeErr error
+	defer func() {
+		closeErr = file.Close()
+	}()
+	if closeErr != nil {
+		return nil, fmt.Errorf("failed to close file: %w", closeErr)
+	}
 
 	decoder := json.NewDecoder(file)
-
 	var config domain.ServiceConfig
 	if err := decoder.Decode(&config); err != nil {
 		return nil, err
