@@ -14,9 +14,10 @@ import (
 
 var db *gorm.DB
 
-func ConnectDatabase(cfg *domain.Config) *gorm.DB {
+func ConnectDatabase(cfg *domain.ServiceConfig) *gorm.DB {
+	config := cfg.Database
 	dsn := fmt.Sprintf("user=%s password=%s dbname=%s port=%s host=%s",
-		cfg.User, cfg.Password, cfg.Database, cfg.Port, cfg.Host)
+		config.User, config.Password, config.Database, config.Port, config.Host)
 
 	var err error
 

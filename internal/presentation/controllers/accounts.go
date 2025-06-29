@@ -17,7 +17,6 @@ type (
 		Name     string `json:"name" validate:"required"`
 		Email    string `json:"email" validate:"required"`
 		Password string `json:"password" validate:"required"`
-		Cnpj     string `json:"cnpj" validate:"required"`
 	}
 )
 
@@ -47,7 +46,6 @@ func (h *AccountHandler) Add(ctx *gin.Context) {
 		Name:     req.Name,
 		Email:    req.Email,
 		Password: req.Password,
-		Cnpj:     req.Cnpj,
 	}
 
 	account, err := h.uc.Add(ctx.Request.Context(), &accountCreated)

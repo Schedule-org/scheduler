@@ -1,0 +1,24 @@
+run:
+  concurrency: 4
+  timeout: 3m
+  tests: true
+  modules-download-mode: readonly
+  allow-parallel-runners: true
+  go: '1.22'
+
+issues:
+  exclude-use-default: false
+
+linters:
+  enable:
+    - errcheck
+    - govet
+    - staticcheck
+    - gosimple
+    - unused
+    - ineffassign
+    - typecheck
+    - gofmt
+    - goimports
+
+  disable-all: false

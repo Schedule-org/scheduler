@@ -13,7 +13,6 @@ type (
 	Account struct {
 		Name        string       `json:"name"`
 		Email       string       `json:"email"`
-		Cnpj        string       `gorm:"size:100;unique;not null"`
 		Password    string       `json:"password"`
 		ActivatedAt sql.NullTime `json:"activate_at"`
 		CreatedAt   time.Time    `json:"created_at"`
