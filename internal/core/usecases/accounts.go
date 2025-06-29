@@ -16,9 +16,11 @@ type AccountUseCase struct {
 }
 
 func NewAccountUseCase(repository domain.AccountRepository, logger *logrus.Logger) domain.AccountUseCase {
-	return &AccountUseCase{repository: repository, logger: logger}
+	return &AccountUseCase{
+		repository: repository,
+		logger:     logger,
+	}
 }
-
 func (s *AccountUseCase) Add(ctx context.Context, payload *domain.Account) (*domain.Account, *core.Exception) {
 	isValidEmail := validateAccountEmail(payload.Email)
 	if !isValidEmail {

@@ -1,0 +1,5 @@
+commit-msg:
+  scripts:
+    validate-commit-msg:
+      runner: bash
+      script: ./githooks/commit-msg/validate_commit_msg.sh
