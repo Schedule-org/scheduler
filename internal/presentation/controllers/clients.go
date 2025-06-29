@@ -41,16 +41,16 @@ func (h *ClientHandler) Add(ctx *gin.Context) {
 		return
 	}
 
-	appointment := domain.Client{
+	client := domain.Client{
 		Email: req.Email,
 		Phone: req.Phone,
 	}
 
-	account, err := h.uc.Add(ctx.Request.Context(), &appointment)
+	c, err := h.uc.Add(ctx.Request.Context(), &client)
 	if err != nil {
 		h.RespondWithError(ctx, err.Code, err.Message, err)
 		return
 	}
 
-	h.RespondWithSuccess(ctx, http.StatusCreated, "Account created successfully", account)
+	h.RespondWithSuccess(ctx, http.StatusCreated, "Account created successfully", c)
 }
