@@ -34,7 +34,7 @@ import (
 
 // @BasePath /api/v1
 func main() {
-	config, _ := env.LoadConfiguration("/config/config.json")
+	config, _ := env.LoadConfiguration("/configs/config.json")
 	database := db.ConnectDatabase(config)
 	r := createRouter()
 	configureSwagger(config, r)
