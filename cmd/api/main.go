@@ -34,7 +34,7 @@ import (
 
 // @BasePath /api/v1
 func main() {
-	config, _ := env.LoadConfiguration("/config/dev.json")
+	config, _ := env.LoadConfiguration("/config/config.json")
 	database := db.ConnectDatabase(config)
 	r := createRouter()
 	configureSwagger(config, r)
@@ -66,7 +66,6 @@ func main() {
 	}
 
 	<-ctx.Done()
-	log.Println("timeout of 5 seconds.")
 	log.Println("Server exiting")
 }
 

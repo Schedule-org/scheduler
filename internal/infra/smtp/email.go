@@ -19,7 +19,7 @@ type SmptSendEmail struct {
 	Subject string
 }
 
-func (s *Smtp) Send(email SmptSendEmail) error {
+func (s Smtp) Send(email SmptSendEmail) error {
 	auth := smtp.PlainAuth("", s.From, s.Password, s.Host)
 	addr := s.Host + ":" + s.Port
 
