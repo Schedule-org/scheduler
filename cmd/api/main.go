@@ -34,7 +34,11 @@ import (
 
 // @BasePath /api/v1
 func main() {
-	config, _ := env.LoadConfiguration("/configs/config.json")
+	logging.InitLogger()
+	config, err := env.LoadConfiguration("../../configs/config.json")
+	if err != nil {
+		log.Fatalf("Erro ao carregar configuração: %v", err)
+	}
 	database := db.ConnectDatabase(config)
 	r := createRouter()
 	configureSwagger(config, r)
@@ -44,7 +48,7 @@ func main() {
 	router.StartApi(r, database, loggging)
 
 	srv := http.Server{
-		Addr:    config.Port,
+		Addr:    ":" + config.Port,
 		Handler: r,
 	}
 

@@ -5,7 +5,7 @@ type ServiceConfig struct {
 	RunMigrationEnabled bool           `json:"run_migration_enabled"`
 	SwaggerEnabled      bool           `json:"swagger_enabled"`
 	Database            DatabaseConfig `json:"database"`
-	DevModeEnabled      bool           `json:"dev_mode"`
+	DevModeEnabled      bool           `json:"dev_mode_enabled"`
 	GrafanaEnabled      bool           `json:"grafana_enabled"`
 	LoggingEnabled      bool           `json:"logging_enabled"`
 }
